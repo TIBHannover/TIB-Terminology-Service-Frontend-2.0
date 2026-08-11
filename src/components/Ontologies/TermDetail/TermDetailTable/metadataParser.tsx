@@ -91,17 +91,31 @@ function renderMathRelatedMetadata(
     metadata["in defining formula"] = {
       value: mathFormulaAxioms.map((axiom: ProcessedAxiom, index: number) => {
         return (
-          <div className="row" key={index}>
+          <div className="row border-bottom" key={index}>
             <div className="col-md-3">
               <QueryClientProvider client={mathWidgetQueryClient}>
                 <MathFormulaWidget api="" mathML={axiom.mathValue} />
               </QueryClientProvider>
             </div>
-            <div className="col-md-4">
-              <p>{axiom.relationLabel}</p>
+            <div className="col-md-4 pt-3">
+              <span>
+                {TermLib.createTermUrl({
+                  ontology_name: term.ontologyId,
+                  termIri: axiom.relationIri,
+                  termLabel: axiom.relationLabel,
+                  type: "property",
+                })}
+              </span>
             </div>
-            <div className="col-md-5">
-              <p>{axiom.targetLabel}</p>
+            <div className="col-md-5 pt-3">
+              <span>
+                {TermLib.createTermUrl({
+                  ontology_name: term.ontologyId,
+                  termIri: axiom.targetIri,
+                  termLabel: axiom.targetLabel,
+                  type: "class",
+                })}
+              </span>
             </div>
           </div>
         );

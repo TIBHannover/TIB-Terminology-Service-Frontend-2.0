@@ -74,6 +74,39 @@ class TermLib {
     ];
   }
 
+  static createTermUrl({
+    ontology_name,
+    termIri,
+    termLabel,
+    type,
+  }: {
+    ontology_name: string;
+    termIri: string;
+    termLabel: string;
+    type: string;
+  }) {
+    if (!ontology_name) {
+      return null;
+    }
+
+    let targetHref =
+      process.env.REACT_APP_PROJECT_SUB_PATH +
+      "/ontologies/" +
+      encodeURIComponent(ontology_name);
+    if (type === "class" || type === "terms") {
+      targetHref += "/terms?iri=" + encodeURIComponent(termIri);
+    } else if (type === "property" || type === "properties") {
+      targetHref += "/props?iri=" + encodeURIComponent(termIri);
+    } else if (type === "individual" || type === "individuals") {
+      targetHref += "/individuals?iri=" + encodeURIComponent(termIri);
+    }
+    return [
+      <a href={targetHref} target="_blank">
+        {termLabel}
+      </a>,
+    ];
+  }
+
   static createAlsoInTags(term: TsTerm) {
     if (term.alsoIn && term.alsoIn.length !== 0) {
       let alsoInList = [];

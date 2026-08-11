@@ -15,6 +15,7 @@ type AxiomObject = {
 export type ProcessedAxiom = {
   mathValue: string;
   relationLabel: string;
+  relationIri: string;
   targetLabel: string;
   targetIri: string;
 };
@@ -403,6 +404,7 @@ export class TsTerm {
           results.push({
             mathValue: mathValue,
             relationLabel: relationLabel,
+            relationIri: axiomKey,
             targetLabel: targetLabel,
             targetIri: axiomVal,
           });
