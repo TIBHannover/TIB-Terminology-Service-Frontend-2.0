@@ -1,4 +1,15 @@
-import { isValidElement } from "react";
+import {
+  Component,
+  isValidElement,
+  ReactNode,
+  useEffect,
+  useContext,
+  useRef,
+  useState,
+} from "react";
+import { EntityInfoWidget } from "@ts4nfdi/terminology-service-suite";
+import { QueryClient, QueryClientProvider } from "react-query";
+import Modal from "react-bootstrap/Modal";
 import {
   classMetaData,
   propertyMetaData,
@@ -9,6 +20,7 @@ import AlertBox from "../../../common/Alerts/Alerts";
 import CopyLinkButton from "../../../common/CopyButton/CopyButton";
 import { CopyLinkButtonMarkdownFormat } from "../../../common/CopyButton/CopyButton";
 import Toolkit from "../../../../Libs/Toolkit";
+import { OntologyPageContext } from "../../../../context/OntologyPageContext";
 import { TermDetailTableComProp, TableMetadata } from "../types";
 import {
   TsClass,
@@ -17,11 +29,30 @@ import {
   TsSkosTerm,
 } from "../../../../concepts";
 
+const entityInfoApi = "https://api.terminology.tib.eu/api/";
+const entityInfoQueryClient = new QueryClient();
+
+type MetadataInfoErrorBoundaryProps = {
+  children: ReactNode;
+  onError: () => void;
+};
+
+class MetadataInfoErrorBoundary extends Component<MetadataInfoErrorBoundaryProps> {
+  componentDidCatch() {
+    this.props.onError();
+  }
+
+  render() {
+    return this.props.children;
+  }
+}
+
 const TermDetailTable = (props: TermDetailTableComProp) => {
   /*
       This component is responsible for rendering the detail table of a term.
       It requires the ontologyPageContext to be available.
     */
+  const ontologyPageContext = useContext(OntologyPageContext);
 
   function setLabelAsLink() {
     if (!props.node) {
@@ -64,6 +95,7 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
         key,
         metadataToRender[key].value,
         metadataToRender[key].isLink,
+        metadataToRender[key].iri,
       );
       result.push(row);
     }
@@ -84,6 +116,7 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
     metadataLabel: string,
     metadataValue: any,
     isLink: boolean,
+    iri?: string,
   ) {
     if (!props.node) {
       return [];
@@ -91,11 +124,11 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
     let row = [
       <div className="col-sm-12 node-detail-table-row" key={metadataLabel}>
         <div className="row">
-          <div className="col-sm-4 col-md-3" key={metadataLabel + "-label"}>
+          <div className="col-4 col-md-3" key={metadataLabel + "-label"}>
             <div className="node-metadata-label">{metadataLabel}</div>
           </div>
           <div
-            className="col-sm-8 col-md-9 node-metadata-value"
+            className="col-7 col-md-8 node-metadata-value"
             key={metadataLabel + "-value"}
           >
             {formatText(metadataLabel, metadataValue, isLink)}
@@ -113,6 +146,18 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
                   props.node.ontologyPreferredPrefix +
                   ":" +
                   props.node.label
+                }
+              />
+            )}
+          </div>
+          <div className="col-1 metadata-info-cell" key={metadataLabel + "-info"}>
+            {iri && (
+              <MetadataInfoButton
+                iri={iri}
+                label={metadataLabel}
+                ontologyId={
+                  ontologyPageContext.ontology.ontologyId ??
+                  props.node.ontologyId
                 }
               />
             )}
@@ -188,5 +233,133 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
     </div>
   );
 };
+
+function MetadataInfoButton({
+  iri,
+  label,
+  ontologyId,
+}: {
+  iri: string;
+  label: string;
+  ontologyId: string;
+}) {
+  const [showModal, setShowModal] = useState(false);
+  const [showIriFallback, setShowIriFallback] = useState(false);
+  const widgetRef = useRef<HTMLDivElement>(null);
+  const noop = () => {};
+  const safeIriUrl = getSafeHttpUrl(iri);
+
+  useEffect(() => {
+    if (!showModal || !widgetRef.current) {
+      setShowIriFallback(false);
+      return;
+    }
+
+    const updateFallback = () => {
+      setShowIriFallback(hasNoInformationMessage(widgetRef.current));
+    };
+    const observer = new MutationObserver(updateFallback);
+    observer.observe(widgetRef.current, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
+    updateFallback();
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [showModal]);
+
+  return (
+    <>
+      <button
+        type="button"
+        className="metadata-info-button"
+        aria-label={`Show ${label} metadata information`}
+        title={`Show "${label}" metadata information`}
+        onClick={() => setShowModal(true)}
+      >
+        <i className="bi bi-info-circle" aria-hidden="true"></i>
+      </button>
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        size="lg"
+        className="metadata-info-modal"
+      >
+        <Modal.Header>
+          <Modal.Title>{label}</Modal.Title>
+          <button
+            type="button"
+            className="metadata-info-close"
+            aria-label="Close"
+            onClick={() => setShowModal(false)}
+          >
+            <i className="bi bi-x-lg" aria-hidden="true"></i>
+          </button>
+        </Modal.Header>
+        <Modal.Body>
+          {showIriFallback ? (
+            safeIriUrl ? (
+              <a
+                className="metadata-info-iri"
+                href={safeIriUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {iri}
+              </a>
+            ) : (
+              <span className="metadata-info-iri">{iri}</span>
+            )
+          ) : (
+            <div ref={widgetRef}>
+              <MetadataInfoErrorBoundary
+                onError={() => setShowIriFallback(true)}
+              >
+                <QueryClientProvider client={entityInfoQueryClient}>
+                  <EntityInfoWidget
+                    api={entityInfoApi}
+                    entityType="property"
+                    hasTitle
+                    iri={iri}
+                    onNavigateToDisambiguate={noop}
+                    onNavigateToEntity={noop}
+                    onNavigateToOntology={noop}
+                    ontologyId={ontologyId}
+                    parameter=""
+                    showBadges
+                  />
+                </QueryClientProvider>
+              </MetadataInfoErrorBoundary>
+            </div>
+          )}
+        </Modal.Body>
+      </Modal>
+    </>
+  );
+}
+
+function hasNoInformationMessage(element: HTMLElement | null): boolean {
+  return (
+    element?.innerText
+      .split("\n")
+      .map((text) => text.trim().toLowerCase())
+      .includes("no information available") ?? false
+  );
+}
+
+function getSafeHttpUrl(iri: string): string | undefined {
+  try {
+    const url = new URL(iri);
+    if (url.protocol === "http:" || url.protocol === "https:") {
+      return iri;
+    }
+  } catch {
+    return;
+  }
+  return;
+}
 
 export default TermDetailTable;

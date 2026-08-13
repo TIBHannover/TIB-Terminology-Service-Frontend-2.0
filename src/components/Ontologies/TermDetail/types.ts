@@ -41,5 +41,6 @@ export type TableMetadata = {
   [key: string]: {
     value: any;
     isLink: boolean;
+    iri?: string;
   };
 };

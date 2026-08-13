@@ -4,6 +4,9 @@ import { buildHtmlAnchor } from "../Libs/htmlFactory";
 import { createElement } from "react";
 
 export type TsAnnotation = {
+  iri: string;
+  label: string;
+  value: any;
   originalIri: string;
   metadavalue: any;
 };
@@ -106,7 +109,7 @@ export class TsTerm {
                 let span = createElement(
                   "span",
                   { className: "node-metadata-label" },
-                  this.term?.["linkedEntities"]?.[key]?.label[0] + ": ",
+                  this.getLabelForLinkedEntity(key) + ": ",
                 );
                 let conatiner = createElement(
                   "span",
@@ -185,9 +188,8 @@ export class TsTerm {
       for (let relation of relatedFromData) {
         let propertyIri = relation["property"];
         let targetIri = relation["value"];
-        let propertyLabel =
-          this.term?.["linkedEntities"][propertyIri]["label"][0];
-        let targetLabel = this.term?.["linkedEntities"][targetIri]["label"][0];
+        let propertyLabel = this.getLabelForLinkedEntity(propertyIri);
+        let targetLabel = this.getLabelForLinkedEntity(targetIri);
         let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
         let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
         let span = document.createElement("span");
@@ -313,7 +315,7 @@ export class TsTerm {
           "/individuals?iri=" +
           encodeURIComponent(csLink);
         result.push(
-          `<a href="${individualUrl}" target='_blank'>${curStatusIndiv["label"][0]}</a>`,
+          `<a href="${individualUrl}" target='_blank'>${this.getLabelForLinkedEntity(csLink)}</a>`,
         );
       }
       return result;
@@ -345,11 +347,19 @@ export class TsTerm {
             typeof this.term[key] === "object" &&
             !Array.isArray(this.term[key])
           ) {
-            annotations[this.term?.["linkedEntities"][key]["label"][0]] =
-              TsTerm.createAnnotation(key, this.term[key]?.value);
+            annotations[this.getLabelForLinkedEntity(key)] =
+              TsTerm.createAnnotation(
+                key,
+                this.getLabelForLinkedEntity(key),
+                this.term[key]?.value,
+              );
           } else {
-            annotations[this.term?.["linkedEntities"][key]["label"][0]] =
-              TsTerm.createAnnotation(key, this.term[key]);
+            annotations[this.getLabelForLinkedEntity(key)] =
+              TsTerm.createAnnotation(
+                key,
+                this.getLabelForLinkedEntity(key),
+                this.term[key],
+              );
           }
         }
       }
@@ -359,8 +369,14 @@ export class TsTerm {
     }
   }
 
-  static createAnnotation(originalIri: string, metadavalue: any): TsAnnotation {
-    return { originalIri, metadavalue };
+  static createAnnotation(
+    iri: string,
+    labelOrValue: string | any,
+    value?: any,
+  ): TsAnnotation {
+    const label = value === undefined ? "" : labelOrValue;
+    const metadavalue = value === undefined ? labelOrValue : value;
+    return { iri, label, value: metadavalue, originalIri: iri, metadavalue };
   }
 
   static getAnnotationValue(annotation: any) {
@@ -368,9 +384,9 @@ export class TsTerm {
       annotation &&
       typeof annotation === "object" &&
       "originalIri" in annotation &&
-      "metadavalue" in annotation
+      ("metadavalue" in annotation || "value" in annotation)
     ) {
-      return annotation.metadavalue;
+      return annotation.metadavalue ?? annotation.value;
     }
     return annotation;
   }
@@ -397,9 +413,8 @@ export class TsTerm {
       let mathValue = axiom.value ?? "";
       for (let item of axiom.axioms) {
         let [axiomKey, axiomVal] = Object.entries(item)[0];
-        let relationLabel =
-          this.term?.["linkedEntities"]?.[axiomKey]?.label?.[0];
-        let targetLabel = this.term?.["linkedEntities"]?.[axiomVal]?.label?.[0];
+        let relationLabel = this.getLabelForLinkedEntity(axiomKey);
+        let targetLabel = this.getLabelForLinkedEntity(axiomVal);
         if (relationLabel && targetLabel) {
           results.push({
             mathValue: mathValue,
@@ -412,5 +427,13 @@ export class TsTerm {
       }
     }
     return results;
+  }
+
+  private getLabelForLinkedEntity(iri: string): string {
+    try {
+      return this.term["linkedEntities"]?.[iri]?.["label"]?.[0] ?? "N/A";
+    } catch {
+      return "N/A";
+    }
   }
 }

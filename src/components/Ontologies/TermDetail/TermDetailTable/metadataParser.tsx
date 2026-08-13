@@ -71,6 +71,7 @@ function renderMathRelatedMetadata(
   term: TsTerm,
   metadata: TableMetadata,
   key: string,
+  iri?: string,
 ) {
   let annotation = term.annotation[key];
   metadata[key] = {
@@ -85,6 +86,7 @@ function renderMathRelatedMetadata(
       </QueryClientProvider>
     ),
     isLink: false,
+    iri,
   };
   let mathFormulaAxioms = term.mathFormulaAxioms();
   if (mathFormulaAxioms.length) {
@@ -141,7 +143,7 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
       annotKey = annotationKeyMap[key] ?? (key as string);
     }
     if (hasMathMlValue(annotationValue)) {
-      renderMathRelatedMetadata(term, metadata, annotKey);
+      renderMathRelatedMetadata(term, metadata, annotKey, annotation.iri);
       continue;
     }
 
@@ -154,16 +156,18 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
           res.push(Toolkit.transformLinksInStringToAnchor(value));
         }
       });
-      metadata[annotKey] = { value: res, isLink: false };
+      metadata[annotKey] = { value: res, isLink: false, iri: annotation.iri };
     } else if (typeof annotationValue === "object" && annotationValue.value) {
       metadata[annotKey] = {
         value: Toolkit.transformLinksInStringToAnchor(annotationValue.value),
         isLink: false,
+        iri: annotation.iri,
       };
     } else {
       metadata[annotKey] = {
         value: Toolkit.transformLinksInStringToAnchor(annotationValue),
         isLink: false,
+        iri: annotation.iri,
       };
     }
   }
@@ -198,7 +202,11 @@ export function classMetaData(term: TsClass) {
             ${dbXref.map((xref: string) => `<li>${xref}</li>`).join("")}
         </ul>
       `;
-    metadata["has dbxref"] = { value: xrefContent, isLink: false };
+    metadata["has dbxref"] = {
+      value: xrefContent,
+      isLink: false,
+      iri: TsTerm.DB_XREF_PURL,
+    };
   }
   return metadata;
 }
@@ -264,7 +272,11 @@ export function skosTermMetaData(term: TsSkosTerm) {
             ${dbXref.map((xref: string) => `<li>${xref}</li>`).join("")}
         </ul>
       `;
-    metadata["has dbxref"] = { value: xrefContent, isLink: false };
+    metadata["has dbxref"] = {
+      value: xrefContent,
+      isLink: false,
+      iri: TsTerm.DB_XREF_PURL,
+    };
   }
   return metadata;
 }

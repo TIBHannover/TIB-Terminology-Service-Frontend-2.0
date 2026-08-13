@@ -138,6 +138,55 @@ body .close-btn-message-modal:active {
   color: #404040;
 }
 
+body .metadata-info-cell {
+  align-items: flex-start;
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+}
+
+body .metadata-info-button,
+body .metadata-info-button:hover,
+body .metadata-info-button:focus,
+body .metadata-info-button:active {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: #0e6668;
+  display: inline-flex;
+  font-size: var(--font-size-sm);
+  height: 14px;
+  justify-content: center;
+  padding: 0;
+  vertical-align: baseline;
+  width: 14px;
+}
+
+body .metadata-info-close,
+body .metadata-info-close:hover,
+body .metadata-info-close:focus,
+body .metadata-info-close:active {
+  align-items: center;
+  background-color: transparent;
+  border: 0;
+  box-shadow: none;
+  color: #404040;
+  display: inline-flex;
+  flex: 0 0 32px;
+  font-size: var(--font-size-base);
+  height: 32px;
+  justify-content: center;
+  margin-left: auto;
+  padding: 0;
+  width: 32px;
+}
+
+body .metadata-info-iri {
+  display: inline-block;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 body .borderless-btn {
   border: none;
   text-decoration: none;

@@ -26,7 +26,7 @@ export class TsIndividual extends TsTerm {
                 target: "_blank",
                 href: parentClassUrl,
               },
-              this.term?.["linkedEntities"]?.[parentIri]?.["label"]?.[0],
+              this.getIndividualLabelForLinkedEntity(parentIri),
             ),
             createElement("br"),
           ),
@@ -35,5 +35,13 @@ export class TsIndividual extends TsTerm {
       return links;
     }
     return "";
+  }
+
+  private getIndividualLabelForLinkedEntity(iri: string): string {
+    try {
+      return this.term["linkedEntities"]?.[iri]?.["label"]?.[0] ?? "N/A";
+    } catch {
+      return "N/A";
+    }
   }
 }

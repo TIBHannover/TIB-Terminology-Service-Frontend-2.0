@@ -24,7 +24,7 @@ export class TsProperty extends TsTerm {
           let domainObj = { ontologyId: "", iri: iri, label: "" };
           domainObj.ontologyId =
             this.term["linkedEntities"][iri]["definedBy"][0];
-          domainObj.label = this.term["linkedEntities"][iri]["label"][0];
+          domainObj.label = this.getPropertyLabelForLinkedEntity(iri);
           listOfDomainObjects.push(domainObj);
         }
         return listOfDomainObjects;
@@ -49,7 +49,7 @@ export class TsProperty extends TsTerm {
           let rangeObj = { ontologyId: "", iri: iri, label: "" };
           rangeObj.ontologyId =
             this.term["linkedEntities"][iri]["definedBy"][0];
-          rangeObj.label = this.term["linkedEntities"][iri]["label"][0];
+          rangeObj.label = this.getPropertyLabelForLinkedEntity(iri);
           propertyRanges.push(rangeObj);
         }
         return propertyRanges;
@@ -57,6 +57,14 @@ export class TsProperty extends TsTerm {
       return [];
     } catch {
       return [];
+    }
+  }
+
+  private getPropertyLabelForLinkedEntity(iri: string): string {
+    try {
+      return this.term["linkedEntities"]?.[iri]?.["label"]?.[0] ?? "N/A";
+    } catch {
+      return "N/A";
     }
   }
 }
