@@ -307,7 +307,6 @@ export class TsTerm {
       }
       let result = [];
       for (let csLink of curationStatusLinks) {
-        let curStatusIndiv = this.term?.["linkedEntities"][csLink];
         let individualUrl =
           process.env.REACT_APP_PROJECT_SUB_PATH +
           "/ontologies/" +

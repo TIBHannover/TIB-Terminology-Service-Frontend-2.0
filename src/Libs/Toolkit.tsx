@@ -125,8 +125,9 @@ class Toolkit {
 
   static setObsoleteInStorageAndUrl(obsoletesValue: boolean | string) {
     localStorage.setItem("obsoletes", String(obsoletesValue));
-    (document.getElementById("obsoletes-checkbox") as HTMLInputElement).checked =
-      Boolean(obsoletesValue);
+    (
+      document.getElementById("obsoletes-checkbox") as HTMLInputElement
+    ).checked = Boolean(obsoletesValue);
     urlFacory.setObsoletes({ value: String(obsoletesValue) });
     return true;
   }
@@ -242,6 +243,18 @@ class Toolkit {
     }
     result = num + result;
     return result;
+  }
+
+  static getSafeHttpUrl(iri: string): string | undefined {
+    try {
+      const url = new URL(iri);
+      if (url.protocol === "http:" || url.protocol === "https:") {
+        return iri;
+      }
+    } catch {
+      return;
+    }
+    return;
   }
 }
 

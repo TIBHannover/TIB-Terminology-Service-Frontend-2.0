@@ -150,7 +150,10 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
               />
             )}
           </div>
-          <div className="col-1 metadata-info-cell" key={metadataLabel + "-info"}>
+          <div
+            className="col-1 metadata-info-cell"
+            key={metadataLabel + "-info"}
+          >
             {iri && (
               <MetadataInfoButton
                 iri={iri}
@@ -247,7 +250,7 @@ function MetadataInfoButton({
   const [showIriFallback, setShowIriFallback] = useState(false);
   const widgetRef = useRef<HTMLDivElement>(null);
   const noop = () => {};
-  const safeIriUrl = getSafeHttpUrl(iri);
+  const safeIriUrl = Toolkit.getSafeHttpUrl(iri);
 
   useEffect(() => {
     if (!showModal || !widgetRef.current) {
@@ -348,18 +351,6 @@ function hasNoInformationMessage(element: HTMLElement | null): boolean {
       .map((text) => text.trim().toLowerCase())
       .includes("no information available") ?? false
   );
-}
-
-function getSafeHttpUrl(iri: string): string | undefined {
-  try {
-    const url = new URL(iri);
-    if (url.protocol === "http:" || url.protocol === "https:") {
-      return iri;
-    }
-  } catch {
-    return;
-  }
-  return;
 }
 
 export default TermDetailTable;
