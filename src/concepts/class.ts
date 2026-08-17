@@ -166,6 +166,9 @@ export class TsClass extends TsTerm {
   recursivelyBuildStructure(metadataPurl: string): string | undefined {
     try {
       let data = this.term[metadataPurl];
+      if (typeof data === "object") {
+        data = [data];
+      }
       if (!data || data.length === 0) {
         return;
       }
