@@ -428,7 +428,7 @@ export class TsTerm {
     return results;
   }
 
-  private getLabelForLinkedEntity(iri: string): string {
+  getLabelForLinkedEntity(iri: string): string {
     try {
       return this.term["linkedEntities"]?.[iri]?.["label"]?.[0] ?? "N/A";
     } catch {

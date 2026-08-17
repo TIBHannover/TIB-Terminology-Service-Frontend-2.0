@@ -73,22 +73,22 @@ export class TsClass extends TsTerm {
         if (TsTerm.ANNOTATION_EXPECTION.includes(key)) {
           continue;
         }
-        if (this.term["linkedEntities"]?.[key]?.["label"]?.length) {
+        if (this.getLabelForLinkedEntity(key).length) {
           if (
             typeof this.term[key] === "object" &&
             !Array.isArray(this.term[key])
           ) {
-            annotations[this.getClassLabelForLinkedEntity(key)] =
+            annotations[this.getLabelForLinkedEntity(key)] =
               TsTerm.createAnnotation(
                 key,
-                this.getClassLabelForLinkedEntity(key),
+                this.getLabelForLinkedEntity(key),
                 this.term[key]?.value,
               );
           } else {
-            annotations[this.getClassLabelForLinkedEntity(key)] =
+            annotations[this.getLabelForLinkedEntity(key)] =
               TsTerm.createAnnotation(
                 key,
-                this.getClassLabelForLinkedEntity(key),
+                this.getLabelForLinkedEntity(key),
                 this.term[key],
               );
           }
@@ -183,7 +183,7 @@ export class TsClass extends TsTerm {
           if (!this.term["linkedEntities"][subClassIri]) {
             continue;
           }
-          let parentLabel = this.getClassLabelForLinkedEntity(subClassIri);
+          let parentLabel = this.getLabelForLinkedEntity(subClassIri);
           let [parentLableString, _] =
             this.getStringValueIfPossible(parentLabel);
           let parentLi = document.createElement("li");
@@ -214,7 +214,7 @@ export class TsClass extends TsTerm {
       if (typeof relationObj[0] === "string") {
         let targetIri = relationObj[0];
         let [targetLabel, _] = this.getStringValueIfPossible(
-          this.getClassLabelForLinkedEntity(targetIri),
+          this.getLabelForLinkedEntity(targetIri),
         );
         let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
         let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
@@ -230,7 +230,7 @@ export class TsClass extends TsTerm {
       if (typeof relationObj[1] === "string") {
         let targetIri = relationObj[1];
         let [targetLabel, _] = this.getStringValueIfPossible(
-          this.getClassLabelForLinkedEntity(targetIri),
+          this.getLabelForLinkedEntity(targetIri),
         );
         let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
         let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
@@ -252,7 +252,7 @@ export class TsClass extends TsTerm {
         return this.recSubClass(relationObj[relKey], relKey?.split("#")[1]);
       }
       let [propertyLabel, _] = this.getStringValueIfPossible(
-        this.getClassLabelForLinkedEntity(propertyIri),
+        this.getLabelForLinkedEntity(propertyIri),
       );
       let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
       let propAnchor = buildHtmlAnchor(propUrl, propertyLabel);
@@ -277,7 +277,7 @@ export class TsClass extends TsTerm {
         // the target is an iri
         let targetIri = relationObj[targetKey];
         let [targetLabel, _] = this.getStringValueIfPossible(
-          this.getClassLabelForLinkedEntity(targetIri),
+          this.getLabelForLinkedEntity(targetIri),
         );
         let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
         let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
@@ -312,7 +312,7 @@ export class TsClass extends TsTerm {
         let object = triple[objectPurl];
         let predicate = triple[predicatePurl];
         let subject = triple[subjectPurl];
-        let predicateLabel = this.getClassLabelForLinkedEntity(predicate);
+        let predicateLabel = this.getLabelForLinkedEntity(predicate);
         let ruleContainer = document.createElement("div") as HTMLDivElement;
         let objectAnchor = buildHtmlAnchor(object, object);
         let subjectAnchor = buildHtmlAnchor(subject, subject);
@@ -342,13 +342,5 @@ export class TsClass extends TsTerm {
       return [value.value, true];
     }
     return [value, false];
-  }
-
-  private getClassLabelForLinkedEntity(iri: string): string {
-    try {
-      return this.term["linkedEntities"]?.[iri]?.["label"]?.[0] ?? "N/A";
-    } catch {
-      return "N/A";
-    }
   }
 }
