@@ -14,6 +14,7 @@ import { NotFoundErrorPage } from "../common/ErrorPages/ErrorPages";
 import { TermsetPageComProps } from "./types";
 import { OntologyTermDataV2 } from "../../api/types/ontologyTypes";
 import { TsClass, TsTerm } from "../../concepts";
+import TermLib from "../../Libs/TermLib";
 import CommonUrlFactory from "../../UrlFactory/CommonUrlFactory";
 import * as SiteUrlParamNames from "../../UrlFactory/UrlParamNames";
 
@@ -105,14 +106,14 @@ const TermSetPage = (props: TermsetPageComProps) => {
       });
       if (term instanceof TsClass) {
         termMap.set("eqto", {
-          value: term.eqAxiom,
+          value: TermLib.renderClassStructure(term, term.eqAxiom),
           valueLink: "",
-          valueIsHtml: true,
+          valueIsHtml: false,
         });
         termMap.set("subclass", {
-          value: term.subClassOf,
+          value: TermLib.renderClassStructure(term, term.subClassOf),
           valueLink: "",
-          valueIsHtml: true,
+          valueIsHtml: false,
         });
       } else {
         termMap.set("eqto", { value: "", valueLink: "", valueIsHtml: true });
@@ -197,8 +198,12 @@ const TermSetPage = (props: TermsetPageComProps) => {
         escapeForCSV(term.annotation["alternative label"].value ?? "N/A"),
       );
       if (term instanceof TsClass) {
-        row.push(escapeForCSV(term.subClassOf ? term.subClassOf : "N/A"));
-        row.push(escapeForCSV(term.eqAxiom ?? "N/A"));
+        row.push(
+          escapeForCSV(TermLib.classStructureToText(term.subClassOf) || "N/A"),
+        );
+        row.push(
+          escapeForCSV(TermLib.classStructureToText(term.eqAxiom) || "N/A"),
+        );
       } else {
         row.push(escapeForCSV("N/A"));
         row.push(escapeForCSV("N/A"));

@@ -1,9 +1,77 @@
-import { TsClass, TsSkosTerm, TsTerm } from "../concepts";
+import { ClassStructureNode, TsClass, TsSkosTerm, TsTerm } from "../concepts";
 import Toolkit from "./Toolkit";
 
 const Has_Curation_Status_Purl = "http://purl.obolibrary.org/obo/IAO_0000114";
 
 class TermLib {
+  static renderClassStructure(term: TsClass, nodes?: ClassStructureNode[]) {
+    if (!nodes?.length) {
+      return;
+    }
+
+    return (
+      <ul>
+        {nodes.map((node, index) => (
+          <li key={index}>{TermLib.renderClassStructureNode(term, node)}</li>
+        ))}
+      </ul>
+    );
+  }
+
+  static classStructureToText(nodes?: ClassStructureNode[]): string {
+    if (!nodes?.length) {
+      return "";
+    }
+    return nodes
+      .map((node) => TermLib.classStructureNodeToText(node))
+      .join("; ");
+  }
+
+  private static renderClassStructureNode(
+    term: TsClass,
+    node: ClassStructureNode,
+  ): JSX.Element | string {
+    if (node.type === "literal") {
+      return node.value;
+    }
+    if (node.type === "link") {
+      return (
+        <a
+          href={TermLib.createClassStructureUrl(term, node)}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {node.label}
+        </a>
+      );
+    }
+
+    return (
+      <span>
+        ({node.left && TermLib.renderClassStructureNode(term, node.left)}
+        <span> {node.relation} </span>
+        {node.right && TermLib.renderClassStructureNode(term, node.right)})
+      </span>
+    );
+  }
+
+  private static classStructureNodeToText(node: ClassStructureNode): string {
+    if (node.type === "literal") {
+      return node.value;
+    }
+    if (node.type === "link") {
+      return node.label || node.iri;
+    }
+    return `(${node.left ? TermLib.classStructureNodeToText(node.left) : ""} ${node.relation} ${node.right ? TermLib.classStructureNodeToText(node.right) : ""})`;
+  }
+
+  private static createClassStructureUrl(
+    term: TsClass,
+    node: Extract<ClassStructureNode, { type: "link" }>,
+  ) {
+    return `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${term.ontologyId}/${node.target}?iri=${encodeURIComponent(node.iri)}`;
+  }
+
   static createOntologyTagWithTermURL(
     ontology_name: string,
     termIri: string,

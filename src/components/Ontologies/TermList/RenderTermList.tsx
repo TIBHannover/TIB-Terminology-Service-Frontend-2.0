@@ -88,14 +88,14 @@ export const RenderTermList = (props) => {
         valueLink: "",
       });
       termMap.set("subclass", {
-        value: term.subClassOf,
+        value: TermLib.renderClassStructure(term, term.subClassOf),
         valueLink: "",
-        valueIsHtml: true,
+        valueIsHtml: false,
       });
       termMap.set("eqto", {
-        value: term.eqAxiom,
+        value: TermLib.renderClassStructure(term, term.eqAxiom),
         valueLink: "",
-        valueIsHtml: true,
+        valueIsHtml: false,
       });
       termMap.set("example", {
         value: term.annotation["example of usage"].value ?? "N/A",

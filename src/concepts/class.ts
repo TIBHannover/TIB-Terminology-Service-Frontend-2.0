@@ -2,12 +2,26 @@ import {
   OntologyTermDataV2,
   OntologyTermData,
 } from "../api/types/ontologyTypes";
-import {
-  buildHtmlAnchor,
-  buildCloseParanthesis,
-  buildOpenParanthesis,
-} from "../Libs/htmlFactory";
+import { buildHtmlAnchor } from "../Libs/htmlFactory";
 import { TsTerm } from "./term";
+
+export type ClassStructureNode =
+  | {
+      type: "link";
+      iri: string;
+      label: string;
+      target: "terms" | "props";
+    }
+  | {
+      type: "literal";
+      value: string;
+    }
+  | {
+      type: "expression";
+      left?: ClassStructureNode; // left is subject in subject-predicate-object triple
+      relation: string; // predicate
+      right?: ClassStructureNode; // right is object in subject-predicate-object triple
+    };
 
 export class TsClass extends TsTerm {
   instancesList: OntologyTermData[];
@@ -28,15 +42,15 @@ export class TsClass extends TsTerm {
     return false;
   }
 
-  get eqAxiom(): string | undefined {
+  get eqAxiom(): ClassStructureNode[] | undefined {
     return this.recursivelyBuildStructure(TsTerm.EQUIVALENT_CLASS_PURL);
   }
 
-  get subClassOf(): string | undefined {
+  get subClassOf(): ClassStructureNode[] | undefined {
     return this.recursivelyBuildStructure(TsTerm.SUBCLASS_PURL);
   }
 
-  get disjointWith(): string | undefined {
+  get disjointWith(): ClassStructureNode[] | undefined {
     return this.recursivelyBuildStructure(TsTerm.DISJOINTWITH_PURL);
   }
 
@@ -163,22 +177,27 @@ export class TsClass extends TsTerm {
     }
   }
 
-  recursivelyBuildStructure(metadataPurl: string): string | undefined {
+  recursivelyBuildStructure(
+    metadataPurl: string,
+  ): ClassStructureNode[] | undefined {
     try {
       let data = this.term[metadataPurl];
-      if (typeof data === "object") {
+      if (typeof data === "string") {
+        data = [data];
+      } else if (Array.isArray(data)) {
+        if (
+          metadataPurl === TsTerm.EQUIVALENT_CLASS_PURL &&
+          this.isExpressionArray(data)
+        ) {
+          data = [data];
+        }
+      } else if (typeof data === "object") {
         data = [data];
       }
       if (!data || data.length === 0) {
         return;
       }
-      if (typeof data === "string") {
-        data = [data];
-      }
-      if (metadataPurl === TsTerm.EQUIVALENT_CLASS_PURL) {
-        data = [data];
-      }
-      let ul = document.createElement("ul");
+      let result: ClassStructureNode[] = [];
       for (let i = 0; i < data.length; i++) {
         let subClassData = data[i];
         let [subClassIri, subClassIsIri] =
@@ -190,62 +209,34 @@ export class TsClass extends TsTerm {
           let parentLabel = this.getLabelForLinkedEntity(subClassIri);
           let [parentLableString, _] =
             this.getStringValueIfPossible(parentLabel);
-          let parentLi = document.createElement("li");
-          let parentUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(subClassIri)}`;
-          let parentAnchor = buildHtmlAnchor(parentUrl, parentLableString);
-          parentLi.appendChild(parentAnchor);
-          ul.appendChild(parentLi);
+          result.push(this.createLinkNode(subClassIri, parentLableString));
         } else {
-          // subclassdata is object. Nees recursive processing
-          let li = document.createElement("li");
-          let content = this.recSubClass(subClassData)!;
-          li.appendChild(content);
-          ul.appendChild(li);
+          result.push(this.recSubClass(subClassData)!);
         }
       }
 
-      return ul.outerHTML;
+      return result.length ? result : undefined;
     } catch (e) {
       // console.log(e)
       return;
     }
   }
 
-  recSubClass(relationObj: any, relation = ""): HTMLSpanElement | undefined {
+  recSubClass(relationObj: any, relation = ""): ClassStructureNode | undefined {
     if (relationObj instanceof Array) {
-      let liContent = document.createElement("span");
-      liContent.appendChild(buildOpenParanthesis());
+      let left: ClassStructureNode | undefined;
       if (typeof relationObj[0] === "string") {
-        let targetIri = relationObj[0];
-        let [targetLabel, _] = this.getStringValueIfPossible(
-          this.getLabelForLinkedEntity(targetIri),
-        );
-        let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
-        let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
-        liContent.appendChild(targetAnchor);
+        left = this.createTermLinkNode(relationObj[0]);
       } else {
-        let content = this.recSubClass(relationObj[0])!;
-        liContent.appendChild(content);
+        left = this.recSubClass(relationObj[0]);
       }
-      let relationTextspan = document.createElement("span");
-      relationTextspan.innerHTML = ` ${relation} `;
-      liContent.appendChild(relationTextspan);
-
+      let right: ClassStructureNode | undefined;
       if (typeof relationObj[1] === "string") {
-        let targetIri = relationObj[1];
-        let [targetLabel, _] = this.getStringValueIfPossible(
-          this.getLabelForLinkedEntity(targetIri),
-        );
-        let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
-        let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
-        liContent.appendChild(targetAnchor);
-        liContent.appendChild(buildCloseParanthesis());
-        return liContent;
+        right = this.createTermLinkNode(relationObj[1]);
+      } else {
+        right = this.recSubClass(relationObj[1]);
       }
-      let content = this.recSubClass(relationObj[1])!;
-      liContent.appendChild(content);
-      liContent.appendChild(buildCloseParanthesis());
-      return liContent;
+      return { type: "expression", left, relation, right };
     }
     if (relationObj instanceof Object) {
       let propertyIri = relationObj["http://www.w3.org/2002/07/owl#onProperty"];
@@ -255,51 +246,35 @@ export class TsClass extends TsTerm {
         )!;
         return this.recSubClass(relationObj[relKey], relKey?.split("#")[1]);
       }
-      let [propertyLabel, _] = this.getStringValueIfPossible(
-        this.getLabelForLinkedEntity(propertyIri),
-      );
-      let propUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/props?iri=${encodeURIComponent(propertyIri)}`;
-      let propAnchor = buildHtmlAnchor(propUrl, propertyLabel);
-      let liContent = document.createElement("span");
-      liContent.appendChild(buildOpenParanthesis());
-      let relationTextspan = document.createElement("span");
-      liContent.appendChild(propAnchor);
       let keys = Object.keys(relationObj);
       let targetKey = keys.find(
         (key) => key !== TsTerm.TYPE_URI && key !== TsTerm.ON_PROPERTY_URI,
       )!;
-      relationTextspan.innerHTML = ` ${targetKey.split("#")[1]} `;
-      liContent.appendChild(relationTextspan);
+      let right: ClassStructureNode | undefined;
       if (typeof relationObj[targetKey] === "string") {
         if (targetKey.includes("Cardinality")) {
-          // the target is a cardinality value such "1" not an iri
-          let targetLabel = " " + relationObj[targetKey];
-          liContent.appendChild(document.createTextNode(targetLabel));
-          liContent.appendChild(buildCloseParanthesis());
-          return liContent;
+          right = { type: "literal", value: relationObj[targetKey] };
+        } else {
+          right = this.createTermLinkNode(relationObj[targetKey]);
         }
-        // the target is an iri
-        let targetIri = relationObj[targetKey];
-        let [targetLabel, _] = this.getStringValueIfPossible(
-          this.getLabelForLinkedEntity(targetIri),
+      } else {
+        right = this.recSubClass(
+          relationObj[targetKey],
+          targetKey?.split("#")[1],
         );
-        let targetUrl = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${this.ontologyId}/terms?iri=${encodeURIComponent(targetIri)}`;
-        let targetAnchor = buildHtmlAnchor(targetUrl, targetLabel);
-        liContent.appendChild(targetAnchor);
-        liContent.appendChild(buildCloseParanthesis());
-        return liContent;
       }
-      // the target is an object
-      let content = this.recSubClass(
-        relationObj[targetKey],
-        targetKey?.split("#")[1],
-      )!;
-      liContent.appendChild(content);
-      liContent.appendChild(buildCloseParanthesis());
-      return liContent;
+      return {
+        type: "expression",
+        left: this.createLinkNode(
+          propertyIri,
+          this.getLabelForLinkedEntity(propertyIri),
+          "props",
+        ),
+        relation: targetKey.split("#")[1],
+        right,
+      };
     }
-    let span = document.createElement("span") as HTMLSpanElement;
-    return span;
+    return { type: "literal", value: "" };
   }
 
   getRules(): string {
@@ -346,5 +321,21 @@ export class TsClass extends TsTerm {
       return [value.value, true];
     }
     return [value, false];
+  }
+
+  private createTermLinkNode(iri: string): ClassStructureNode {
+    return this.createLinkNode(iri, this.getLabelForLinkedEntity(iri));
+  }
+
+  private createLinkNode(
+    iri: string,
+    label: string,
+    target: "terms" | "props" = "terms",
+  ): ClassStructureNode {
+    return { type: "link", iri, label, target };
+  }
+
+  private isExpressionArray(data: any[]): boolean {
+    return data.length === 2;
   }
 }

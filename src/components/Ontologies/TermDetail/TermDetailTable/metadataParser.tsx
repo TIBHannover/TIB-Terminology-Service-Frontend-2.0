@@ -180,9 +180,18 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
  */
 export function classMetaData(term: TsClass) {
   let metadata = createBaseMetadata(term);
-  metadata["SubClass Of"] = { value: term.subClassOf, isLink: false };
-  metadata["Equivalent to"] = { value: term.eqAxiom, isLink: false };
-  metadata["Disjoint with"] = { value: term.disjointWith, isLink: false };
+  metadata["SubClass Of"] = {
+    value: TermLib.renderClassStructure(term, term.subClassOf),
+    isLink: false,
+  };
+  metadata["Equivalent to"] = {
+    value: TermLib.renderClassStructure(term, term.eqAxiom),
+    isLink: false,
+  };
+  metadata["Disjoint with"] = {
+    value: TermLib.renderClassStructure(term, term.disjointWith),
+    isLink: false,
+  };
   metadata["Used in axiom"] = { value: term.relations, isLink: false };
   metadata["Instances"] = {
     value: TermLib.createInstancesListForClass(term),

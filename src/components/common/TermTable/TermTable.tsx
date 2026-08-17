@@ -9,7 +9,7 @@ type Column = {
 };
 
 type Term = {
-  value: string;
+  value: ReactNode;
   valueLink: string;
   valueIsHtml: boolean; // value is html and is rendered through Toolkit
 };
@@ -94,7 +94,11 @@ const TermTable = (props: InputProp) => {
         } else if (term.get(col.id)!.valueIsHtml) {
           oneRow.push(
             <td className="table-body-cell">
-              {Toolkit.renderDangerousHtml(term.get(col.id)!.value, {}, "span")}
+              {Toolkit.renderDangerousHtml(
+                term.get(col.id)!.value as string,
+                {},
+                "span",
+              )}
             </td>,
           );
         } else {
