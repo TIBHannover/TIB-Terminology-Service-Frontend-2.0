@@ -132,6 +132,9 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
   // add custom annotation fields. Metadata key can be anything
   for (let key in term.annotation) {
     const annotation = term.annotation[key] as TsAnnotation;
+    if (!annotation) {
+      continue;
+    }
     if (key === "definition" || key === "has_dbxref") {
       continue;
     }
@@ -181,15 +184,21 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
 export function classMetaData(term: TsClass) {
   let metadata = createBaseMetadata(term);
   metadata["SubClass Of"] = {
-    value: TermLib.renderClassStructure(term, term.subClassOf),
+    value: TermLib.renderClassStructure(term, term.subClassOf, {
+      showAxioms: true,
+    }),
     isLink: false,
   };
   metadata["Equivalent to"] = {
-    value: TermLib.renderClassStructure(term, term.eqAxiom),
+    value: TermLib.renderClassStructure(term, term.eqAxiom, {
+      showAxioms: true,
+    }),
     isLink: false,
   };
   metadata["Disjoint with"] = {
-    value: TermLib.renderClassStructure(term, term.disjointWith),
+    value: TermLib.renderClassStructure(term, term.disjointWith, {
+      showAxioms: true,
+    }),
     isLink: false,
   };
   metadata["Used in axiom"] = { value: term.relations, isLink: false };
@@ -276,7 +285,7 @@ export function skosTermMetaData(term: TsSkosTerm) {
   if (term.annotation) {
     renderAnnotation(term, metadata);
   }
-  const dbXref = term.annotation["has_dbxref"].value;
+  const dbXref = term.annotation["has_dbxref"]?.value;
   if (dbXref && dbXref.length > 0) {
     const xrefContent = `
         <ul>

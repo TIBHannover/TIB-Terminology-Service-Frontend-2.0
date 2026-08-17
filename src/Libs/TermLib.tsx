@@ -1,10 +1,25 @@
-import { ClassStructureNode, TsClass, TsSkosTerm, TsTerm } from "../concepts";
+import { useState } from "react";
+import Modal from "react-bootstrap/Modal";
+import {
+  ClassStructureAxiom,
+  ClassStructureNode,
+  TsClass,
+  TsSkosTerm,
+  TsTerm,
+} from "../concepts";
 import Toolkit from "./Toolkit";
 
 const Has_Curation_Status_Purl = "http://purl.obolibrary.org/obo/IAO_0000114";
+type RenderClassStructureOptions = {
+  showAxioms?: boolean;
+};
 
 class TermLib {
-  static renderClassStructure(term: TsClass, nodes?: ClassStructureNode[]) {
+  static renderClassStructure(
+    term: TsClass,
+    nodes?: ClassStructureNode[],
+    options: RenderClassStructureOptions = {},
+  ) {
     if (!nodes?.length) {
       return;
     }
@@ -12,7 +27,9 @@ class TermLib {
     return (
       <ul>
         {nodes.map((node, index) => (
-          <li key={index}>{TermLib.renderClassStructureNode(term, node)}</li>
+          <li key={index}>
+            {TermLib.renderClassStructureNode(term, node, options)}
+          </li>
         ))}
       </ul>
     );
@@ -30,27 +47,45 @@ class TermLib {
   private static renderClassStructureNode(
     term: TsClass,
     node: ClassStructureNode,
+    options: RenderClassStructureOptions,
   ): JSX.Element | string {
+    const axiomButton =
+      options.showAxioms && node.axioms?.length ? (
+        <AxiomInfoButton axioms={node.axioms} />
+      ) : null;
+
     if (node.type === "literal") {
-      return node.value;
+      return (
+        <>
+          {node.value}
+          {axiomButton}
+        </>
+      );
     }
     if (node.type === "link") {
       return (
-        <a
-          href={TermLib.createClassStructureUrl(term, node)}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {node.label}
-        </a>
+        <>
+          <a
+            href={TermLib.createClassStructureUrl(term, node)}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {node.label}
+          </a>
+          {axiomButton}
+        </>
       );
     }
 
     return (
       <span>
-        ({node.left && TermLib.renderClassStructureNode(term, node.left)}
+        ({node.left &&
+          TermLib.renderClassStructureNode(term, node.left, options)}
         <span> {node.relation} </span>
-        {node.right && TermLib.renderClassStructureNode(term, node.right)})
+        {node.right &&
+          TermLib.renderClassStructureNode(term, node.right, options)}
+        )
+        {axiomButton}
       </span>
     );
   }
@@ -333,6 +368,52 @@ class TermLib {
     }
     return results;
   }
+}
+
+function AxiomInfoButton({ axioms }: { axioms: ClassStructureAxiom[] }) {
+  const [showModal, setShowModal] = useState(false);
+
+  return (
+    <>
+      <button
+        type="button"
+        className="metadata-info-button ms-1"
+        aria-label="see axioms"
+        title="see axioms"
+        onClick={() => setShowModal(true)}
+      >
+        <i className="bi bi-info-circle" aria-hidden="true"></i>
+      </button>
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        size="lg"
+        className="metadata-info-modal"
+      >
+        <Modal.Header>
+          <Modal.Title>Axioms</Modal.Title>
+          <button
+            type="button"
+            className="metadata-info-close"
+            aria-label="Close"
+            onClick={() => setShowModal(false)}
+          >
+            <i className="bi bi-x-lg" aria-hidden="true"></i>
+          </button>
+        </Modal.Header>
+        <Modal.Body>
+          <ul>
+            {axioms.map((axiom, index) => (
+              <li key={`${axiom.key}-${axiom.value}-${index}`}>
+                <span title={axiom.key}>{axiom.keyLabel}</span>:{" "}
+                <span title={axiom.value}>{axiom.valueLabel}</span>
+              </li>
+            ))}
+          </ul>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
 }
 
 export default TermLib;

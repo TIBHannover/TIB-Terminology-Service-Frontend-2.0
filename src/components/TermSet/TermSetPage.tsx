@@ -101,7 +101,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
         valueLink: "",
       });
       termMap.set("altTerm", {
-        value: term.annotation["alternative label"].value ?? "N/A",
+        value: term.annotation["alternative label"]?.value ?? "N/A",
         valueLink: "",
       });
       if (term instanceof TsClass) {
@@ -124,16 +124,16 @@ const TermSetPage = (props: TermsetPageComProps) => {
         });
       }
       termMap.set("example", {
-        value: term.annotation["example of usage"].value ?? "N/A",
+        value: term.annotation["example of usage"]?.value ?? "N/A",
         valueLink: "",
       });
       termMap.set("seealso", {
-        value: term.annotation["seeAlso"].value ?? "N/A",
+        value: term.annotation["seeAlso"]?.value ?? "N/A",
         valueLink: "",
       });
       termMap.set("contrib", { value: term.contributors, valueLink: "" });
       termMap.set("comment", {
-        value: term.annotation["comment"].value ?? "N/A",
+        value: term.annotation["comment"]?.value ?? "N/A",
         valueLink: "",
       });
       termMap.set("action", { value: DeleteBtn, valueLink: "" });
@@ -195,7 +195,7 @@ const TermSetPage = (props: TermsetPageComProps) => {
         ),
       );
       row.push(
-        escapeForCSV(term.annotation["alternative label"].value ?? "N/A"),
+        escapeForCSV(term.annotation["alternative label"]?.value ?? "N/A"),
       );
       if (term instanceof TsClass) {
         row.push(
@@ -209,11 +209,11 @@ const TermSetPage = (props: TermsetPageComProps) => {
         row.push(escapeForCSV("N/A"));
       }
       row.push(
-        escapeForCSV(term.annotation["example of usage"].value ?? "N/A"),
+        escapeForCSV(term.annotation["example of usage"]?.value ?? "N/A"),
       );
-      row.push(escapeForCSV(term.annotation["seeAlso"].value ?? "N/A"));
+      row.push(escapeForCSV(term.annotation["seeAlso"]?.value ?? "N/A"));
       row.push(escapeForCSV(term.contributors));
-      row.push(escapeForCSV(term.annotation["comment"].value ?? "N/A"));
+      row.push(escapeForCSV(term.annotation["comment"]?.value ?? "N/A"));
       rows.push(row);
     }
     let csvContent =

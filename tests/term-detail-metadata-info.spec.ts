@@ -11,6 +11,12 @@ const ONTOLOGY_ID = "metadata-link-test";
 const TERM_IRI = "http://example.test/terms/annotated-term";
 const PROPERTY_IRI = "http://example.test/properties/sourceAnnotation";
 const UNSAFE_PROPERTY_IRI = "javascript:alert(1)";
+const PARENT_IRI = "http://example.test/terms/parent-term";
+const SECOND_PARENT_IRI = "http://example.test/terms/plain-parent-term";
+const EQUIVALENT_IRI = "http://example.test/terms/equivalent-term";
+const DISJOINT_IRI = "http://example.test/terms/disjoint-term";
+const AXIOM_PROPERTY_IRI = "http://example.test/properties/isInferred";
+const AXIOM_VALUE_IRI = "http://example.test/terms/reasoner";
 
 function metadataRow(page: Page, label: string): Locator {
   return page.locator(".node-detail-table-row").filter({
@@ -64,11 +70,32 @@ function termResponse(propertyIri = PROPERTY_IRI) {
     hasDirectParents: false,
     definition: ["Term with annotation metadata"],
     [propertyIri]: "Source annotation value",
+    "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+      {
+        value: PARENT_IRI,
+        axioms: [{ [AXIOM_PROPERTY_IRI]: AXIOM_VALUE_IRI }],
+      },
+      SECOND_PARENT_IRI,
+    ],
+    "http://www.w3.org/2002/07/owl#equivalentClass": {
+      value: EQUIVALENT_IRI,
+      axioms: [{ [AXIOM_PROPERTY_IRI]: "true" }],
+    },
+    "http://www.w3.org/2002/07/owl#disjointWith": {
+      value: DISJOINT_IRI,
+      axioms: [{ [AXIOM_PROPERTY_IRI]: AXIOM_VALUE_IRI }],
+    },
     linkedEntities: {
       [propertyIri]: {
         label: ["source annotation"],
         format: ["Text"],
       },
+      [PARENT_IRI]: { label: ["Parent term"] },
+      [SECOND_PARENT_IRI]: { label: ["Plain parent term"] },
+      [EQUIVALENT_IRI]: { label: ["Equivalent term"] },
+      [DISJOINT_IRI]: { label: ["Disjoint term"] },
+      [AXIOM_PROPERTY_IRI]: { label: ["is inferred"] },
+      [AXIOM_VALUE_IRI]: { label: ["reasoner"] },
     },
   };
 }
@@ -182,4 +209,50 @@ test("metadata fallback renders unsafe property IRI as text", async ({
     timeout: 15000,
   });
   await expect(dialog.locator("a.metadata-info-iri")).toHaveCount(0);
+});
+
+test("term detail class structure axiom buttons open modal only for axiom nodes", async ({
+  page,
+}) => {
+  await mockMetadataTermRoutes(page);
+  await gotoMetadataTerm(page);
+
+  const subclassRow = metadataRow(page, "SubClass Of");
+  await expect(subclassRow.locator(".node-metadata-value")).toContainText(
+    "Parent term",
+  );
+  await expect(subclassRow.locator(".node-metadata-value")).toContainText(
+    "Plain parent term",
+  );
+  await expect(
+    subclassRow.getByRole("button", { name: "see axioms" }),
+  ).toHaveCount(1);
+
+  await expect(
+    metadataRow(page, "Equivalent to").getByRole("button", {
+      name: "see axioms",
+    }),
+  ).toHaveCount(1);
+  await expect(
+    metadataRow(page, "Disjoint with").getByRole("button", {
+      name: "see axioms",
+    }),
+  ).toHaveCount(1);
+
+  const axiomButton = subclassRow.getByRole("button", { name: "see axioms" });
+  await expect(axiomButton).toHaveAttribute("title", "see axioms");
+  await axiomButton.click();
+
+  const dialog = page.locator(".metadata-info-modal .modal-dialog");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator(".modal-title")).toHaveText("Axioms");
+  await expect(dialog.locator("li")).toHaveText("is inferred: reasoner");
+  await expect(dialog.locator("li span").first()).toHaveAttribute(
+    "title",
+    AXIOM_PROPERTY_IRI,
+  );
+  await expect(dialog.locator("li span").nth(1)).toHaveAttribute(
+    "title",
+    AXIOM_VALUE_IRI,
+  );
 });

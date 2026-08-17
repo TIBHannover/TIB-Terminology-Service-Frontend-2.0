@@ -220,11 +220,11 @@ export class TsTerm {
 
   get contributors() {
     if (this.annotation?.["contributor"]) {
-      return this.annotation["contributor"].value;
+      return this.annotation["contributor"]?.value;
     } else if (this.annotation?.["term editor"]) {
-      return this.annotation["term editor"].value;
+      return this.annotation["term editor"]?.value;
     } else if (this.annotation?.["creator"]) {
-      return this.annotation["creator"].value;
+      return this.annotation["creator"]?.value;
     } else {
       return "N/A";
     }

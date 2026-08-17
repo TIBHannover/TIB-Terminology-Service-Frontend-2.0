@@ -84,7 +84,7 @@ export const RenderTermList = (props) => {
         valueLink: "",
       });
       termMap.set("altTerm", {
-        value: term.annotation["alternative label"].value ?? "N/A",
+        value: term.annotation["alternative label"]?.value ?? "N/A",
         valueLink: "",
       });
       termMap.set("subclass", {
@@ -98,12 +98,14 @@ export const RenderTermList = (props) => {
         valueIsHtml: false,
       });
       termMap.set("example", {
-        value: term.annotation["example of usage"].value ?? "N/A",
+        value: term.annotation["example of usage"]?.value ?? "N/A",
         valueLink: "",
       });
       termMap.set("seealso", {
         value:
-          term.annotation["seeAlso"].value ?? term.annotation["see also"].value,
+          term.annotation["seeAlso"]?.value ??
+          term.annotation["see also"]?.value ??
+          "N/A",
         valueLink: "",
       });
       termMap.set("contrib", {
@@ -111,7 +113,7 @@ export const RenderTermList = (props) => {
         valueLink: "",
       });
       termMap.set("comment", {
-        value: term.annotation["comment"].value ?? "N/A",
+        value: term.annotation["comment"]?.value ?? "N/A",
         valueLink: "",
       });
       termMap.set("action", { value: addToSetButton, valueLink: "" });

@@ -5,22 +5,32 @@ import {
 import { buildHtmlAnchor } from "../Libs/htmlFactory";
 import { TsTerm } from "./term";
 
+export type ClassStructureAxiom = {
+  key: string;
+  value: string;
+  keyLabel: string;
+  valueLabel: string;
+};
+
 export type ClassStructureNode =
   | {
       type: "link";
       iri: string;
       label: string;
       target: "terms" | "props";
+      axioms?: ClassStructureAxiom[];
     }
   | {
       type: "literal";
       value: string;
+      axioms?: ClassStructureAxiom[];
     }
   | {
       type: "expression";
       left?: ClassStructureNode; // left is subject in subject-predicate-object triple
       relation: string; // predicate
       right?: ClassStructureNode; // right is object in subject-predicate-object triple
+      axioms?: ClassStructureAxiom[];
     };
 
 export class TsClass extends TsTerm {
@@ -209,7 +219,14 @@ export class TsClass extends TsTerm {
           let parentLabel = this.getLabelForLinkedEntity(subClassIri);
           let [parentLableString, _] =
             this.getStringValueIfPossible(parentLabel);
-          result.push(this.createLinkNode(subClassIri, parentLableString));
+          result.push(
+            this.createLinkNode(
+              subClassIri,
+              parentLableString,
+              "terms",
+              this.createAxiomNodes(subClassData),
+            ),
+          );
         } else {
           result.push(this.recSubClass(subClassData)!);
         }
@@ -242,13 +259,21 @@ export class TsClass extends TsTerm {
       let propertyIri = relationObj["http://www.w3.org/2002/07/owl#onProperty"];
       if (!propertyIri) {
         let relKey = Object.keys(relationObj).find(
-          (key) => key !== TsTerm.TYPE_URI,
+          (key) => key !== TsTerm.TYPE_URI && key !== "axioms",
         )!;
-        return this.recSubClass(relationObj[relKey], relKey?.split("#")[1]);
+        let node = this.recSubClass(relationObj[relKey], relKey?.split("#")[1]);
+        let axioms = this.createAxiomNodes(relationObj);
+        if (node && axioms?.length) {
+          node.axioms = axioms;
+        }
+        return node;
       }
       let keys = Object.keys(relationObj);
       let targetKey = keys.find(
-        (key) => key !== TsTerm.TYPE_URI && key !== TsTerm.ON_PROPERTY_URI,
+        (key) =>
+          key !== TsTerm.TYPE_URI &&
+          key !== TsTerm.ON_PROPERTY_URI &&
+          key !== "axioms",
       )!;
       let right: ClassStructureNode | undefined;
       if (typeof relationObj[targetKey] === "string") {
@@ -263,7 +288,7 @@ export class TsClass extends TsTerm {
           targetKey?.split("#")[1],
         );
       }
-      return {
+      let node: ClassStructureNode = {
         type: "expression",
         left: this.createLinkNode(
           propertyIri,
@@ -273,6 +298,11 @@ export class TsClass extends TsTerm {
         relation: targetKey.split("#")[1],
         right,
       };
+      let axioms = this.createAxiomNodes(relationObj);
+      if (axioms?.length) {
+        node.axioms = axioms;
+      }
+      return node;
     }
     return { type: "literal", value: "" };
   }
@@ -331,8 +361,32 @@ export class TsClass extends TsTerm {
     iri: string,
     label: string,
     target: "terms" | "props" = "terms",
+    axioms?: ClassStructureAxiom[],
   ): ClassStructureNode {
-    return { type: "link", iri, label, target };
+    let node: ClassStructureNode = { type: "link", iri, label, target };
+    if (axioms?.length) {
+      node.axioms = axioms;
+    }
+    return node;
+  }
+
+  private createAxiomNodes(value: any): ClassStructureAxiom[] | undefined {
+    if (!value?.axioms?.length) {
+      return;
+    }
+    return value.axioms.flatMap((axiom: Record<string, string>) => {
+      let entry = Object.entries(axiom)[0];
+      if (!entry) {
+        return [];
+      }
+      let [key, axiomValue] = entry;
+      return [{
+        key,
+        value: axiomValue,
+        keyLabel: this.getLabelForLinkedEntity(key) || key,
+        valueLabel: this.getLabelForLinkedEntity(axiomValue) || axiomValue,
+      }];
+    });
   }
 
   private isExpressionArray(data: any[]): boolean {
