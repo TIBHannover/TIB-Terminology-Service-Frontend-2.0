@@ -6,7 +6,7 @@ import AlertBox from "../../common/Alerts/Alerts";
 import TermLib from "../../../Libs/TermLib";
 import TermTable from "../../common/TermTable/TermTable";
 import { AddToTermsetModal } from "../../TermSet/AddTermToSet";
-import { TsTerm } from "../../../concepts";
+import { TsClass } from "../../../concepts";
 
 const PAGE_SIZES_FOR_DROPDOWN = [
   { label: "20", value: 20 },
@@ -56,7 +56,7 @@ export const RenderTermList = (props) => {
   }
 
   async function createList() {
-    let listOfterms = props.listOfTerms;
+    let listOfterms = props.listOfTerms as TsClass[];
     let baseUrl = process.env.REACT_APP_PROJECT_SUB_PATH + "/ontologies/";
     let dataForTable = [];
     let modals = [];
@@ -67,7 +67,6 @@ export const RenderTermList = (props) => {
         encodeURIComponent(term["ontologyId"]) +
         "/terms?iri=" +
         encodeURIComponent(term["iri"]);
-      let annotation = term["annotation"];
       let addToSetButton = (
         <AddToTermsetModal
           modalId={"term-in-tree-" + id}
@@ -81,12 +80,11 @@ export const RenderTermList = (props) => {
       termMap.set("label", { value: term["label"], valueLink: termTreeUrl });
       termMap.set("decs", {
         value:
-          term.definition ?? TsTerm.getAnnotationValue(annotation?.definition),
+          term.definition ?? term.annotation?.["definition"]?.value ?? "N/A",
         valueLink: "",
       });
       termMap.set("altTerm", {
-        value:
-          TsTerm.getAnnotationValue(annotation["alternative label"]) ?? "N/A",
+        value: term.annotation["alternative label"].value ?? "N/A",
         valueLink: "",
       });
       termMap.set("subclass", {
@@ -100,23 +98,20 @@ export const RenderTermList = (props) => {
         valueIsHtml: true,
       });
       termMap.set("example", {
-        value:
-          TsTerm.getAnnotationValue(term["annotation"]["example of usage"]) ??
-          "N/A",
+        value: term.annotation["example of usage"].value ?? "N/A",
         valueLink: "",
       });
       termMap.set("seealso", {
         value:
-          TsTerm.getAnnotationValue(term["annotation"]["seeAlso"]) ?? "N/A",
+          term.annotation["seeAlso"].value ?? term.annotation["see also"].value,
         valueLink: "",
       });
       termMap.set("contrib", {
-        value: TermLib.getContributors(term),
+        value: term.contributors,
         valueLink: "",
       });
       termMap.set("comment", {
-        value:
-          TsTerm.getAnnotationValue(term["annotation"]["comment"]) ?? "N/A",
+        value: term.annotation["comment"].value ?? "N/A",
         valueLink: "",
       });
       termMap.set("action", { value: addToSetButton, valueLink: "" });
@@ -156,10 +151,7 @@ export const RenderTermList = (props) => {
             props.obsoletesCheckboxHandler(e);
           }}
         />
-        <label
-          className="form-check-label"
-          htmlFor="obsolte_check_term_list"
-        >
+        <label className="form-check-label" htmlFor="obsolte_check_term_list">
           Include obsoletes terms
         </label>
       </div>
@@ -178,9 +170,7 @@ export const RenderTermList = (props) => {
     }
     return (
       <>
-        <div className="col-sm-3">
-          {renderObsoleteCheckbox()}
-        </div>
+        <div className="col-sm-3">{renderObsoleteCheckbox()}</div>
         <div className="col-sm-3">
           <DropDown
             options={PAGE_SIZES_FOR_DROPDOWN}

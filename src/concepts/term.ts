@@ -6,16 +6,16 @@ import { createElement } from "react";
 export type TsAnnotation = {
   iri: string;
   label: string;
-  value: any;
+  value: string | Record<string, string> | string[] | Record<string, string>[];
   originalIri: string;
-  metadavalue: any;
 };
 
-type AxiomObject = {
+type AnnotationObject = {
   value?: string;
   axioms?: Record<string, string>[];
 };
-export type ProcessedAxiom = {
+
+export type ProcessedMathAxiom = {
   mathValue: string;
   relationLabel: string;
   relationIri: string;
@@ -50,6 +50,7 @@ export class TsTerm {
     TsTerm.EQUIVALENT_CLASS_PURL,
     TsTerm.DISJOINTWITH_PURL,
     TsTerm.RULE_PURL,
+    TsTerm.TYPE_URI,
   ];
 
   term: OntologyTermDataV2;
@@ -219,11 +220,11 @@ export class TsTerm {
 
   get contributors() {
     if (this.annotation?.["contributor"]) {
-      return TsTerm.getAnnotationValue(this.annotation["contributor"]);
+      return this.annotation["contributor"].value;
     } else if (this.annotation?.["term editor"]) {
-      return TsTerm.getAnnotationValue(this.annotation["term editor"]);
+      return this.annotation["term editor"].value;
     } else if (this.annotation?.["creator"]) {
-      return TsTerm.getAnnotationValue(this.annotation["creator"]);
+      return this.annotation["creator"].value;
     } else {
       return "N/A";
     }
@@ -323,7 +324,7 @@ export class TsTerm {
     }
   }
 
-  buildAnnotations(): { [key: string]: any } {
+  buildAnnotations(): { [key: string]: TsAnnotation } {
     try {
       let annotations: { [key: string]: any } = {};
       if (this.term[TsTerm.IDENTIFIER_PURL_HTTP]) {
@@ -338,28 +339,16 @@ export class TsTerm {
         );
       }
       for (let key in this.term) {
-        if (key === TsTerm.CURATION_STATUS_PURL) {
+        if (key === TsTerm.CURATION_STATUS_PURL || key === TsTerm.TYPE_URI) {
           continue;
         }
-        if (this.term["linkedEntities"]?.[key]?.["label"]?.length) {
-          if (
-            typeof this.term[key] === "object" &&
-            !Array.isArray(this.term[key])
-          ) {
-            annotations[this.getLabelForLinkedEntity(key)] =
-              TsTerm.createAnnotation(
-                key,
-                this.getLabelForLinkedEntity(key),
-                this.term[key]?.value,
-              );
-          } else {
-            annotations[this.getLabelForLinkedEntity(key)] =
-              TsTerm.createAnnotation(
-                key,
-                this.getLabelForLinkedEntity(key),
-                this.term[key],
-              );
-          }
+        if (this.getLabelForLinkedEntity(key).length) {
+          annotations[this.getLabelForLinkedEntity(key)] =
+            TsTerm.createAnnotation(
+              key,
+              this.getLabelForLinkedEntity(key),
+              this.term[key],
+            );
         }
       }
       return annotations;
@@ -370,24 +359,21 @@ export class TsTerm {
 
   static createAnnotation(
     iri: string,
-    labelOrValue: string | any,
+    label: string,
     value?: any,
   ): TsAnnotation {
-    const label = value === undefined ? "" : labelOrValue;
-    const metadavalue = value === undefined ? labelOrValue : value;
-    return { iri, label, value: metadavalue, originalIri: iri, metadavalue };
-  }
-
-  static getAnnotationValue(annotation: any) {
-    if (
-      annotation &&
-      typeof annotation === "object" &&
-      "originalIri" in annotation &&
-      ("metadavalue" in annotation || "value" in annotation)
-    ) {
-      return annotation.metadavalue ?? annotation.value;
+    let result: TsAnnotation = {
+      iri: iri,
+      label: label,
+      value: "",
+      originalIri: iri,
+    };
+    if (typeof value === "string" || Array.isArray(value)) {
+      result.value = value;
+    } else if (typeof value === "object") {
+      result.value = value.value;
     }
-    return annotation;
+    return result;
   }
 
   static getAnnotationOriginalIri(annotation: any, fallback: string) {
@@ -401,13 +387,13 @@ export class TsTerm {
     return fallback;
   }
 
-  mathFormulaAxioms(): ProcessedAxiom[] {
-    let axioms: AxiomObject[] =
+  mathFormulaAxioms(): ProcessedMathAxiom[] {
+    let axioms: AnnotationObject[] =
       this.term[TsTerm.IN_DEFINING_FORMULA_PURL] ?? [];
     if (!axioms.length) {
       return [];
     }
-    let results: ProcessedAxiom[] = [];
+    let results: ProcessedMathAxiom[] = [];
     for (let axiom of axioms) {
       let mathValue = axiom.value ?? "";
       for (let item of axiom.axioms) {
@@ -430,9 +416,19 @@ export class TsTerm {
 
   getLabelForLinkedEntity(iri: string): string {
     try {
-      return this.term["linkedEntities"]?.[iri]?.["label"]?.[0] ?? "N/A";
+      return this.term["linkedEntities"]?.[iri]?.["label"]?.[0] ?? "";
     } catch {
-      return "N/A";
+      return "";
+    }
+  }
+
+  getAxiomsFromAnnotationObject(annotation: AnnotationObject) {
+    if (!("axioms" in annotation)) {
+      return [];
+    }
+    let axioms = annotation["axioms"];
+    let results: ProcessedMathAxiom[] = [];
+    for (let ax of axioms) {
     }
   }
 }

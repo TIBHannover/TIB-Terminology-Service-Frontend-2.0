@@ -229,18 +229,6 @@ class TermLib {
     return result;
   }
 
-  static getContributors(term) {
-    if (term["annotation"]?.["contributor"]) {
-      return TsTerm.getAnnotationValue(term["annotation"]["contributor"]);
-    } else if (term["annotation"]?.["term editor"]) {
-      return TsTerm.getAnnotationValue(term["annotation"]["term editor"]);
-    } else if (term["annotation"]?.["creator"]) {
-      return TsTerm.getAnnotationValue(term["annotation"]["creator"]);
-    } else {
-      return "N/A";
-    }
-  }
-
   static getAnnotations(term) {
     let annotations = {};
     for (let key in term) {

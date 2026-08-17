@@ -9,7 +9,8 @@ import {
   TsProperty,
   TsTerm,
   TsSkosTerm,
-  ProcessedAxiom,
+  ProcessedMathAxiom,
+  TsAnnotation,
 } from "../../../../concepts";
 
 const annotationKeyMap: Record<string, string> = {
@@ -35,9 +36,7 @@ function createBaseMetadata(term: TsTerm): TableMetadata {
   let metadata: TableMetadata = {};
   metadata["Label"] = { value: term.label, isLink: false };
   metadata["Description"] = {
-    value:
-      term.definition ??
-      TsTerm.getAnnotationValue(term?.annotation?.definition),
+    value: term.definition ?? term?.annotation?.["definition"]?.value,
     isLink: false,
   };
   if (term.originalOntology !== term.ontologyId) {
@@ -91,37 +90,39 @@ function renderMathRelatedMetadata(
   let mathFormulaAxioms = term.mathFormulaAxioms();
   if (mathFormulaAxioms.length) {
     metadata["in defining formula"] = {
-      value: mathFormulaAxioms.map((axiom: ProcessedAxiom, index: number) => {
-        return (
-          <div className="row border-bottom" key={index}>
-            <div className="col-md-3">
-              <QueryClientProvider client={mathWidgetQueryClient}>
-                <MathFormulaWidget api="" mathML={axiom.mathValue} />
-              </QueryClientProvider>
+      value: mathFormulaAxioms.map(
+        (axiom: ProcessedMathAxiom, index: number) => {
+          return (
+            <div className="row border-bottom" key={index}>
+              <div className="col-md-3">
+                <QueryClientProvider client={mathWidgetQueryClient}>
+                  <MathFormulaWidget api="" mathML={axiom.mathValue} />
+                </QueryClientProvider>
+              </div>
+              <div className="col-md-4 pt-3">
+                <span>
+                  {TermLib.createTermUrl({
+                    ontology_name: term.ontologyId,
+                    termIri: axiom.relationIri,
+                    termLabel: axiom.relationLabel,
+                    type: "property",
+                  })}
+                </span>
+              </div>
+              <div className="col-md-5 pt-3">
+                <span>
+                  {TermLib.createTermUrl({
+                    ontology_name: term.ontologyId,
+                    termIri: axiom.targetIri,
+                    termLabel: axiom.targetLabel,
+                    type: "class",
+                  })}
+                </span>
+              </div>
             </div>
-            <div className="col-md-4 pt-3">
-              <span>
-                {TermLib.createTermUrl({
-                  ontology_name: term.ontologyId,
-                  termIri: axiom.relationIri,
-                  termLabel: axiom.relationLabel,
-                  type: "property",
-                })}
-              </span>
-            </div>
-            <div className="col-md-5 pt-3">
-              <span>
-                {TermLib.createTermUrl({
-                  ontology_name: term.ontologyId,
-                  termIri: axiom.targetIri,
-                  termLabel: axiom.targetLabel,
-                  type: "class",
-                })}
-              </span>
-            </div>
-          </div>
-        );
-      }),
+          );
+        },
+      ),
       isLink: false,
     };
   }
@@ -130,8 +131,7 @@ function renderMathRelatedMetadata(
 function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
   // add custom annotation fields. Metadata key can be anything
   for (let key in term.annotation) {
-    const annotation = term.annotation[key];
-    const annotationValue = TsTerm.getAnnotationValue(annotation);
+    const annotation = term.annotation[key] as TsAnnotation;
     if (key === "definition" || key === "has_dbxref") {
       continue;
     }
@@ -142,14 +142,14 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
     } else {
       annotKey = annotationKeyMap[key] ?? (key as string);
     }
-    if (hasMathMlValue(annotationValue)) {
+    if (hasMathMlValue(annotation.value)) {
       renderMathRelatedMetadata(term, metadata, annotKey, annotation.iri);
       continue;
     }
 
-    if (Array.isArray(annotationValue)) {
+    if (Array.isArray(annotation.value)) {
       let res: string[] = [];
-      annotationValue.map((value: any) => {
+      annotation.value.map((value: any) => {
         if (typeof value === "object" && value.value) {
           res.push(Toolkit.transformLinksInStringToAnchor(value.value));
         } else {
@@ -157,15 +157,17 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
         }
       });
       metadata[annotKey] = { value: res, isLink: false, iri: annotation.iri };
-    } else if (typeof annotationValue === "object" && annotationValue.value) {
+    } else if (typeof annotation.value === "object" && annotation.value.value) {
       metadata[annotKey] = {
-        value: Toolkit.transformLinksInStringToAnchor(annotationValue.value),
+        value: Toolkit.transformLinksInStringToAnchor(annotation.value.value),
         isLink: false,
         iri: annotation.iri,
       };
     } else {
       metadata[annotKey] = {
-        value: Toolkit.transformLinksInStringToAnchor(annotationValue),
+        value: Toolkit.transformLinksInStringToAnchor(
+          annotation.value as string,
+        ),
         isLink: false,
         iri: annotation.iri,
       };
@@ -195,7 +197,7 @@ export function classMetaData(term: TsClass) {
   if (term.annotation) {
     renderAnnotation(term, metadata);
   }
-  const dbXref = TsTerm.getAnnotationValue(term.annotation["has_dbxref"]);
+  const dbXref = term.annotation?.["has_dbxref"]?.value;
   if (dbXref && dbXref.length > 0) {
     const xrefContent = `
         <ul>
@@ -265,7 +267,7 @@ export function skosTermMetaData(term: TsSkosTerm) {
   if (term.annotation) {
     renderAnnotation(term, metadata);
   }
-  const dbXref = TsTerm.getAnnotationValue(term.annotation["has_dbxref"]);
+  const dbXref = term.annotation["has_dbxref"].value;
   if (dbXref && dbXref.length > 0) {
     const xrefContent = `
         <ul>

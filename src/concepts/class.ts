@@ -55,6 +55,7 @@ export class TsClass extends TsTerm {
       if (dbXref && dbXref.length) {
         annotations["has_dbxref"] = TsTerm.createAnnotation(
           TsTerm.DB_XREF_PURL,
+          "has_dbxref",
           dbXref,
         );
       }

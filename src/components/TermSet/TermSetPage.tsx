@@ -26,10 +26,6 @@ const PAGE_SIZES_FOR_DROPDOWN = [
 ];
 const DEFAUTL_ROWS_COUNT = 10;
 
-function annotationValue(annotation: any, key: string) {
-  return TsTerm.getAnnotationValue(annotation?.[key]);
-}
-
 const TermSetPage = (props: TermsetPageComProps) => {
   const termsetId = props.match.params.termsetId;
   const urlFactory = new CommonUrlFactory();
@@ -99,11 +95,12 @@ const TermSetPage = (props: TermsetPageComProps) => {
       termMap.set("shortForm", { value: term.shortForm, valueLink: "" });
       termMap.set("label", { value: term.label, valueLink: termTreeUrl });
       termMap.set("decs", {
-        value: term.definition ?? annotationValue(annotation, "definition"),
+        value:
+          term.definition ?? term.annotation?.["definition"]?.value ?? "N/A",
         valueLink: "",
       });
       termMap.set("altTerm", {
-        value: annotationValue(annotation, "alternative label") ?? "N/A",
+        value: term.annotation["alternative label"].value ?? "N/A",
         valueLink: "",
       });
       if (term instanceof TsClass) {
@@ -126,16 +123,16 @@ const TermSetPage = (props: TermsetPageComProps) => {
         });
       }
       termMap.set("example", {
-        value: annotationValue(annotation, "example of usage") ?? "N/A",
+        value: term.annotation["example of usage"].value ?? "N/A",
         valueLink: "",
       });
       termMap.set("seealso", {
-        value: annotationValue(annotation, "seeAlso") ?? "N/A",
+        value: term.annotation["seeAlso"].value ?? "N/A",
         valueLink: "",
       });
       termMap.set("contrib", { value: term.contributors, valueLink: "" });
       termMap.set("comment", {
-        value: annotationValue(annotation, "comment") ?? "N/A",
+        value: term.annotation["comment"].value ?? "N/A",
         valueLink: "",
       });
       termMap.set("action", { value: DeleteBtn, valueLink: "" });
@@ -193,11 +190,11 @@ const TermSetPage = (props: TermsetPageComProps) => {
       row.push(escapeForCSV(term.label));
       row.push(
         escapeForCSV(
-          term.definition ?? annotationValue(annotation, "definition"),
+          term.definition ?? term.annotation?.["definition"]?.value ?? "N/A",
         ),
       );
       row.push(
-        escapeForCSV(annotationValue(annotation, "alternative label") ?? "N/A"),
+        escapeForCSV(term.annotation["alternative label"].value ?? "N/A"),
       );
       if (term instanceof TsClass) {
         row.push(escapeForCSV(term.subClassOf ? term.subClassOf : "N/A"));
@@ -207,15 +204,11 @@ const TermSetPage = (props: TermsetPageComProps) => {
         row.push(escapeForCSV("N/A"));
       }
       row.push(
-        escapeForCSV(annotationValue(annotation, "example of usage") ?? "N/A"),
+        escapeForCSV(term.annotation["example of usage"].value ?? "N/A"),
       );
-      row.push(
-        escapeForCSV(annotationValue(annotation, "seeAlso") ?? "N/A"),
-      );
+      row.push(escapeForCSV(term.annotation["seeAlso"].value ?? "N/A"));
       row.push(escapeForCSV(term.contributors));
-      row.push(
-        escapeForCSV(annotationValue(annotation, "comment") ?? "N/A"),
-      );
+      row.push(escapeForCSV(term.annotation["comment"].value ?? "N/A"));
       rows.push(row);
     }
     let csvContent =
