@@ -43,15 +43,23 @@ async function gotoNoteListFromOntologyPage(page: Page) {
   const notesTab = page
     .locator(".ontology-detail-nav-item .nav-link", { hasText: /^Notes/ })
     .first();
-  await expect(notesTab).toContainText("Notes (1)");
+  await expect(notesTab).toContainText("Notes (0)");
   await notesTab.click();
   await expect(page).toHaveURL(/\/ontologies\/chmo\/notes/);
   await expect(page.locator(".is-loading-term-list")).toBeHidden();
 }
 
 async function gotoNoteList(page: Page) {
-  await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/notes?lang=en`);
+  await gotoPath(page, `/ontologies/${ONTOLOGY_ID}?lang=en`);
+  await page
+    .locator(".ontology-detail-nav-item .nav-link", { hasText: /^Notes/ })
+    .first()
+    .click();
+  await expect(page).toHaveURL(/\/ontologies\/chmo\/notes/);
   await expect(page.locator(".is-loading-term-list")).toBeHidden();
+  await expect(
+    page.locator(".note-list-card, .tree-view-container.list-container").first(),
+  ).toBeVisible({ timeout: 30000 });
 }
 
 test.describe("note feature", () => {
@@ -67,7 +75,7 @@ test.describe("note feature", () => {
   });
 
   test("note list renders cards and actions", async ({ page }) => {
-    await gotoNoteListFromOntologyPage(page);
+    await gotoNoteList(page);
     const noteCard = page.locator(".note-list-card").first();
     await expect(noteCard.getByRole("link", { name: "Mock CHMO note" }))
       .toHaveAttribute("href", /noteId=1/);

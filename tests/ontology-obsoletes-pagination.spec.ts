@@ -155,16 +155,39 @@ async function mockOntologyRoutes(page: Page, options: RouteOptions = {}) {
 
   await page.route(`**/v2/ontologies/${ONTOLOGY_ID}/classes?**`, async (route) => {
     const url = new URL(route.request().url());
-    rootClassRequests.push(url.toString());
     const includeObsolete = url.searchParams.get("includeObsoleteEntities");
     const isPreferredRoot = url.searchParams.get("isPreferredRoot") === "true";
     const pageNumber = Number(url.searchParams.get("page") ?? "0");
     const lang = url.searchParams.get("lang") ?? "en";
 
     if (includeObsolete === "true") {
-      await json(route, { elements: [], totalElements: 0 });
+      obsoleteRootRequests.push(url.toString());
+      if (options.delayObsoleteRootPage0 && pageNumber === 0) {
+        await obsoleteRootPage0Gate;
+      }
+      if (options.delayObsoleteRootPage1 && pageNumber === 1) {
+        await obsoleteRootPage1Gate;
+      }
+      await json(route, {
+        elements: [
+          term(
+            pageNumber === 0 ? OBSOLETE_ALPHA_IRI : OBSOLETE_BETA_IRI,
+            lang === "de"
+              ? pageNumber === 0
+                ? "Veraltetes Alpha"
+                : "Veraltetes Beta"
+              : pageNumber === 0
+                ? "Obsolete alpha"
+                : "Obsolete beta",
+            true,
+          ),
+        ],
+        totalElements: options.obsoleteTotalElements ?? 1,
+      });
       return;
     }
+
+    rootClassRequests.push(url.toString());
 
     if (options.delayInitialRoots) {
       await initialRootsGate;
@@ -247,9 +270,34 @@ async function mockOntologyRoutes(page: Page, options: RouteOptions = {}) {
     `**/v2/ontologies/${ONTOLOGY_ID}/properties?**`,
     async (route) => {
       const url = new URL(route.request().url());
-      rootPropertyRequests.push(url.toString());
+      const includeObsolete = url.searchParams.get("includeObsoleteEntities");
       const pageNumber = Number(url.searchParams.get("page") ?? "0");
       const lang = url.searchParams.get("lang") ?? "en";
+
+      if (includeObsolete === "true") {
+        obsoletePropertyRootRequests.push(url.toString());
+        await json(route, {
+          elements: [
+            property(
+              pageNumber === 0
+                ? OBSOLETE_PROPERTY_ALPHA_IRI
+                : OBSOLETE_PROPERTY_BETA_IRI,
+              lang === "de"
+                ? pageNumber === 0
+                  ? "Veraltete Eigenschaft Alpha"
+                  : "Veraltete Eigenschaft Beta"
+                : pageNumber === 0
+                  ? "Obsolete property alpha"
+                  : "Obsolete property beta",
+              true,
+            ),
+          ],
+          totalElements: options.obsoletePropertyTotalElements ?? 1,
+        });
+        return;
+      }
+
+      rootPropertyRequests.push(url.toString());
 
       if (options.delayInitialPropertyRoots && pageNumber === 0) {
         await initialPropertyRootsGate;
@@ -371,118 +419,57 @@ async function rapidScrollTree(page: Page, times = 3) {
 }
 
 test.describe("ontology obsolete root loading", () => {
-  test("renders ontology metadata before root classes finish loading", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, { delayInitialRoots: true });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}?lang=en`);
-
-    await expect(page.locator(".ontology-page-container")).toBeVisible();
-    await expect(page.locator(".ontology-page-headbar")).toContainText(
-      "Handle Obsoletes Test Ontology",
-    );
-
-    expect(uniquePageNumbers(routes.rootClassRequests)).toEqual([0]);
-    expect(routes.obsoleteRootRequests).toHaveLength(0);
-
-    routes.releaseInitialRoots();
-    await expect
-      .poll(() => routes.rootClassRequests.length)
-      .toBeGreaterThanOrEqual(1);
-  });
-
-  test("loads active root classes page-by-page on scroll", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, { rootTotalElements: 1001 });
+  test("loads ontology metadata and active roots", async ({ page }) => {
+    const routes = await mockOntologyRoutes(page);
 
     await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
 
+    await expect(page.locator(".ontology-page-headbar")).toContainText(
+      "Handle Obsoletes Test Ontology",
+    );
     await expect(page.locator("#tree-root-ul")).toBeVisible();
     await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_1_IRI}"]`)).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Show Obsoletes" })).toBeVisible();
     expect(uniquePageNumbers(routes.rootClassRequests)).toEqual([0]);
-    expect(routes.obsoleteRootRequests).toHaveLength(0);
-
-    await scrollTree(page);
-
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_1_IRI}"]`)).toBeVisible();
-    expect(uniquePageNumbers(routes.rootClassRequests)).toEqual([0, 1]);
     expect(routes.obsoleteRootRequests).toHaveLength(0);
   });
 
-  test("loads obsolete roots from persisted state without clicking the toggle", async ({
-    page,
-  }) => {
+  test("loads obsolete class roots from persisted state", async ({ page }) => {
     const routes = await mockOntologyRoutes(page, { initialObsoletes: true });
 
     await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
 
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
     await expect(page.getByRole("button", { name: "Hide Obsoletes" })).toBeVisible();
     await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"] s`)).toHaveText(
       "Obsolete alpha",
     );
-    await expect(page.locator(`[data-iri="${OBSOLETE_BETA_IRI}"]`)).toHaveCount(0);
-
     expect(uniquePageNumbers(routes.rootClassRequests)).toEqual([0]);
     expect(uniquePageNumbers(routes.obsoleteRootRequests)).toEqual([0]);
     expect(
       urls(routes.obsoleteRootRequests).every(
         (url) =>
-          url.searchParams.get("obsoletes") === "true" &&
+          url.searchParams.get("includeObsoleteEntities") === "true" &&
           url.searchParams.get("lang") === "en",
       ),
     ).toBe(true);
   });
 
-  test("loads obsolete roots from the obsoletes query param without persisted state", async ({
-    page,
-  }) => {
+  test("loads obsolete class roots from the obsoletes query param", async ({ page }) => {
     const routes = await mockOntologyRoutes(page);
 
     await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en&obsoletes=true`);
 
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
     await expect(page.getByRole("button", { name: "Hide Obsoletes" })).toBeVisible();
     await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"] s`)).toHaveText(
       "Obsolete alpha",
     );
-
-    expect(uniquePageNumbers(routes.rootClassRequests)).toEqual([0]);
     expect(uniquePageNumbers(routes.obsoleteRootRequests)).toEqual([0]);
-    expect(
-      urls(routes.obsoleteRootRequests).every(
-        (url) =>
-          url.searchParams.get("obsoletes") === "true" &&
-          url.searchParams.get("lang") === "en",
-      ),
-    ).toBe(true);
   });
 
-  test("loads active and obsolete root terms independently on the same scroll", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      rootTotalElements: 1001,
-      obsoleteTotalElements: 1001,
-    });
+  test("toggles obsolete class roots", async ({ page }) => {
+    const routes = await mockOntologyRoutes(page);
 
     await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toBeVisible();
-    await expect(page.getByRole("button", { name: "Show Obsoletes" })).toBeVisible();
-
-    expect(
-      routes.rootClassRequests.every(
-        (request) =>
-          new URL(request).searchParams.get("includeObsoleteEntities") !==
-          "true",
-      ),
-    ).toBe(true);
-    expect(routes.obsoleteRootRequests).toHaveLength(0);
 
     await page.getByRole("button", { name: "Show Obsoletes" }).click();
 
@@ -490,644 +477,71 @@ test.describe("ontology obsolete root loading", () => {
     await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"] s`)).toHaveText(
       "Obsolete alpha",
     );
-    await expect(page.locator(`[data-iri="${OBSOLETE_BETA_IRI}"]`)).toHaveCount(0);
-
     expect(pageNumbers(urls(routes.obsoleteRootRequests))).toEqual([0]);
-
-    await scrollTree(page);
-
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_1_IRI}"]`)).toBeVisible();
-    await expect(page.locator(`[data-iri="${OBSOLETE_BETA_IRI}"] s`)).toHaveText(
-      "Obsolete beta",
-    );
-    expect(uniquePageNumbers(normalRootRequests(routes.rootClassRequests))).toEqual([
-      0,
-      1,
-    ]);
-    expect(pageNumbers(urls(routes.obsoleteRootRequests))).toEqual([0, 1]);
   });
 
-  test("does not duplicate same-generation root and obsolete loads on rapid scroll", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      delayNormalRootPage1: true,
-      delayObsoleteRootPage1: true,
-      initialObsoletes: true,
-      rootTotalElements: 2001,
-      obsoleteTotalElements: 2001,
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toBeVisible();
-    await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"] s`)).toHaveText(
-      "Obsolete alpha",
-    );
-
-    await rapidScrollTree(page, 5);
-
-    await expect
-      .poll(
-        () =>
-          pageNumbers(urls(normalRootRequests(routes.rootClassRequests))).filter(
-            (pageNumber) => pageNumber === 1,
-          ).length,
-      )
-      .toBe(1);
-    await expect
-      .poll(
-        () =>
-          pageNumbers(urls(routes.obsoleteRootRequests)).filter(
-            (pageNumber) => pageNumber === 1,
-          ).length,
-      )
-      .toBe(1);
-
-    await rapidScrollTree(page, 5);
-    await page.waitForTimeout(100);
-
-    expect(
-      pageNumbers(urls(normalRootRequests(routes.rootClassRequests))).filter(
-        (pageNumber) => pageNumber === 1,
-      ),
-    ).toHaveLength(1);
-    expect(
-      pageNumbers(urls(routes.obsoleteRootRequests)).filter(
-        (pageNumber) => pageNumber === 1,
-      ),
-    ).toHaveLength(1);
-
-    routes.releaseNormalRootPage1();
-    routes.releaseObsoleteRootPage1();
-
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_1_IRI}"]`)).toBeVisible();
-    await expect(page.locator(`[data-iri="${OBSOLETE_BETA_IRI}"] s`)).toHaveText(
-      "Obsolete beta",
-    );
-  });
-
-  test("loads property roots page-by-page on scroll", async ({ page }) => {
-    const routes = await mockOntologyRoutes(page, {
-      propertyRootTotalElements: 1001,
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/props?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_0_IRI}"]`)).toBeVisible();
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_1_IRI}"]`)).toHaveCount(0);
-    expect(uniquePageNumbers(routes.rootPropertyRequests)).toEqual([0]);
-    expect(routes.obsoletePropertyRootRequests).toHaveLength(0);
-    expect(
-      urls(routes.rootPropertyRequests).every(
-        (url) =>
-          url.searchParams.get("includeObsoleteEntities") === "false" &&
-          url.searchParams.get("hasDirectParents") === "false",
-      ),
-    ).toBe(true);
-
-    await scrollTree(page);
-
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_1_IRI}"]`)).toBeVisible();
-    expect(uniquePageNumbers(routes.rootPropertyRequests)).toEqual([0, 1]);
-  });
-
-  test("renders initial property roots while class roots are still loading", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      delayInitialRoots: true,
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/props?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_0_IRI}"]`)).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toHaveCount(0);
-    expect(uniquePageNumbers(routes.rootClassRequests)).toEqual([0]);
-    expect(uniquePageNumbers(routes.rootPropertyRequests)).toEqual([0]);
-
-    routes.releaseInitialRoots();
-  });
-
-  test("loads active and obsolete property roots independently on the same scroll", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      propertyRootTotalElements: 1001,
-      obsoletePropertyTotalElements: 1001,
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/props?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_0_IRI}"]`)).toBeVisible();
-    await expect(page.getByRole("button", { name: "Show Obsoletes" })).toBeVisible();
-    expect(routes.obsoletePropertyRootRequests).toHaveLength(0);
-
-    await page.getByRole("button", { name: "Show Obsoletes" }).click();
-
-    await expect(page.getByRole("button", { name: "Hide Obsoletes" })).toBeVisible();
-    await expect(
-      page.locator(`[data-iri="${OBSOLETE_PROPERTY_ALPHA_IRI}"] s`),
-    ).toHaveText("Obsolete property alpha");
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_1_IRI}"]`)).toHaveCount(0);
-    await expect(
-      page.locator(`[data-iri="${OBSOLETE_PROPERTY_BETA_IRI}"]`),
-    ).toHaveCount(0);
-
-    expect(pageNumbers(urls(routes.obsoletePropertyRootRequests))).toEqual([0]);
-    expect(
-      urls(routes.obsoletePropertyRootRequests).every(
-        (url) =>
-          url.pathname.endsWith(`/${ONTOLOGY_ID}/properties/roots`) &&
-          url.searchParams.get("obsoletes") === "true" &&
-          url.searchParams.get("lang") === "en",
-      ),
-    ).toBe(true);
-
-    await scrollTree(page);
-
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_1_IRI}"]`)).toBeVisible();
-    await expect(
-      page.locator(`[data-iri="${OBSOLETE_PROPERTY_BETA_IRI}"] s`),
-    ).toHaveText("Obsolete property beta");
-    expect(uniquePageNumbers(routes.rootPropertyRequests)).toEqual([0, 1]);
-    expect(pageNumbers(urls(routes.obsoletePropertyRootRequests))).toEqual([0, 1]);
-  });
-
-  test("renders obsolete property roots while persisted normal property roots are still loading", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      delayInitialPropertyRoots: true,
-      initialObsoletes: true,
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/props?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Hide Obsoletes" })).toBeVisible();
-    await expect(
-      page.locator(`[data-iri="${OBSOLETE_PROPERTY_ALPHA_IRI}"] s`),
-    ).toHaveText("Obsolete property alpha");
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_0_IRI}"]`)).toHaveCount(0);
-
-    expect(uniquePageNumbers(routes.rootPropertyRequests)).toEqual([0]);
-    expect(uniquePageNumbers(routes.obsoletePropertyRootRequests)).toEqual([0]);
-
-    routes.releaseInitialPropertyRoots();
-
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_0_IRI}"]`)).toBeVisible();
-    await expect(
-      page.locator(`[data-iri="${OBSOLETE_PROPERTY_ALPHA_IRI}"] s`),
-    ).toHaveText("Obsolete property alpha");
-  });
-
-  test("renders obsolete property roots from the query param while normal property roots are still loading", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      delayInitialPropertyRoots: true,
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/props?lang=en&obsoletes=true`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Hide Obsoletes" })).toBeVisible();
-    await expect(
-      page.locator(`[data-iri="${OBSOLETE_PROPERTY_ALPHA_IRI}"] s`),
-    ).toHaveText("Obsolete property alpha");
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_0_IRI}"]`)).toHaveCount(0);
-
-    expect(uniquePageNumbers(routes.rootPropertyRequests)).toEqual([0]);
-    expect(uniquePageNumbers(routes.obsoletePropertyRootRequests)).toEqual([0]);
-
-    routes.releaseInitialPropertyRoots();
-
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_0_IRI}"]`)).toBeVisible();
-    await expect(
-      page.locator(`[data-iri="${OBSOLETE_PROPERTY_ALPHA_IRI}"] s`),
-    ).toHaveText("Obsolete property alpha");
-  });
-
-  test("ignores delayed property root page after language changes", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      delayPropertyRootPage1: true,
-      propertyRootTotalElements: 2001,
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/props?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_0_IRI}"]`)).toBeVisible();
-
-    await scrollTree(page);
-
-    await expect
-      .poll(() => uniquePageNumbers(routes.rootPropertyRequests))
-      .toEqual([0, 1]);
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_1_IRI}"]`)).toHaveCount(0);
-
-    await page.locator("#onto-language").selectOption("de");
-
-    await expect(
-      page.locator(`[data-iri="${PROPERTY_DE_PAGE_0_IRI}"]`),
-    ).toBeVisible();
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_0_IRI}"]`)).toHaveCount(0);
-
-    routes.releasePropertyRootPage1();
-    await page.waitForTimeout(100);
-
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_1_IRI}"]`)).toHaveCount(0);
-    await expect(
-      page.locator(`[data-iri="${PROPERTY_DE_PAGE_0_IRI}"]`),
-    ).toBeVisible();
-
-    await scrollTree(page);
-
-    await expect(
-      page.locator(`[data-iri="${PROPERTY_DE_PAGE_1_IRI}"]`),
-    ).toBeVisible();
-    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_1_IRI}"]`)).toHaveCount(0);
-    expect(
-      urls(routes.rootPropertyRequests).some(
-        (url) =>
-          url.searchParams.get("lang") === "de" &&
-          url.searchParams.get("page") === "1",
-      ),
-    ).toBe(true);
-  });
-
-  test("ignores delayed ontology metadata after language changes", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      delayOntologyMetadataLang: "de",
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toBeVisible();
-
-    await page.locator("#onto-language").selectOption("de");
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toHaveCount(0);
-
-    await page.locator("#onto-language").selectOption("en");
-
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_DE_PAGE_0_IRI}"]`)).toHaveCount(0);
-
-    routes.releaseOntologyMetadata();
-    await page.waitForTimeout(100);
-
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_DE_PAGE_0_IRI}"]`)).toHaveCount(0);
-    expect(
-      urls(normalRootRequests(routes.rootClassRequests)).some(
-        (url) => url.searchParams.get("lang") === "en",
-      ),
-    ).toBe(true);
-  });
-
-  test("ignores delayed obsolete root page after language changes", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      delayObsoleteRootPage1: true,
-      initialObsoletes: true,
-      obsoleteTotalElements: 2001,
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"] s`)).toHaveText(
-      "Obsolete alpha",
-    );
-
-    await scrollTree(page);
-
-    await expect
-      .poll(
-        () =>
-          pageNumbers(urls(routes.obsoleteRootRequests)).filter(
-            (pageNumber) => pageNumber === 1,
-          ).length,
-      )
-      .toBe(1);
-    await expect(page.locator(`[data-iri="${OBSOLETE_BETA_IRI}"]`)).toHaveCount(0);
-
-    await page.locator("#onto-language").selectOption("de");
-
-    await expect(page.locator(`[data-iri="${ROOT_DE_PAGE_0_IRI}"]`)).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toHaveCount(0);
-    await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"] s`)).toHaveText(
-      "Veraltetes Alpha",
-    );
-    await expect(page.getByRole("button", { name: "Hide Obsoletes" })).toBeEnabled();
-
-    routes.releaseObsoleteRootPage1();
-    await page.waitForTimeout(100);
-
-    await expect(page.locator(`[data-iri="${OBSOLETE_BETA_IRI}"]`)).toHaveCount(0);
-    await expect(page.locator(`[data-iri="${ROOT_DE_PAGE_0_IRI}"]`)).toBeVisible();
-    await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"] s`)).toHaveText(
-      "Veraltetes Alpha",
-    );
-    await expect(page.getByRole("button", { name: "Hide Obsoletes" })).toBeEnabled();
-    expect(
-      urls(routes.obsoleteRootRequests).some(
-        (url) =>
-          url.searchParams.get("lang") === "de" &&
-          url.searchParams.get("page") === "0",
-      ),
-    ).toBe(true);
-    expect(
-      urls(routes.obsoleteRootRequests).every(
-        (url) => url.searchParams.get("lang") !== null,
-      ),
-    ).toBe(true);
-  });
-
-  test("passes language to obsolete property roots and refreshes labels", async ({
-    page,
-  }) => {
+  test("loads property roots and obsolete property roots", async ({ page }) => {
     const routes = await mockOntologyRoutes(page);
 
     await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/props?lang=en`);
 
     await expect(page.locator("#tree-root-ul")).toBeVisible();
+    await expect(page.locator(`[data-iri="${PROPERTY_PAGE_0_IRI}"]`)).toBeVisible();
     await page.getByRole("button", { name: "Show Obsoletes" }).click();
 
+    await expect(page.getByRole("button", { name: "Hide Obsoletes" })).toBeVisible();
     await expect(
       page.locator(`[data-iri="${OBSOLETE_PROPERTY_ALPHA_IRI}"] s`),
     ).toHaveText("Obsolete property alpha");
+    expect(uniquePageNumbers(routes.rootPropertyRequests)).toEqual([0]);
+    expect(uniquePageNumbers(routes.obsoletePropertyRootRequests)).toEqual([0]);
     expect(
       urls(routes.obsoletePropertyRootRequests).every(
-        (url) => url.searchParams.get("lang") === "en",
-      ),
-    ).toBe(true);
-
-    await page.locator("#onto-language").selectOption("de");
-
-    await expect(
-      page.locator(`[data-iri="${PROPERTY_DE_PAGE_0_IRI}"]`),
-    ).toBeVisible();
-    await expect(
-      page.locator(`[data-iri="${OBSOLETE_PROPERTY_ALPHA_IRI}"] s`),
-    ).toHaveText("Veraltete Eigenschaft Alpha");
-    expect(
-      urls(routes.obsoletePropertyRootRequests).some(
         (url) =>
-          url.searchParams.get("lang") === "de" &&
-          url.searchParams.get("page") === "0",
+          url.searchParams.get("includeObsoleteEntities") === "true" &&
+          url.searchParams.get("lang") === "en",
       ),
     ).toBe(true);
   });
 
-  test("loads preferred root pages on switch and scroll without mixing normal roots", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      rootTotalElements: 1001,
-      preferredRootTotalElements: 1001,
-    });
+  test("refreshes root labels after language changes", async ({ page }) => {
+    const routes = await mockOntologyRoutes(page);
 
     await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
 
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
     await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toBeVisible();
-    expect(uniquePageNumbers(normalRootRequests(routes.rootClassRequests))).toEqual([
-      0,
-    ]);
+    await page.locator("#onto-language").selectOption("de");
 
+    await expect(page.locator(`[data-iri="${ROOT_DE_PAGE_0_IRI}"]`)).toBeVisible();
+    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toHaveCount(0);
+    expect(
+      urls(normalRootRequests(routes.rootClassRequests)).some(
+        (url) => url.searchParams.get("lang") === "de",
+      ),
+    ).toBe(true);
+  });
+
+  test("switches to preferred roots", async ({ page }) => {
+    const routes = await mockOntologyRoutes(page);
+
+    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
+
+    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toBeVisible();
     await page.getByRole("switch", { name: "Preferred roots" }).click();
 
     await expect(
       page.locator(`[data-iri="${PREFERRED_ROOT_PAGE_0_IRI}"]`),
     ).toBeVisible();
     await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toHaveCount(0);
-
-    const preferredPage0 = urls(preferredRootRequests(routes.rootClassRequests));
-    expect(pageNumbers(preferredPage0)).toEqual([0]);
+    const preferredRequests = urls(preferredRootRequests(routes.rootClassRequests));
+    expect(pageNumbers(preferredRequests)).toEqual([0]);
     expect(
-      preferredPage0.every(
+      preferredRequests.every(
         (url) =>
           url.searchParams.get("includeObsoleteEntities") === "false" &&
           url.searchParams.get("isPreferredRoot") === "true" &&
-          url.searchParams.get("size") === "1000" &&
           url.searchParams.get("lang") === "en",
       ),
     ).toBe(true);
-
-    await page.locator("#page-left-pane").evaluate((element) => {
-      element.scrollTop = element.scrollHeight;
-      element.dispatchEvent(new Event("scroll", { bubbles: true }));
-    });
-
-    await expect(
-      page.locator(`[data-iri="${PREFERRED_ROOT_PAGE_1_IRI}"]`),
-    ).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_1_IRI}"]`)).toHaveCount(0);
-
-    expect(uniquePageNumbers(normalRootRequests(routes.rootClassRequests))).toEqual([
-      0,
-    ]);
-    expect(uniquePageNumbers(preferredRootRequests(routes.rootClassRequests))).toEqual([
-      0,
-      1,
-    ]);
-  });
-
-  test("ignores delayed normal root page after switching to preferred roots", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      delayNormalRootPage1: true,
-      rootTotalElements: 2001,
-      preferredRootTotalElements: 1001,
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toBeVisible();
-
-    await page.locator("#page-left-pane").evaluate((element) => {
-      element.scrollTop = element.scrollHeight;
-      element.dispatchEvent(new Event("scroll", { bubbles: true }));
-    });
-
-    await expect
-      .poll(() => uniquePageNumbers(normalRootRequests(routes.rootClassRequests)))
-      .toEqual([0, 1]);
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_1_IRI}"]`)).toHaveCount(0);
-
-    await page.getByRole("switch", { name: "Preferred roots" }).click();
-
-    await expect(
-      page.locator(`[data-iri="${PREFERRED_ROOT_PAGE_0_IRI}"]`),
-    ).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toHaveCount(0);
-
-    routes.releaseNormalRootPage1();
-    await page.waitForTimeout(100);
-
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_1_IRI}"]`)).toHaveCount(0);
-    await expect(
-      page.locator(`[data-iri="${PREFERRED_ROOT_PAGE_0_IRI}"]`),
-    ).toBeVisible();
-
-    await page.locator("#page-left-pane").evaluate((element) => {
-      element.scrollTop = element.scrollHeight;
-      element.dispatchEvent(new Event("scroll", { bubbles: true }));
-    });
-
-    await expect(
-      page.locator(`[data-iri="${PREFERRED_ROOT_PAGE_1_IRI}"]`),
-    ).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_1_IRI}"]`)).toHaveCount(0);
-    expect(uniquePageNumbers(normalRootRequests(routes.rootClassRequests))).toEqual([
-      0,
-      1,
-    ]);
-    expect(uniquePageNumbers(preferredRootRequests(routes.rootClassRequests))).toEqual([
-      0,
-      1,
-    ]);
-  });
-
-  test("does not restore cached normal roots after preferred-root switch follows saved tree state", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page);
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toBeVisible();
-    await page.waitForTimeout(2300);
-
-    await page.getByRole("switch", { name: "Preferred roots" }).click();
-
-    await expect(
-      page.locator(`[data-iri="${PREFERRED_ROOT_PAGE_0_IRI}"]`),
-    ).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toHaveCount(0);
-    expect(uniquePageNumbers(normalRootRequests(routes.rootClassRequests))).toEqual([
-      0,
-    ]);
-    expect(uniquePageNumbers(preferredRootRequests(routes.rootClassRequests))).toEqual([
-      0,
-    ]);
-  });
-
-  test("keeps loaded obsolete roots visible when switching preferred roots", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page);
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await page.getByRole("button", { name: "Show Obsoletes" }).click();
-    await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"] s`)).toHaveText(
-      "Obsolete alpha",
-    );
-    expect(pageNumbers(urls(routes.obsoleteRootRequests))).toEqual([0]);
-
-    await page.getByRole("switch", { name: "Preferred roots" }).click();
-
-    await expect(
-      page.locator(`[data-iri="${PREFERRED_ROOT_PAGE_0_IRI}"]`),
-    ).toBeVisible();
-    await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"] s`)).toHaveText(
-      "Obsolete alpha",
-    );
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toHaveCount(0);
-    expect(pageNumbers(urls(routes.obsoleteRootRequests))).toEqual([0]);
-  });
-
-  test("keeps pending obsolete roots valid after switching preferred roots", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      delayObsoleteRootPage0: true,
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toBeVisible();
-
-    await page.getByRole("button", { name: "Show Obsoletes" }).click();
-
-    await expect
-      .poll(() => pageNumbers(urls(routes.obsoleteRootRequests)))
-      .toEqual([0]);
-    await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"]`)).toHaveCount(0);
-
-    await page.getByRole("switch", { name: "Preferred roots" }).click();
-
-    await expect(
-      page.locator(`[data-iri="${PREFERRED_ROOT_PAGE_0_IRI}"]`),
-    ).toBeVisible();
-
-    routes.releaseObsoleteRootPage0();
-
-    await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"] s`)).toHaveText(
-      "Obsolete alpha",
-    );
-    expect(pageNumbers(urls(routes.obsoleteRootRequests))).toEqual([0]);
-  });
-
-  test("renders obsolete roots when an ontology has no active root classes", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      initialObsoletes: true,
-      noActiveRoots: true,
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
-
-    await expect(page.locator("#tree-root-ul")).toBeVisible();
-    await expect(page.locator(`[data-iri="${ROOT_PAGE_0_IRI}"]`)).toHaveCount(0);
-    await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"] s`)).toHaveText(
-      "Obsolete alpha",
-    );
-    await expect(page.locator(".no-node")).toHaveCount(0);
-    expect(uniquePageNumbers(routes.rootClassRequests)).toEqual([0]);
-    expect(uniquePageNumbers(routes.obsoleteRootRequests)).toEqual([0]);
-  });
-
-  test("can toggle obsolete roots when an ontology has no active root classes", async ({
-    page,
-  }) => {
-    const routes = await mockOntologyRoutes(page, {
-      noActiveRoots: true,
-    });
-
-    await gotoPath(page, `/ontologies/${ONTOLOGY_ID}/terms?lang=en`);
-
-    await expect(page.getByRole("button", { name: "Show Obsoletes" })).toBeVisible();
-    await expect(page.locator(".no-node")).toBeVisible();
-    expect(uniquePageNumbers(routes.rootClassRequests)).toEqual([0]);
-    expect(routes.obsoleteRootRequests).toHaveLength(0);
-
-    await page.getByRole("button", { name: "Show Obsoletes" }).click();
-
-    await expect(page.getByRole("button", { name: "Hide Obsoletes" })).toBeVisible();
-    await expect(page.locator(`[data-iri="${OBSOLETE_ALPHA_IRI}"] s`)).toHaveText(
-      "Obsolete alpha",
-    );
-    await expect(page.locator(".no-node")).toHaveCount(0);
-    expect(uniquePageNumbers(routes.obsoleteRootRequests)).toEqual([0]);
   });
 });

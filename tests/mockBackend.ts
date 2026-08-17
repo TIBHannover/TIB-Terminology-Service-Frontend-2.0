@@ -77,7 +77,8 @@ function sendJson(
   payload: Record<string, unknown>,
 ) {
   res.writeHead(statusCode, {
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": "http://localhost:3000",
+    "Access-Control-Allow-Credentials": "true",
     "Access-Control-Allow-Headers":
       "Content-Type, X-TS-Frontend-Id, X-TS-Frontend-Token, X-TS-Auth-Provider, X-TS-Auth-APP-Code, X-CSRF-Token, X-Auth-Token",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",

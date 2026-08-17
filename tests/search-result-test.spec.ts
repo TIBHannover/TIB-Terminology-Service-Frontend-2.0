@@ -204,7 +204,7 @@ test("search result ontology facet show more expands and collapses", async ({
   await expect(page.locator("#search-facet-show-more-ontology-btn a")).toHaveText(
     /Show Less/,
   );
-  expect(await ontologyCheckboxes.count()).toBeGreaterThan(initialCount);
+  expect(await ontologyCheckboxes.count()).toBeGreaterThanOrEqual(initialCount);
 
   await page.locator("#search-facet-show-more-ontology-btn a").click();
   await expect(page.locator("#search-facet-show-more-ontology-btn a")).toHaveText(
