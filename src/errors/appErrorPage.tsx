@@ -7,6 +7,47 @@ type CompState = {
   errorContent?: string;
 };
 
+const CHUNK_LOAD_RETRY_KEY = "chunk-load-retry";
+const CHUNK_LOAD_RETRY_WINDOW_KEY = "chunk-load-retry-at:";
+const CHUNK_LOAD_RETRY_TTL = 30000;
+
+export function isChunkLoadError(error: Error) {
+  return (
+    error.name === "ChunkLoadError" ||
+    /Loading chunk \S+ failed/i.test(error.message)
+  );
+}
+
+function shouldReloadForChunkError() {
+  try {
+    const lastRetry = Number(sessionStorage.getItem(CHUNK_LOAD_RETRY_KEY));
+    if (lastRetry && Date.now() - lastRetry < CHUNK_LOAD_RETRY_TTL) {
+      return false;
+    }
+    sessionStorage.setItem(CHUNK_LOAD_RETRY_KEY, String(Date.now()));
+    return true;
+  } catch {
+    const lastRetry = window.name.startsWith(CHUNK_LOAD_RETRY_WINDOW_KEY)
+      ? Number(window.name.replace(CHUNK_LOAD_RETRY_WINDOW_KEY, ""))
+      : 0;
+    if (lastRetry && Date.now() - lastRetry < CHUNK_LOAD_RETRY_TTL) {
+      return false;
+    }
+    window.name = CHUNK_LOAD_RETRY_WINDOW_KEY + Date.now();
+    return true;
+  }
+}
+
+function clearChunkLoadRetry() {
+  try {
+    sessionStorage.removeItem(CHUNK_LOAD_RETRY_KEY);
+  } catch {
+    if (window.name.startsWith(CHUNK_LOAD_RETRY_WINDOW_KEY)) {
+      window.name = "";
+    }
+  }
+}
+
 class ErrorBoundary extends React.Component {
   state: CompState;
   props: any;
@@ -21,6 +62,15 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error: Error) {
+    if (isChunkLoadError(error) && shouldReloadForChunkError()) {
+      window.location.reload();
+      return;
+    }
+
+    if (!isChunkLoadError(error)) {
+      clearChunkLoadRetry();
+    }
+
     this.setState({
       hasError: this.state.hasError,
       errorContent: error.message,

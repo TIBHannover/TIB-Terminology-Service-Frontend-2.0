@@ -134,40 +134,40 @@ const App = () => {
                 <AppContext.Provider value={appContextData}>
                   {showLoadingPage && <LoadingPage />}
                   {appIsReady && (
-                    <div
-                      className={
-                        showLoadingPage
-                          ? "app-shell app-shell-loading"
-                          : "app-shell"
-                      }
-                    >
-                      <Suspense fallback={null}>
-                        <Header />
-                        <HeaderPaintObserver onPaint={handleHeaderPaint} />
-                      </Suspense>
+                    <ErrorBoundary>
                       <div
-                        className="application-content"
-                        id="application_content"
+                        className={
+                          showLoadingPage
+                            ? "app-shell app-shell-loading"
+                            : "app-shell"
+                        }
                       >
-                        {isBackendDown && <BackendIsDownMessage />}
                         <Suspense fallback={null}>
-                          <CookieBanner />
+                          <Header />
+                          <HeaderPaintObserver onPaint={handleHeaderPaint} />
                         </Suspense>
-                        <ErrorBoundary>
+                        <div
+                          className="application-content"
+                          id="application_content"
+                        >
+                          {isBackendDown && <BackendIsDownMessage />}
+                          <Suspense fallback={null}>
+                            <CookieBanner />
+                          </Suspense>
                           <Suspense fallback={<LoadingPage />}>
                             <AppRouter />
                           </Suspense>
-                        </ErrorBoundary>
-                      </div>
-                      {process.env.REACT_APP_SITE_TOUR === "true" && (
+                        </div>
+                        {process.env.REACT_APP_SITE_TOUR === "true" && (
+                          <Suspense fallback={null}>
+                            <SiteTour />
+                          </Suspense>
+                        )}
                         <Suspense fallback={null}>
-                          <SiteTour />
+                          <Footer />
                         </Suspense>
-                      )}
-                      <Suspense fallback={null}>
-                        <Footer />
-                      </Suspense>
-                    </div>
+                      </div>
+                    </ErrorBoundary>
                   )}
                 </AppContext.Provider>
               </div>
