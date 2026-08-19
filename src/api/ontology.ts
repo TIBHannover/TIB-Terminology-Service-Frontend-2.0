@@ -17,6 +17,11 @@ type constructorProps = {
   withObsolete?: boolean;
 };
 
+type OntologyListResult = {
+  ontologies: TsOntology[];
+  failed: boolean;
+};
+
 class OntologyApi {
   ontologyId: string = "";
   lang: string = "en";
@@ -36,31 +41,52 @@ class OntologyApi {
   }
 
   async fetchOntologyList(collectionId: string = ""): Promise<TsOntology[]> {
+    return (await this.fetchOntologyListResult(collectionId)).ontologies;
+  }
+
+  async fetchOntologyListResult(
+    collectionId: string = "",
+  ): Promise<OntologyListResult> {
+    try {
+      return {
+        ontologies: await this.fetchOntologyListOrThrow(collectionId),
+        failed: false,
+      };
+    } catch {
+      return {
+        ontologies: [],
+        failed: true,
+      };
+    }
+  }
+
+  private async fetchOntologyListOrThrow(
+    collectionId: string = "",
+  ): Promise<TsOntology[]> {
     type TempResult = {
       elements: Array<any>;
     };
 
-    try {
-      let OntologiesListUrl = `${process.env.REACT_APP_API_URL}/v2/ontologies?size=1000`;
-      if (collectionId) {
-        OntologiesListUrl += `&schema=collection&classification=${collectionId}&option=COMPOSITE`;
-      }
-      let resp = await fetch(OntologiesListUrl, getCallSetting);
-      let result: TempResult = await resp.json();
-      let ontoList: TsOntology[] = [];
-      let projectId = process.env.REACT_APP_PROJECT_ID!;
-      for (let onto of result["elements"]) {
-        let ontology = new TsOntology(onto);
-        if (projectId === "general") {
-          ontoList.push(ontology);
-        } else if (ontology.collections.includes(projectId.toUpperCase())) {
-          ontoList.push(ontology);
-        }
-      }
-      return ontoList;
-    } catch (e) {
-      return [];
+    let OntologiesListUrl = `${process.env.REACT_APP_API_URL}/v2/ontologies?size=1000`;
+    if (collectionId) {
+      OntologiesListUrl += `&schema=collection&classification=${collectionId}&option=COMPOSITE`;
     }
+    let resp = await fetch(OntologiesListUrl, getCallSetting);
+    if (!resp.ok) {
+      throw new Error("Failed to fetch ontology list");
+    }
+    let result: TempResult = await resp.json();
+    let ontoList: TsOntology[] = [];
+    let projectId = process.env.REACT_APP_PROJECT_ID!;
+    for (let onto of result["elements"]) {
+      let ontology = new TsOntology(onto);
+      if (projectId === "general") {
+        ontoList.push(ontology);
+      } else if (ontology.collections.includes(projectId.toUpperCase())) {
+        ontoList.push(ontology);
+      }
+    }
+    return ontoList;
   }
 
   async fetchOntology(): Promise<TsOntology | null> {

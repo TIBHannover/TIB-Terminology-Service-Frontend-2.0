@@ -33,6 +33,10 @@ const TABS_LIST = [
   API_TAB_ID,
 ];
 
+function normalizeCollectionId(value: string) {
+  return value.replace(/[_\s-]+/g, "").toLowerCase();
+}
+
 const CollectionPage = (props: CmpProps) => {
   const collectionIdFromUrl = props.match.params.collectionId;
   const CollectionsMetadata = collectionsInfoJson as CollectionsData;
@@ -49,6 +53,8 @@ const CollectionPage = (props: CmpProps) => {
   const [loading, setLoading] = useState(true);
   const [activeTabId, setActiveTabId] = useState<string>(tabFromUrl);
   const [ontologyList, setOntologyList] = useState<TsOntology[]>([]);
+  const [ontologiesLoading, setOntologiesLoading] = useState(true);
+  const [ontologiesFailed, setOntologiesFailed] = useState(false);
   // const [bioregistryCollection, setBioregistryCollection] =
   // useState<BioregistryCollection>({});
   const [stats, setStats] = useState<stats>({
@@ -241,6 +247,38 @@ const CollectionPage = (props: CmpProps) => {
     );
   }
 
+  function renderComingSoon() {
+    return (
+      <div className="row p-4">
+        <div className="col-sm-12 text-center">
+          <p className="fs-4 fw-bold">Coming soon</p>
+          <p>This collection is available here soon.</p>
+        </div>
+      </div>
+    );
+  }
+
+  function renderOntologiesError() {
+    return (
+      <div className="row p-4">
+        <div className="col-sm-12 text-center">
+          <p className="fs-4 fw-bold">Ontologies could not be loaded</p>
+          <p>Please try again later.</p>
+        </div>
+      </div>
+    );
+  }
+
+  function renderOntologiesLoading() {
+    return (
+      <div className="row p-4">
+        <div className="col-sm-12 text-center">
+          <p>Loading ontologies ...</p>
+        </div>
+      </div>
+    );
+  }
+
   function renderTabs() {
     return (
       <Nav
@@ -277,11 +315,18 @@ const CollectionPage = (props: CmpProps) => {
   }
 
   useEffect(() => {
-    let processedCollectionId = collectionIdFromUrl.split("_").join(" ");
+    let processedCollectionId = normalizeCollectionId(collectionIdFromUrl);
     let collectionIds = Object.keys(CollectionsMetadata);
     for (let colId of collectionIds) {
-      if (colId.toLowerCase() === processedCollectionId.toLowerCase()) {
-        setCollection(CollectionsMetadata[colId]);
+      let collectionInfo = CollectionsMetadata[colId];
+      if (
+        [
+          colId,
+          collectionInfo.id,
+          collectionInfo.html_id,
+        ].some((id) => normalizeCollectionId(id) === processedCollectionId)
+      ) {
+        setCollection(collectionInfo);
         break;
       }
     }
@@ -292,9 +337,17 @@ const CollectionPage = (props: CmpProps) => {
   useEffect(() => {
     if (collection?.id) {
       const ontoApi = new OntologyApi({});
-      ontoApi.fetchOntologyList(collection?.id).then((ontologies) => {
-        setOntologyList(ontologies);
-      });
+      setOntologiesLoading(true);
+      setOntologiesFailed(false);
+      ontoApi
+        .fetchOntologyListResult(collection.id)
+        .then((result) => {
+          setOntologyList(result.ontologies);
+          setOntologiesFailed(result.failed);
+        })
+        .finally(() => {
+          setOntologiesLoading(false);
+        });
       // getBioregistryCollection(collection.id).then((bioregistryCollection) => {
       //   setBioregistryCollection(bioregistryCollection);
       // });
@@ -357,17 +410,27 @@ const CollectionPage = (props: CmpProps) => {
           {renderCollectionStats()}
         </div>
         <div className="col-8">
-          {renderTabs()}
-          {activeTabId === ABOUT_TAB_ID && renderAboutSection()}
-          {/* {activeTabId === BIOREGISTRY_TAB_ID && ( */}
-          {/*   <BioregistryPage bioregistryCollection={bioregistryCollection} /> */}
-          {/* )} */}
-          {activeTabId === ONTOLOGIES_TAB_ID && (
-            <div className="row p-4 ontology-list-container">
-              {renderOntologyList()}
-            </div>
+          {ontologiesLoading ? (
+            renderOntologiesLoading()
+          ) : ontologiesFailed ? (
+            renderOntologiesError()
+          ) : ontologyList.length === 0 ? (
+            renderComingSoon()
+          ) : (
+            <>
+              {renderTabs()}
+              {activeTabId === ABOUT_TAB_ID && renderAboutSection()}
+              {/* {activeTabId === BIOREGISTRY_TAB_ID && ( */}
+              {/*   <BioregistryPage bioregistryCollection={bioregistryCollection} /> */}
+              {/* )} */}
+              {activeTabId === ONTOLOGIES_TAB_ID && (
+                <div className="row p-4 ontology-list-container">
+                  {renderOntologyList()}
+                </div>
+              )}
+              {activeTabId === API_TAB_ID && renderApiDoc()}
+            </>
           )}
-          {activeTabId === API_TAB_ID && renderApiDoc()}
         </div>
       </div>
     </div>
