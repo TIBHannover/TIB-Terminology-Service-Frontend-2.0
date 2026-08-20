@@ -100,6 +100,22 @@ function termResponse(propertyIri = PROPERTY_IRI) {
   };
 }
 
+function axiomTermResponse() {
+  return {
+    iri: AXIOM_VALUE_IRI,
+    label: ["reasoner"],
+    type: ["class"],
+    ontologyId: ONTOLOGY_ID,
+    linkedEntities: {},
+  };
+}
+
+function routeEntityIri(url: URL) {
+  return decodeURIComponent(
+    decodeURIComponent(url.pathname.split("/entities/")[1] ?? ""),
+  );
+}
+
 async function mockMetadataTermRoutes(
   page: Page,
   {
@@ -133,7 +149,14 @@ async function mockMetadataTermRoutes(
         `/api/v2/ontologies/${ONTOLOGY_ID}/entities/`,
       )
     ) {
-      await json(route, termResponse(propertyIri));
+      const iri = routeEntityIri(url);
+      if (iri === TERM_IRI) {
+        await json(route, termResponse(propertyIri));
+      } else if (iri === AXIOM_VALUE_IRI) {
+        await json(route, axiomTermResponse());
+      } else {
+        await json(route, {}, 404);
+      }
       return;
     }
 
@@ -246,13 +269,31 @@ test("term detail class structure axiom buttons open modal only for axiom nodes"
   const dialog = page.locator(".metadata-info-modal .modal-dialog");
   await expect(dialog).toBeVisible();
   await expect(dialog.locator(".modal-title")).toHaveText("Axioms");
-  await expect(dialog.locator("li")).toHaveText("is inferred: reasoner");
-  await expect(dialog.locator("li span").first()).toHaveAttribute(
-    "title",
-    AXIOM_PROPERTY_IRI,
+
+  const externalLink = dialog.getByRole("link", { name: AXIOM_PROPERTY_IRI });
+  await expect(externalLink).toHaveAttribute("href", AXIOM_PROPERTY_IRI);
+  await expect(externalLink).toHaveAttribute("target", "_blank");
+  await expect(externalLink).toHaveAttribute("title", AXIOM_PROPERTY_IRI);
+
+  const termLink = dialog.getByRole("link", { name: "reasoner" });
+  await expect(termLink).toHaveAttribute(
+    "href",
+    `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${ONTOLOGY_ID}/terms?iri=${encodeURIComponent(AXIOM_VALUE_IRI)}`,
   );
-  await expect(dialog.locator("li span").nth(1)).toHaveAttribute(
-    "title",
-    AXIOM_VALUE_IRI,
+  await expect(termLink).toHaveAttribute("target", "_blank");
+  await expect(termLink).toHaveAttribute("title", AXIOM_VALUE_IRI);
+  await expect(dialog.locator("li")).toHaveText(
+    `${AXIOM_PROPERTY_IRI}: reasoner`,
   );
+
+  await dialog.getByRole("button", { name: "Close" }).click();
+  await expect(dialog).toBeHidden();
+  const equivalentButton = metadataRow(page, "Equivalent to").getByRole(
+    "button",
+    { name: "see axioms" },
+  );
+  await equivalentButton.click();
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('li span[title="true"]')).toHaveText("true");
+  await expect(dialog.getByRole("link", { name: "true" })).toHaveCount(0);
 });

@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Modal from "react-bootstrap/Modal";
+import TermApi from "../api/term";
+import { OntologyPageContext } from "../context/OntologyPageContext";
 import {
   ClassStructureAxiom,
   ClassStructureNode,
@@ -51,7 +53,7 @@ class TermLib {
   ): JSX.Element | string {
     const axiomButton =
       options.showAxioms && node.axioms?.length ? (
-        <AxiomInfoButton axioms={node.axioms} />
+        <AxiomInfoButton axioms={node.axioms} ontologyId={term.ontologyId} />
       ) : null;
 
     if (node.type === "literal") {
@@ -370,8 +372,58 @@ class TermLib {
   }
 }
 
-function AxiomInfoButton({ axioms }: { axioms: ClassStructureAxiom[] }) {
+type AxiomLink = {
+  href: string;
+  label: string;
+};
+
+function AxiomInfoButton({
+  axioms,
+  ontologyId,
+}: {
+  axioms: ClassStructureAxiom[];
+  ontologyId: string;
+}) {
   const [showModal, setShowModal] = useState(false);
+  const [links, setLinks] = useState<Record<string, AxiomLink | null>>({});
+  const requestedIris = useRef(new Set<string>());
+  const ontologyPageContext = useContext(OntologyPageContext);
+
+  useEffect(() => {
+    if (!showModal) {
+      return;
+    }
+
+    const currentOntologyId =
+      ontologyPageContext.ontology.ontologyId || ontologyId;
+    const iris = [
+      ...new Set(axioms.flatMap((axiom) => [axiom.key, axiom.value])),
+    ].filter((iri) => isHttpLink(iri) && !requestedIris.current.has(iri));
+
+    if (!iris.length) {
+      return;
+    }
+
+    iris.forEach((iri) => requestedIris.current.add(iri));
+    Promise.all(
+      iris.map(async (iri) => {
+        let term = await new TermApi(currentOntologyId, iri).fetchTerm();
+        return [
+          iri,
+          createAxiomLink(
+            currentOntologyId,
+            iri,
+            term?.iri ? term.type : undefined,
+          ),
+        ] as const;
+      }),
+    ).then((resolvedLinks) => {
+      setLinks((currentLinks) => ({
+        ...currentLinks,
+        ...Object.fromEntries(resolvedLinks),
+      }));
+    });
+  }, [showModal, axioms, ontologyId, ontologyPageContext.ontology.ontologyId]);
 
   return (
     <>
@@ -405,14 +457,70 @@ function AxiomInfoButton({ axioms }: { axioms: ClassStructureAxiom[] }) {
           <ul>
             {axioms.map((axiom, index) => (
               <li key={`${axiom.key}-${axiom.value}-${index}`}>
-                <span title={axiom.key}>{axiom.keyLabel}</span>:{" "}
-                <span title={axiom.value}>{axiom.valueLabel}</span>
+                <AxiomValue
+                  iri={axiom.key}
+                  label={axiom.keyLabel}
+                  link={links[axiom.key]}
+                />
+                :{" "}
+                <AxiomValue
+                  iri={axiom.value}
+                  label={axiom.valueLabel}
+                  link={links[axiom.value]}
+                />
               </li>
             ))}
           </ul>
         </Modal.Body>
       </Modal>
     </>
+  );
+}
+
+function createAxiomLink(
+  ontologyId: string,
+  iri: string,
+  termType?: string,
+): AxiomLink | null {
+  if (termType) {
+    const termLink = TermLib.createTermUrl({
+      ontology_name: ontologyId,
+      termIri: iri,
+      termLabel: "",
+      type: termType,
+    })?.[0];
+    return termLink?.props?.href
+      ? { href: termLink.props.href, label: "" }
+      : null;
+  }
+  return isHttpLink(iri) ? { href: iri, label: iri } : null;
+}
+
+function isHttpLink(value: string): boolean {
+  try {
+    let url = new URL(value);
+    return ["http:", "https:"].includes(url.protocol);
+  } catch {
+    return false;
+  }
+}
+
+function AxiomValue({
+  iri,
+  label,
+  link,
+}: {
+  iri: string;
+  label: string;
+  link?: AxiomLink | null;
+}) {
+  if (!link) {
+    return <span title={iri}>{label}</span>;
+  }
+  return (
+    <a href={link.href} title={iri} target="_blank" rel="noreferrer">
+      {link.label || label}
+    </a>
   );
 }
 
