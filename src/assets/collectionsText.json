@@ -184,7 +184,7 @@
     "name": "NFDI-MatWerk",
     "text": "The NFDI-MatWerk ontology collection provides a selection of ontologies and terminologies relevant for Materials Science and Engineering (MSE). It includes vocabularies for describing materials, processes, properties, experimental and computational methods, research data, and related research resources and infrastructure. By providing shared and well-defined semantic concepts, the collection supports the consistent description, integration, discovery, and reuse of materials science research data and contributes to interoperability across heterogeneous data sources and workflows. The collection is part of the semantic infrastructure of the NFDI-MatWerk consortium within the German National Research Data Infrastructure (NFDI) and supports the implementation of FAIR data principles in Materials Science and Engineering",
     "logo": "/matwerk.png",
-    "ontology_list_url": "/ontologies?and=false&sortedBy=title&page=1&size=10&collection=NFDI+MatWerk",
+    "ontology_list_url": "/ontologies?and=false&sortedBy=title&page=1&size=10&collection=NFDI-MatWerk",
     "project_homepage": "https://nfdi-matwerk.de/",
     "domain_ts_link": "",
     "logo_width": 300,
