@@ -377,20 +377,35 @@ const OntologyPage = (props: CmpPropp) => {
                     {!waiting &&
                       activeTab === ONDET_TAB_ID &&
                       (() => {
+                        const supportedOndetHosts = [
+                          "raw.githubusercontent.com",
+                          "gitlab.com",
+                          "git.rwth-aachen.de",
+                          "git.tib.eu",
+                          "labs.etsi.org",
+                        ];
                         const errorMessage = (
                           <p>
                             <h5>
-                              Ontology is not in OnDeT, since it is not hosted
-                              on Github or Gitlab
+                              Ontology history is not available in OnDeT for
+                              this ontology source.
                             </h5>
                           </p>
                         );
 
                         try {
-                          const fileUrl = new URL(ontology.versionedUrl);
+                          const versionedUrl =
+                            ontology.versionedUrl?.startsWith("labs.etsi.org/")
+                              ? `https://${ontology.versionedUrl}`
+                              : ontology.versionedUrl;
+                          const fileUrl = new URL(versionedUrl);
+                          const isSupportedGitHost =
+                            supportedOndetHosts.includes(fileUrl.host);
+                          const isRawFile =
+                            fileUrl.host === "raw.githubusercontent.com" ||
+                            fileUrl.pathname.includes("/-/raw/");
 
-                          return fileUrl.host === "raw.githubusercontent.com" ||
-                            fileUrl.host === "gitlab.com" ? (
+                          return isSupportedGitHost && isRawFile ? (
                             <Suspense fallback={TAB_LOADER}>
                               <ChangesTimeline />
                             </Suspense>
