@@ -5,9 +5,15 @@ import * as Diff2Html from "diff2html";
 import "diff2html/bundles/css/diff2html.min.css";
 import "../layout/diff2html_table_row_fixed.css";
 import OndetApi from "../../api/ondet";
+import {
+  DiffAvailability,
+  ProcessedDiffTimelineItem,
+} from "../../api/types/ondetTypes";
 import { OntologyPageContext } from "../../context/OntologyPageContext";
 import { useContext } from "react";
 import Toolkit from "../../Libs/Toolkit";
+
+const MAX_INLINE_GIT_DIFF_BYTES = 1000000;
 
 const ROBOT_DIFF_STATIC_HEADER_REGEX =
   /# Ontology comparison\n\n## Left\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n## Right\n- Ontology IRI: .+\n- Version IRI: .+\n- Loaded from: .+\n\n/;
@@ -18,65 +24,109 @@ const customMarkdownComponents: any = {
   h3: "h6",
   h4: "p",
   a(props) {
-    const { node, ...rest } = props;
-    return <a href style={{ "font-size": "14px" }} {...rest} />;
+    const { node, children, ...rest } = props;
+    return (
+      <a style={{ fontSize: "14px" }} {...rest}>
+        {children}
+      </a>
+    );
   },
 };
 
 const ChangesTimeline = () => {
   const ontologyPageContext = useContext(OntologyPageContext);
-  const ontologyRawUrl = ontologyPageContext.ontology.versionedUrl;
-  const [ontologyCommits, setOntologyCommits] = useState([]);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const ontologyRawUrl =
+    ontologyPageContext.ontology.versionedUrl?.startsWith("labs.etsi.org/")
+      ? `https://${ontologyPageContext.ontology.versionedUrl}`
+      : ontologyPageContext.ontology.versionedUrl;
+  const [ontologyCommits, setOntologyCommits] = useState<ProcessedDiffTimelineItem[]>([]);
+  const [selectedItem, setSelectedItem] = useState<ProcessedDiffTimelineItem | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [contoMarkdown, setContoMarkdown] = useState("");
   const [robotMarkdown, setRobotMarkdown] = useState("");
   const [gitDiffHtml, setGitDiffHtml] = useState("");
+  const [gitDiffUrl, setGitDiffUrl] = useState("");
+  const [gitDiffStatus, setGitDiffStatus] = useState<DiffAvailability | null>(null);
   const [commitsFetched, setCommitsFetched] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [gitDiffLoading, setGitDiffLoading] = useState(false);
+  const [gitDiffError, setGitDiffError] = useState("");
+  const [loadedGitDiffSha, setLoadedGitDiffSha] = useState("");
+  const [timelineError, setTimelineError] = useState("");
+  const [detailsError, setDetailsError] = useState("");
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     async function fetchOntology() {
       setCommitsFetched(true);
-      const data = await ondetApi.fetchOntologyCommits(ontologyRawUrl);
-      setOntologyCommits(data);
-      setCommitsFetched(false);
+      setTimelineError("");
+      setOntologyCommits([]);
+      try {
+        const data = await ondetApi.fetchOntologyCommits(ontologyRawUrl);
+        setOntologyCommits(Array.isArray(data) ? data : []);
+      } catch (error) {
+        setTimelineError("Ontology history could not be loaded.");
+      } finally {
+        setCommitsFetched(false);
+      }
     }
 
-    fetchOntology();
+    if (ontologyRawUrl) {
+      fetchOntology();
+    } else {
+      setTimelineError("No versioned ontology URL is available.");
+    }
   }, [ontologyRawUrl]);
 
-  const handleItemClick = async (item, index) => {
+  const handleItemClick = async (item: ProcessedDiffTimelineItem, index: number) => {
     setLoading(true);
     setSelectedItem(item);
     setSelectedIndex(index);
-    const data = await ondetApi.fetchOntologyVersion(item.sha);
+    setDetailsError("");
+    setGitDiffHtml("");
+    setGitDiffUrl("");
+    setGitDiffStatus(null);
+    setGitDiffError("");
+    setLoadedGitDiffSha("");
 
-    setContoMarkdown(getContoDiff(data.difference));
-    setRobotMarkdown(getRobotDiff(data.markdown));
-    setGitDiffHtml(Diff2Html.html(data.gitDiff, {}));
+    try {
+      const data = await ondetApi.fetchOntologyVersion(item.sha, false);
 
-    setLoading(false);
+      setContoMarkdown(getContoDiff(data?.difference));
+      setRobotMarkdown(getRobotDiff(data?.markdown, data?.status?.robot));
+      setGitDiffUrl(data?.status?.git?.url || data?.gitDiffUrl || "");
+      setGitDiffStatus(data?.status?.git || null);
+    } catch (error) {
+      setDetailsError("Diff details could not be loaded for this commit.");
+      setContoMarkdown("### COnto diff could not be loaded for this commit");
+      setRobotMarkdown("### ROBOT diff could not be loaded for this commit");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getContoDiff = (diffArray) => {
-    if (diffArray.hasOwnProperty("error")) {
+    if (!diffArray) {
+      return "### COnto diff is not available for this commit";
+    }
+    if (diffArray.error) {
       return diffArray.error;
     }
-    if (diffArray.changes.length !== 0) {
+    if (Array.isArray(diffArray.changes) && diffArray.changes.length !== 0) {
       return formatDataForMarkdown(diffArray);
-    } else {
-      return "### COnto was not able to calculate the differences";
     }
+    return "### COnto diff is not available for this commit";
   };
 
-  const getRobotDiff = (markdown) => {
-    if (markdown.hasOwnProperty("file")) {
-      return markdown.file.split(ROBOT_DIFF_STATIC_HEADER_REGEX)[1];
-    } else {
-      return "### Robot was not able to calculate the differences";
+  const getRobotDiff = (markdown, robotStatus?: DiffAvailability) => {
+    if (markdown?.file) {
+      const splitMarkdown = markdown.file.split(ROBOT_DIFF_STATIC_HEADER_REGEX);
+      return splitMarkdown[1] || markdown.file;
     }
+    if (robotStatus?.message) {
+      return `### ROBOT diff is not available for this commit\n\n${robotStatus.message}`;
+    }
+    return "### ROBOT diff is not available for this commit";
   };
 
   const formatUriFragment = (uri) => {
@@ -95,6 +145,9 @@ const ChangesTimeline = () => {
 
     data.changes.forEach((change) => {
       const parts = change.split(" ");
+      if (parts.length < 4) {
+        return;
+      }
 
       const ppLabel = parts[0];
       const s = formatUriFragment(parts[1]);
@@ -121,9 +174,51 @@ const ChangesTimeline = () => {
     return markdownContent;
   };
 
+  const loadGitDiff = async () => {
+    if (!selectedItem || gitDiffLoading || loadedGitDiffSha === selectedItem.sha) {
+      return;
+    }
+
+    setGitDiffLoading(true);
+    setGitDiffError("");
+    try {
+      const data = await ondetApi.fetchOntologyVersion(
+        selectedItem.sha,
+        true,
+        MAX_INLINE_GIT_DIFF_BYTES
+      );
+      setGitDiffUrl(data?.status?.git?.url || data?.gitDiffUrl || gitDiffUrl);
+      setGitDiffStatus(data?.status?.git || gitDiffStatus);
+      if (data?.gitDiff) {
+        setGitDiffHtml(Diff2Html.html(data.gitDiff, {}));
+        setLoadedGitDiffSha(selectedItem.sha);
+      } else if (data?.status?.git?.status === "EXTERNAL_URL" && (data.status.git.url || data.gitDiffUrl)) {
+        setOpen(false);
+        window.open(data.status.git.url || data.gitDiffUrl, "_blank", "noopener,noreferrer");
+      } else {
+        setGitDiffHtml("");
+        setGitDiffError(data?.status?.git?.message || "Git diff is not available for this commit.");
+      }
+    } catch (error) {
+      setGitDiffError("Git diff could not be loaded for this commit.");
+      setGitDiffHtml("");
+    } finally {
+      setGitDiffLoading(false);
+    }
+  };
+
   const handleOpen = () => {
+    if (
+      gitDiffStatus?.inlineRecommended === false &&
+      (gitDiffStatus?.url || gitDiffUrl)
+    ) {
+      window.open(gitDiffStatus.url || gitDiffUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
+
     ontologyPageContext.handleFullScreen();
     setOpen(true);
+    loadGitDiff();
   };
 
   const handleClose = () => {
@@ -133,29 +228,29 @@ const ChangesTimeline = () => {
   return (
     <div className="tree-view-container resizable-container">
       {commitsFetched && <Spinner animation="border" variant="primary" />}
-      {!commitsFetched && ontologyCommits.length <= 1 && (
+      {!commitsFetched && timelineError && (
+        <h5>{timelineError}</h5>
+      )}
+      {!commitsFetched && !timelineError && ontologyCommits.length === 0 && (
         <>
           <h5>
-            Ontology was not added into OnDeT even though it is in supported
-            GIT-repository.
+            No comparable ontology versions are available in OnDeT for this
+            ontology.
             <br />
-            We are currently investigating the cause.
+            The ontology must be processed before differences can be shown.
           </h5>
         </>
       )}
-      {!commitsFetched && ontologyCommits.length !== 1 && (
+      {!commitsFetched && !timelineError && ontologyCommits.length > 0 && (
         <>
           <div className="node-table-container">
             <ul>
-              {ontologyCommits.map((diff, index, arr) => {
-                if (arr[index - 1] === undefined) return null;
-
-                const item = arr[index - 1];
-                const date = item.commit?.committer.date || item.date;
-                const message = item.commit?.message || item.message;
+              {ontologyCommits.map((item, index) => {
+                const date = item.date;
+                const message = item.message || "Ontology file version";
 
                 return (
-                  <li key={item.sha}>
+                  <li key={item.sha || `${item.parentSha}-${index}`}>
                     <button
                       onClick={() => handleItemClick(item, index)}
                       style={{
@@ -166,7 +261,7 @@ const ChangesTimeline = () => {
                         padding: 0,
                       }}
                     >
-                      <span>{new Date(date).toLocaleString()}</span>
+                      <span>{date ? new Date(date).toLocaleString() : ""}</span>
                       <Card
                         style={{
                           padding: "20px",
@@ -188,6 +283,9 @@ const ChangesTimeline = () => {
           </div>
           <div className="col-sm-9">
             {selectedItem && loading && <div className="isLoading"></div>}
+            {selectedItem && detailsError && !loading && (
+              <h5>{detailsError}</h5>
+            )}
             {!selectedItem && (
               <div>
                 <p>
@@ -198,21 +296,31 @@ const ChangesTimeline = () => {
                 </p>
               </div>
             )}
-            {selectedItem && !loading && (
+            {selectedItem && !loading && !detailsError && (
               <>
                 <div className="sticky-top text-center">
-                  {/* This view displays semantic differences calculated by COntoDiff and ROBOT DIFF. */}
-                  This view displays semantic differences calculated by ROBOT
-                  DIFF.
+                  This view displays available semantic differences calculated
+                  by ROBOT DIFF and COntoDiff.
                   <br />
-                  If you want
+                  {ontologyRawUrl && (
+                    <>
+                      <a
+                        href={ontologyRawUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Versioned URL
+                      </a>
+                      <br />
+                    </>
+                  )}
                   <Button variant="link" onClick={handleOpen}>
                     {" "}
-                    see syntax differences
+                    Open syntax diff
                   </Button>
                 </div>
                 <div className="d-flex">
-                  <div className="col-sm-12">
+                  <div className="col-sm-6">
                     <div className="row sticky-top text-center">
                       <h3>ROBOT Diff</h3>
                     </div>
@@ -223,15 +331,16 @@ const ChangesTimeline = () => {
                     </div>
                   </div>
 
-                  {/* <div className="col-sm-6">
-                                        <div className='row sticky-top text-center'>
-                                            <h3>COnto Diff</h3>
-                                        </div>
-                                        <div className='node-table-container'>
-                                            <ReactMarkdown
-                                                components={customMarkdownComponents}>{contoMarkdown}</ReactMarkdown>
-                                        </div>
-                                    </div> */}
+                  <div className="col-sm-6">
+                    <div className="row sticky-top text-center">
+                      <h3>COnto Diff</h3>
+                    </div>
+                    <div className="node-table-container">
+                      <ReactMarkdown components={customMarkdownComponents}>
+                        {contoMarkdown}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
                 </div>
               </>
             )}
@@ -247,7 +356,13 @@ const ChangesTimeline = () => {
             <Modal.Header closeButton>
               <Modal.Title>Git Diff</Modal.Title>
             </Modal.Header>
-            <Modal.Body>{Toolkit.renderDangerousHtml(gitDiffHtml)}</Modal.Body>
+            <Modal.Body>
+              {gitDiffLoading && <Spinner animation="border" variant="primary" />}
+              {!gitDiffLoading && gitDiffError && <h5>{gitDiffError}</h5>}
+              {!gitDiffLoading &&
+                !gitDiffError &&
+                Toolkit.renderDangerousHtml(gitDiffHtml)}
+            </Modal.Body>
           </Modal>
         </>
       )}
