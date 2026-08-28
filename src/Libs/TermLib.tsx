@@ -467,6 +467,7 @@ function AxiomInfoButton({
                   iri={axiom.value}
                   label={axiom.valueLabel}
                   link={links[axiom.value]}
+                  renderLinks
                 />
               </li>
             ))}
@@ -509,12 +510,21 @@ function AxiomValue({
   iri,
   label,
   link,
+  renderLinks = false,
 }: {
   iri: string;
   label: string;
   link?: AxiomLink | null;
+  renderLinks?: boolean;
 }) {
   if (!link) {
+    if (renderLinks) {
+      return Toolkit.renderDangerousHtml(
+        Toolkit.transformLinksInStringToAnchor(label),
+        { title: iri },
+        "span",
+      );
+    }
     return <span title={iri}>{label}</span>;
   }
   return (

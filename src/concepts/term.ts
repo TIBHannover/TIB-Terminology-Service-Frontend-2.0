@@ -416,7 +416,14 @@ export class TsTerm {
 
   getLabelForLinkedEntity(iri: string): string {
     try {
-      return this.term["linkedEntities"]?.[iri]?.["label"]?.[0] ?? "";
+      const label = this.term["linkedEntities"]?.[iri]?.["label"]?.[0];
+      if (typeof label === "string") {
+        return label;
+      }
+      if (label && typeof label === "object") {
+        return label.value ?? "";
+      }
+      return "";
     } catch {
       return "";
     }

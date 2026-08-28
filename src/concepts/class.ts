@@ -256,6 +256,17 @@ export class TsClass extends TsTerm {
       return { type: "expression", left, relation, right };
     }
     if (relationObj instanceof Object) {
+      if (relationObj.type?.includes("reification") && relationObj.value) {
+        let node =
+          typeof relationObj.value === "string"
+            ? this.createTermLinkNode(relationObj.value)
+            : this.recSubClass(relationObj.value, relation);
+        let axioms = this.createAxiomNodes(relationObj);
+        if (node && axioms?.length) {
+          node.axioms = [...(node.axioms ?? []), ...axioms];
+        }
+        return node;
+      }
       let propertyIri = relationObj["http://www.w3.org/2002/07/owl#onProperty"];
       if (!propertyIri) {
         let relKey = Object.keys(relationObj).find(
