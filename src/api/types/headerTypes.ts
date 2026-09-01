@@ -8,6 +8,7 @@ export type TsPluginHeader = {
   "X-TS-User-Token"?: string | null;
   "Content-Type"?: string | null;
   "X-TS-Auth-APP-Code"?: string | null;
+  "X-TS-OAuth-State"?: string | null;
 } & HeadersInit;
 
 export type GetHeaderFuncParams = {

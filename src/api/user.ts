@@ -14,6 +14,8 @@ const baseUrl: string | undefined =
 
 export async function runLogin(
   authCode: string,
+  state: string,
+  provider: string,
 ): Promise<LoginResponse | null> {
   try {
     let headers: TsPluginHeader = getTsPluginHeaders({
@@ -21,6 +23,8 @@ export async function runLogin(
       withAccessToken: false,
     });
     headers["X-TS-Auth-APP-Code"] = authCode;
+    headers["X-TS-OAuth-State"] = state;
+    headers["X-TS-Auth-Provider"] = provider;
     let result: any = await fetch(baseUrl + "/user/login/", {
       method: "GET",
       headers: headers,
@@ -32,6 +36,31 @@ export async function runLogin(
       return null;
     }
     return result;
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function createLoginState(
+  provider: string,
+  state: string,
+): Promise<{ code_challenge?: string } | null> {
+  try {
+    let headers: TsPluginHeader = getTsPluginHeaders({
+      isJson: false,
+      withAccessToken: false,
+    });
+    headers["X-TS-Auth-Provider"] = provider;
+    headers["X-TS-OAuth-State"] = state;
+    let result: any = await fetch(baseUrl + "/user/login/state/", {
+      method: "GET",
+      headers: headers,
+      credentials: "include",
+    });
+    if (!result.ok) {
+      return null;
+    }
+    return (await result.json())["_result"];
   } catch (e) {
     return null;
   }

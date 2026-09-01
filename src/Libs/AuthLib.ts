@@ -4,41 +4,74 @@ import { LoginResponse, ApiKey } from "../api/types/userTypes";
 
 class Auth {
   static run(): boolean {
-    let cUrl = window.location.href;
-    if (cUrl.includes("code=")) {
-      Auth.enableLoginAnimation();
-      let code = cUrl.split("code=")[1];
-      if (code.includes("&")) {
-        code = code.split("&")[0];
+    const callbackUrl = new URL(window.location.href);
+    const code = callbackUrl.searchParams.get("code");
+    const state = callbackUrl.searchParams.get("state");
+    if (code) {
+      const storedTransaction = state
+        ? sessionStorage.getItem("oauthLoginState:" + state)
+        : null;
+      if (state) {
+        sessionStorage.removeItem("oauthLoginState:" + state);
       }
-      runLogin(code).then((payload) => {
+      let loginTransaction: {
+        authProvider: string;
+        redirectUrl: string;
+      } | null = null;
+      try {
+        loginTransaction = storedTransaction
+          ? JSON.parse(storedTransaction)
+          : null;
+      } catch (e) {
+        loginTransaction = null;
+      }
+      if (!state || !loginTransaction) {
+        Auth.clearCallbackParameters(callbackUrl);
+        return false;
+      }
+      Auth.enableLoginAnimation();
+      runLogin(code, state, loginTransaction.authProvider).then((payload) => {
         if (payload) {
-          let userData = Auth.createUserDataObjectFromAuthResponse(payload);
+          let userData = Auth.createUserDataObjectFromAuthResponse(
+            payload,
+            loginTransaction.authProvider,
+          );
           if (!userData) {
             Auth.disableLoginAnimation();
             return false;
           }
           localStorage.setItem("user", JSON.stringify(userData));
-          let redirectUrl = localStorage.getItem("redirectUrl")
-            ? localStorage.getItem("redirectUrl")
-            : process.env.REACT_APP_PROJECT_SUB_PATH;
+          localStorage.setItem("authProvider", loginTransaction.authProvider);
+          localStorage.setItem("redirectUrl", loginTransaction.redirectUrl);
+          let redirectUrl =
+            loginTransaction.redirectUrl ||
+            process.env.REACT_APP_PROJECT_SUB_PATH;
           if (redirectUrl) {
             window.location.replace(redirectUrl);
           }
           return true;
         }
         Auth.disableLoginAnimation();
+        Auth.clearCallbackParameters(callbackUrl);
         return false;
       });
     }
     return false;
   }
 
+  static clearCallbackParameters(url: URL): void {
+    url.searchParams.delete("code");
+    url.searchParams.delete("state");
+    url.searchParams.delete("error");
+    url.searchParams.delete("error_description");
+    window.history.replaceState({}, document.title, url.toString());
+  }
+
   static createUserDataObjectFromAuthResponse(
     response: LoginResponse,
+    authProvider: string,
   ): UserModel | null {
     try {
-      let authProvider = localStorage.getItem("authProvider");
       let user = new UserModel();
       user.setCsrf(response.csrf_token ?? "");
       user.setId(response["id"]);
