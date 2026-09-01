@@ -70,7 +70,7 @@ class TermLib {
           <a
             href={TermLib.createClassStructureUrl(term, node)}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             {node.label}
           </a>
@@ -139,7 +139,7 @@ class TermLib {
       <a
         href={targetHref}
         className="btn btn-default ontology-button "
-        target="_blank"
+        target="_blank" rel="noopener noreferrer"
       >
         {ontology_name.toUpperCase()}
       </a>,
@@ -173,7 +173,7 @@ class TermLib {
       targetHref += "/individuals?iri=" + encodeURIComponent(termIri);
     }
     return [
-      <a href={targetHref} target="_blank">
+      <a href={targetHref} target="_blank" rel="noopener noreferrer">
         {ontology_name.toUpperCase() + ":" + termLabel}
       </a>,
     ];
@@ -206,7 +206,7 @@ class TermLib {
       targetHref += "/individuals?iri=" + encodeURIComponent(termIri);
     }
     return [
-      <a href={targetHref} target="_blank">
+      <a href={targetHref} target="_blank" rel="noopener noreferrer">
         {termLabel}
       </a>,
     ];
@@ -246,7 +246,7 @@ class TermLib {
         encodeURIComponent(instance["iri"]);
       result.push(
         <li>
-          <a href={individualUrl} target="_blank">
+          <a href={individualUrl} target="_blank" rel="noopener noreferrer">
             {instance["label"]}
           </a>
         </li>,
@@ -268,7 +268,7 @@ class TermLib {
         encodeURIComponent(cl["iri"]);
       result.push(
         <>
-          <a href={classUrl} target="_blank">
+          <a href={classUrl} target="_blank" rel="noopener noreferrer">
             {cl["label"]}
           </a>
           <br />
@@ -528,7 +528,7 @@ function AxiomValue({
     return <span title={iri}>{label}</span>;
   }
   return (
-    <a href={link.href} title={iri} target="_blank" rel="noreferrer">
+    <a href={link.href} title={iri} target="_blank" rel="noopener noreferrer">
       {link.label || label}
     </a>
   );

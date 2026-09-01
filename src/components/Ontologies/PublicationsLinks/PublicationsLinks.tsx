@@ -107,7 +107,7 @@ const PublicationsLinks = () => {
                             <div className="col-sm-11">
                                 <p className="fs-6">{pub.citation}</p>
                                 <a href={"https://doi.org/" + pub.doi} target="_blank"
-                                   rel="noreferrer nofollow">
+                                   rel="noopener noreferrer nofollow">
                                     {pub.doi}
                                     <i className="fa fa-solid fa-up-right-from-square border-0"></i>
                                 </a>

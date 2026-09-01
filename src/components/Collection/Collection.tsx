@@ -140,7 +140,7 @@ const Collections = () => {
                 <a
                   href={collectionJson["project_homepage"]}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   {collectionJson["project_homepage"]}
                 </a>
@@ -154,7 +154,7 @@ const Collections = () => {
                 <a
                   href={collectionJson["domain_ts_link"]}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   {collectionJson["domain_ts_link"]}
                 </a>

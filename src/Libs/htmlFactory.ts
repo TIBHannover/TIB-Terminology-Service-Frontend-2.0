@@ -3,6 +3,7 @@ export function buildHtmlAnchor(url: string, text: string): HTMLAnchorElement {
   a.href = url;
   a.innerHTML = text;
   a.target = "_blank";
+  a.rel = "noopener noreferrer";
   return a;
 }
 

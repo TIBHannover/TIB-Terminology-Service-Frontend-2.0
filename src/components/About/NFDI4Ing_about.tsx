@@ -12,15 +12,15 @@ export function nfdi4IngAbout() {
         method-oriented and user-centred approach in order to make engineering
         research data FAIR ( findable, accessible, interoperable, and
         re-usable). Before meeting the{" "}
-        <a href="https://nfdi4ing.de/#meet_archetypes" target="_blank">
+        <a href="https://nfdi4ing.de/#meet_archetypes" target="_blank" rel="noopener noreferrer">
           archetypes
         </a>{" "}
         and
-        <a href="https://nfdi4ing.de/#exploring_projects" target="_blank">
+        <a href="https://nfdi4ing.de/#exploring_projects" target="_blank" rel="noopener noreferrer">
           exploring our projects
         </a>
         , you might want to have a look at the
-        <a href="https://nfdi4ing.de/#overview_taskareas" target="_blank">
+        <a href="https://nfdi4ing.de/#overview_taskareas" target="_blank" rel="noopener noreferrer">
           overview of task areas
         </a>
         .
@@ -64,7 +64,7 @@ export function nfdi4IngAbout() {
         associated attributes and relations that are readable and
         understandable, not only to target audiences but also to machines, is
         key to{" "}
-        <a href="https://doi.org/10.3233/ISU-170824" target="_blank">
+        <a href="https://doi.org/10.3233/ISU-170824" target="_blank" rel="noopener noreferrer">
           FAIRness
         </a>
         .
@@ -115,57 +115,57 @@ export function nfdi4IngAbout() {
         of the existing vocabularies that are used in engineering disciplines
         have a generic origin. Examples for this are descriptions for provenance
         tracking (e.g., W3C{" "}
-        <a href="https://www.w3.org/TR/prov-o/" target="_blank">
+        <a href="https://www.w3.org/TR/prov-o/" target="_blank" rel="noopener noreferrer">
           PROV
         </a>
         ), units and/or quantities used (e.g., measured quantities such as
-        <a href="https://cdd.iec.ch/" target="_blank">
+        <a href="https://cdd.iec.ch/" target="_blank" rel="noopener noreferrer">
           {" "}
           IEC 61630
         </a>
         ,
-        <a href="http://www.qudt.org/" target="_blank">
+        <a href="http://www.qudt.org/" target="_blank" rel="noopener noreferrer">
           {" "}
           QUDT
         </a>{" "}
         and
-        <a href="https://github.com/HajoRijgersberg/OM" target="_blank">
+        <a href="https://github.com/HajoRijgersberg/OM" target="_blank" rel="noopener noreferrer">
           {" "}
           OM
         </a>
         ), devices (e.g. Research Alliance
         <a
           href="https://www.rd-alliance.org/groups/persistent-identification-instruments-wg"
-          target="_blank"
+          target="_blank" rel="noopener noreferrer"
         >
           WG for Persistent Identification of Instruments
         </a>
         ) and experiments (e.g. the{" "}
-        <a href="https://www.allotrope.org/allotrope-framework" target="_blank">
+        <a href="https://www.allotrope.org/allotrope-framework" target="_blank" rel="noopener noreferrer">
           {" "}
           Allotrope Data Format (ADF)
         </a>
         ) Discipline-specific vocabularies mostly focus on engineering-related
         disciplines, for example chemical (
-        <a href="http://www.chemspider.com/" target="_blank">
+        <a href="http://www.chemspider.com/" target="_blank" rel="noopener noreferrer">
           ChemSpider
         </a>
         ) and material (
-        <a href="http://www.chemspider.com/" target="_blank">
+        <a href="http://www.chemspider.com/" target="_blank" rel="noopener noreferrer">
           MaterialHub
         </a>
         ) databases as well as observations (e.g.{" "}
-        <a href="https://www.w3.org/TR/vocab-data-cube/" target="_blank">
+        <a href="https://www.w3.org/TR/vocab-data-cube/" target="_blank" rel="noopener noreferrer">
           RDF Data Cube Vocabulary
         </a>
         ,
-        <a href="https://www.w3.org/TR/vocab-ssn/" target="_blank">
+        <a href="https://www.w3.org/TR/vocab-ssn/" target="_blank" rel="noopener noreferrer">
           Semantic Sensor Network ontology
         </a>
         ) and metrology (e.g.
         <a
           href="https://www.bipm.org/en/publications/guides/vim.html"
-          target="_blank"
+          target="_blank" rel="noopener noreferrer"
         >
           VIM3
         </a>

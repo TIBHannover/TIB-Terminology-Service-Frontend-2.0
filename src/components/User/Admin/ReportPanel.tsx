@@ -22,7 +22,7 @@ const ReportPanel = () => {
                 <a
                   href={rep["reported_content_url"]}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   {rep["reported_content_url"]}
                 </a>

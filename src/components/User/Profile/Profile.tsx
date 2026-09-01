@@ -14,7 +14,7 @@ const UserProfile = () => {
         <tr>
           <td>Homepage</td>
           <td>
-            <a href={appContext.user.githubHomeUrl} target={"_blank"}>
+            <a href={appContext.user.githubHomeUrl} target={"_blank"} rel="noopener noreferrer">
               {appContext.user.githubHomeUrl}
             </a>
           </td>

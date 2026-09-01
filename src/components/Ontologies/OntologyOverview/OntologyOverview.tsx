@@ -57,7 +57,7 @@ const OntologyOverview = () => {
               <a
                 href={`${process.env.REACT_APP_API_URL}/v2/ontologies/${ontologyPageContext.ontology.ontologyId}?lang=${ontologyPageContext.ontoLang}`}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="btn btn-secondary download-ontology-btn w-75 stour-overview-page-show-metadata-as-json-btn"
               >
                 Show Ontology Metadata as JSON

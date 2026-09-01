@@ -3,7 +3,7 @@ export function createIssueTitle(issue) {
     <a
       href={issue["html_url"]}
       className="git-issue-title stour-github-issue-title"
-      target={"_blank"}
+      target={"_blank"} rel="noopener noreferrer"
     >
       {issue["title"]}
     </a>,
@@ -21,7 +21,7 @@ export function createLabelTags(labelsList) {
         <a
           href={formatLabelUrl(label["url"])}
           className="git-issue-tag-link"
-          target={"_blank"}
+          target={"_blank"} rel="noopener noreferrer"
         >
           {label["name"]}
         </a>

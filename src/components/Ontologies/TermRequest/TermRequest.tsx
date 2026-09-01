@@ -337,7 +337,7 @@ const TermRequest = (props) => {
                     <b>My Submitted Issues</b>
                   </a>
                 </div>
-                <a href={newIssueUrl} target="_blank" rel="noreferrer nofollow">
+                <a href={newIssueUrl} target="_blank" rel="noopener noreferrer nofollow">
                   {newIssueUrl}
                 </a>
               </div>

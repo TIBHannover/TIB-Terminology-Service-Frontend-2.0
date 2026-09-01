@@ -44,7 +44,7 @@ export function renderDocumentation() {
         <b>
           <a
             href="https://api.terminology.tib.eu/api/"
-            rel="nofollow noreferrer"
+            rel="nofollow noopener noreferrer"
             target="_blank"
           >
             {" "}
@@ -57,7 +57,7 @@ export function renderDocumentation() {
         <b>
           <a
             href="https://api.terminology.tib.eu/swagger-ui/index.html"
-            rel="nofollow noreferrer"
+            rel="nofollow noopener noreferrer"
             target="_blank"
           >
             {" "}
@@ -70,7 +70,7 @@ export function renderDocumentation() {
         <b>
           <a
             href="https://api.terminology.tib.eu/swagger-ui/index.html"
-            rel="nofollow noreferrer"
+            rel="nofollow noopener noreferrer"
             target="_blank"
           >
             Swagger Documentation
@@ -87,7 +87,7 @@ export function renderDocumentation() {
         <a
           href="https://fair-impact.github.io/MOD-API/"
           target="_blank"
-          rel="nofollow noreferrer"
+          rel="nofollow noopener noreferrer"
         >
           https://fair-impact.github.io/MOD-API/
         </a>
@@ -106,7 +106,7 @@ export function renderDocumentation() {
         <b>
           <a
             href="https://api.terminology.tib.eu/mod/swagger-ui/index.html"
-            rel="nofollow noreferrer"
+            rel="nofollow noopener noreferrer"
             target="_blank"
           >
             Swagger Documentation
@@ -121,7 +121,7 @@ export function renderDocumentation() {
             href="https://zenodo.org/records/10725304"
             target="_blank"
             className="ms-1 me-1"
-            rel="nofollow noreferrer"
+            rel="nofollow noopener noreferrer"
           >
             https://zenodo.org/records/10725304
           </a>
@@ -132,7 +132,7 @@ export function renderDocumentation() {
             href="https://fair-impact.github.io/MOD/index-en.html"
             target="_blank"
             className="ms-1"
-            rel="nofollow noreferrer"
+            rel="nofollow noopener noreferrer"
           >
             https://fair-impact.github.io/MOD/index-en.html
           </a>

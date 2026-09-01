@@ -29,7 +29,7 @@ export function buildNoteAboutPart(note: Note | Record<string, any>) {
   }
 
   return (
-    <Link to={url} target="_blank">
+    <Link to={url} target="_blank" rel="noopener noreferrer">
       <b>{label}</b>
     </Link>
   );

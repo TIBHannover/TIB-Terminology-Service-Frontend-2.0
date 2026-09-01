@@ -94,7 +94,7 @@ export function nfdi4IngDoc() {
                     executed from the
                     <a
                       href="http://service.tib.eu/ts4tib/swagger-ui.html"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       <b> Swagger Documentation</b>
                     </a>
@@ -120,13 +120,13 @@ export function nfdi4IngDoc() {
             request a new ontology please use our GitLab{" "}
             <a
               href="https://git.rwth-aachen.de/nfdi4ing/metadata4ing/terminology-service-issue-tracker/-/issues"
-              target={"_blank"}
+              target={"_blank"} rel="noopener noreferrer"
             >
               {" "}
               issue tracker
             </a>
             . For more information, you can{" "}
-            <a href="https://nfdi4ing.de/contact/" target={"_blank"}>
+            <a href="https://nfdi4ing.de/contact/" target={"_blank"} rel="noopener noreferrer">
               {" "}
               contact the NFDI4Ing management team
             </a>

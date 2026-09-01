@@ -121,7 +121,7 @@ export function nfdi4IngHelp() {
                 represented by a
                 <a
                   href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier"
-                  target={"_blank"}
+                  target={"_blank"} rel="noopener noreferrer"
                 >
                   {" "}
                   Uniform Resource Identifier (URI)
@@ -132,14 +132,14 @@ export function nfdi4IngHelp() {
                 refer to a reliable description of a concept related to your
                 work. You can also integrate terminological items into your own
                 applications via the
-                <a href="/docs" target={"_blank"}>
+                <a href="/docs" target={"_blank"} rel="noopener noreferrer">
                   {" "}
                   Terminology Service’s API
                 </a>
                 . Learn more about the API here or at its
                 <a
                   href="http://service.tib.eu/ts4tib/swagger-ui.html"
-                  target={"_blank"}
+                  target={"_blank"} rel="noopener noreferrer"
                 >
                   <b> Swagger Documentation</b>
                 </a>
@@ -184,7 +184,7 @@ export function nfdi4IngHelp() {
                 mail to felix.engel [AT] tib.eu or leave an issue at our{" "}
                 <a
                   href="https://git.rwth-aachen.de/nfdi4ing/metadata4ing/terminology-service-issue-tracker/-/issues"
-                  target={"_blank"}
+                  target={"_blank"} rel="noopener noreferrer"
                 >
                   {" "}
                   issue tracker
@@ -273,20 +273,20 @@ export function nfdi4IngHelp() {
                   <li>
                     <a
                       href="https://www.iso.org/obp/ui#search"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       https://www.iso.org/obp/ui#search
                     </a>
                   </li>
                   <li>
-                    <a href="https://www.electropedia.org/" target={"_blank"}>
+                    <a href="https://www.electropedia.org/" target={"_blank"} rel="noopener noreferrer">
                       https://www.electropedia.org/
                     </a>
                   </li>
                   <li>
                     <a
                       href="https://www.din.de/de/service-fuer-anwender/din-term"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       https://www.din.de/de/service-fuer-anwender/din-term
                     </a>{" "}
@@ -296,7 +296,7 @@ export function nfdi4IngHelp() {
                   <li>
                     <a
                       href="https://www.din.de/de/service-fuer-anwender/din-termonline"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       https://www.din.de/de/service-fuer-anwender/din-termonline
                     </a>{" "}
@@ -310,7 +310,7 @@ export function nfdi4IngHelp() {
                   <li>
                     <a
                       href="https://bartoc-fast.ub.unibas.ch/bartocfast/"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       https://bartoc-fast.ub.unibas.ch/bartocfast/
                     </a>
@@ -318,7 +318,7 @@ export function nfdi4IngHelp() {
                   <li>
                     <a
                       href="https://service.tib.eu/ts4tib/index"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       https://service.tib.eu/ts4tib/index
                     </a>
@@ -329,27 +329,27 @@ export function nfdi4IngHelp() {
                 and concept fiels in the domain:
                 <ul>
                   <li>
-                    <a href="https://bartoc.org/" target={"_blank"}>
+                    <a href="https://bartoc.org/" target={"_blank"} rel="noopener noreferrer">
                       https://bartoc.org/
                     </a>
                   </li>
                   <li>
                     <a
                       href="https://lov.linkeddata.es/dataset/lov/"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       https://lov.linkeddata.es/dataset/lov/
                     </a>
                   </li>
                   <li>
-                    <a href="https://www.lod-cloud.net/" target={"_blank"}>
+                    <a href="https://www.lod-cloud.net/" target={"_blank"} rel="noopener noreferrer">
                       https://www.lod-cloud.net/
                     </a>
                   </li>
                   <li>
                     <a
                       href="https://archivo.dbpedia.org/list"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       https://archivo.dbpedia.org/list
                     </a>
@@ -436,7 +436,7 @@ export function nfdi4IngHelp() {
                     and ontologies{" "}
                     <a
                       href="https://w3id.org/faircookbook/FCB019"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       https://w3id.org/faircookbook/FCB019
                     </a>
@@ -444,7 +444,7 @@ export function nfdi4IngHelp() {
                   <li>
                     <a
                       href="https://www.w3.org/TR/rdf11-primer/"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       https://www.w3.org/TR/rdf11-primer/
                     </a>
@@ -452,7 +452,7 @@ export function nfdi4IngHelp() {
                   <li>
                     <a
                       href="https://www.w3.org/TR/rdf-schema/"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       https://www.w3.org/TR/rdf-schema/
                     </a>
@@ -460,7 +460,7 @@ export function nfdi4IngHelp() {
                   <li>
                     <a
                       href="https://www.w3.org/TR/owl2-primer/"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       https://www.w3.org/TR/owl2-primer/
                     </a>
@@ -468,7 +468,7 @@ export function nfdi4IngHelp() {
                   <li>
                     <a
                       href="https://www.w3.org/TR/skos-reference/"
-                      target={"_blank"}
+                      target={"_blank"} rel="noopener noreferrer"
                     >
                       https://www.w3.org/TR/skos-reference/
                     </a>
@@ -508,7 +508,7 @@ export function nfdi4IngHelp() {
                 <ul>
                   <li>
                     The{" "}
-                    <a href="https://service.tib.eu/sc3/" target={"_blank"}>
+                    <a href="https://service.tib.eu/sc3/" target={"_blank"} rel="noopener noreferrer">
                       Ontology Curation Portal
                     </a>{" "}
                     allows you to collect your ontologies in projects. Each

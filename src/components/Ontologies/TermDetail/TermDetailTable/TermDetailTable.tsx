@@ -190,7 +190,7 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
     }
     if (isLink) {
       return (
-        <a href={metadataValue} target="_blank" rel="noreferrer">
+        <a href={metadataValue} target="_blank" rel="noopener noreferrer">
           {metadataValue}
         </a>
       );
@@ -381,7 +381,7 @@ function MetadataInfoButton({
                 className="metadata-info-iri"
                 href={safeIriUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 {iri}
               </a>

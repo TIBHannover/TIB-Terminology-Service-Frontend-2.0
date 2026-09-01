@@ -472,7 +472,7 @@ const CollectionPage = (props: CmpProps) => {
 //                 </a>
 //               )}
 //               {author.github && (
-//                 <a href={"https://github.com/" + author.github} target="_blank">
+//                 <a href={"https://github.com/" + author.github} target="_blank" rel="noopener noreferrer">
 //                   <i className="fa-brands fa-github fs-5 ms-2"></i>
 //                 </a>
 //               )}

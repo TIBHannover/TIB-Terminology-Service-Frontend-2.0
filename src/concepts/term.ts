@@ -315,7 +315,7 @@ export class TsTerm {
           "/individuals?iri=" +
           encodeURIComponent(csLink);
         result.push(
-          `<a href="${individualUrl}" target='_blank'>${this.getLabelForLinkedEntity(csLink)}</a>`,
+          `<a href="${individualUrl}" target='_blank' rel="noopener noreferrer">${this.getLabelForLinkedEntity(csLink)}</a>`,
         );
       }
       return result;

@@ -396,7 +396,7 @@ class UsagePage extends React.Component {
               </p>
               <a
                 href="https://public.ccsds.org/pubs/650x0m2.pdf"
-                target="_blank"
+                target="_blank" rel="noopener noreferrer"
               >
                 https://public.ccsds.org/pubs/650x0m2.pdf
               </a>
@@ -418,7 +418,7 @@ class UsagePage extends React.Component {
                 use-case specific metadata and represented in RDF and SHACL. The
                 <a
                   href="https://coscine.rwth-aachen.de/coscine/apps/aimsfrontend/#/"
-                  target={"_blank"}
+                  target={"_blank"} rel="noopener noreferrer"
                 >
                   {" "}
                   AIMS Frontend
@@ -426,7 +426,7 @@ class UsagePage extends React.Component {
                 is developed as an
                 <a
                   href="https://git.rwth-aachen.de/coscine/frontend/apps/aimsfrontend"
-                  target={"_blank"}
+                  target={"_blank"} rel="noopener noreferrer"
                 >
                   {" "}
                   Open Source Project{" "}
@@ -440,7 +440,7 @@ class UsagePage extends React.Component {
                 by automatically querying its
                 <a
                   href="http://service.tib.eu/ts4tib/swagger-ui.html"
-                  target={"_blank"}
+                  target={"_blank"} rel="noopener noreferrer"
                 >
                   {" "}
                   REST Interface{" "}

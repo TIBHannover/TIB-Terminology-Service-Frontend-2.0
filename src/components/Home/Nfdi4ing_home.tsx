@@ -178,7 +178,7 @@ export function homePageContent() {
                     {" "}
                     <a
                       className="ahome"
-                      target="_blank"
+                      target="_blank" rel="noopener noreferrer"
                       href="https://www.aims-projekt.de/"
                     >
                       Application Profile Service:
@@ -196,7 +196,7 @@ export function homePageContent() {
                   <p>
                     <a
                       className="ahome"
-                      target="_blank"
+                      target="_blank" rel="noopener noreferrer"
                       href="https://orkg.org/"
                     >
                       Open Research Knowledge Graph:
@@ -212,7 +212,7 @@ export function homePageContent() {
                     <b>Termclick:</b>{" "}
                     <a
                       className="ahome"
-                      target="_blank"
+                      target="_blank" rel="noopener noreferrer"
                       href="https://addons.mozilla.org/en-US/firefox/addon/termclick/"
                     >
                       Termclick
