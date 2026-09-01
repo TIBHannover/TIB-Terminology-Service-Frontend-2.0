@@ -373,7 +373,23 @@ export class TsTerm {
     } else if (typeof value === "object") {
       result.value = value.value;
     }
+    if (["mass", "monoisotopic mass"].includes(label.toLowerCase())) {
+      result.value = TsTerm.addMolarMassUnit(result.value);
+    }
     return result;
+  }
+
+  private static addMolarMassUnit(value: TsAnnotation["value"]) {
+    const addUnit = (item: any) => {
+      if (typeof item === "string") {
+        return item.endsWith(" g/mol") ? item : `${item} g/mol`;
+      }
+      if (typeof item === "object" && typeof item.value === "string") {
+        return { ...item, value: addUnit(item.value) };
+      }
+      return item;
+    };
+    return Array.isArray(value) ? value.map(addUnit) : addUnit(value);
   }
 
   static getAnnotationOriginalIri(annotation: any, fallback: string) {
