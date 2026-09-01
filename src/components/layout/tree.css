@@ -164,6 +164,17 @@
   overflow: hidden;
 }
 
+.tree-view-container .node-metadata-value-collapsed {
+  line-height: 1.5;
+  max-height: 15em;
+  overflow: hidden;
+}
+
+.tree-view-container .node-metadata-toggle {
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
 .node-detail-table-row {
   border-bottom: 1px solid black;
 }
