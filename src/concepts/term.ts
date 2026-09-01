@@ -315,7 +315,10 @@ export class TsTerm {
           "/individuals?iri=" +
           encodeURIComponent(csLink);
         result.push(
-          `<a href="${individualUrl}" target='_blank' rel="noopener noreferrer">${this.getLabelForLinkedEntity(csLink)}</a>`,
+          buildHtmlAnchor(
+            individualUrl,
+            this.getLabelForLinkedEntity(csLink),
+          ).outerHTML,
         );
       }
       return result;
