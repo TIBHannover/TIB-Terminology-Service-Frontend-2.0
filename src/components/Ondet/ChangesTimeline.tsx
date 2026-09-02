@@ -14,6 +14,19 @@ const ROBOT_DIFF_STATIC_HEADER_REGEX =
 
 const ondetApi = new (OndetApi as any)({});
 
+const safeMarkdownUrl = (url: string) => {
+  if (/^(?:\/(?!\/)|\.{1,2}\/|[?#])/.test(url)) {
+    return url;
+  }
+
+  try {
+    const protocol = new URL(url).protocol;
+    return protocol === "http:" || protocol === "https:" ? url : "";
+  } catch {
+    return "";
+  }
+};
+
 const customMarkdownComponents: any = {
   h3: "h6",
   h4: "p",
@@ -217,7 +230,10 @@ const ChangesTimeline = () => {
                       <h3>ROBOT Diff</h3>
                     </div>
                     <div className="node-table-container">
-                      <ReactMarkdown components={customMarkdownComponents}>
+                      <ReactMarkdown
+                        components={customMarkdownComponents}
+                        transformLinkUri={safeMarkdownUrl}
+                      >
                         {robotMarkdown}
                       </ReactMarkdown>
                     </div>
