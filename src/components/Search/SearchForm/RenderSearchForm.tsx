@@ -17,6 +17,8 @@ type CmpProps = {
   jumpToResult: any[];
   jumptToRef: any;
   ontologyJumpToResult: TsOntology[];
+  exact: boolean;
+  obsoletes: boolean;
   handleExactCheckboxClick: (e: React.MouseEvent<HTMLInputElement>) => void;
   handleObsoletesCheckboxClick: (e: React.MouseEvent<HTMLInputElement>) => void;
   handleIncludeImprtedCheckboxClick: (
@@ -260,7 +262,9 @@ const RenderSearchForm = (props: CmpProps) => {
                 className="form-check-input"
                 id="exact-checkbox"
                 value="exact match"
+                checked={props.exact}
                 onClick={props.handleExactCheckboxClick}
+                onChange={() => {}}
               />
               <label className="form-check-label ms-2" htmlFor="exact-checkbox">
                 Exact match
@@ -272,7 +276,9 @@ const RenderSearchForm = (props: CmpProps) => {
                 className="form-check-input"
                 id="obsoletes-checkbox"
                 value="Obsolete results"
+                checked={props.obsoletes}
                 onClick={props.handleObsoletesCheckboxClick}
+                onChange={() => {}}
               />
               <label
                 className="form-check-label ms-2"
@@ -287,7 +293,9 @@ const RenderSearchForm = (props: CmpProps) => {
                 className="form-check-input"
                 id="include-imported-checkbox"
                 value="include-imported"
+                checked={appContext.includeImportedTerms}
                 onClick={props.handleIncludeImprtedCheckboxClick}
+                onChange={() => {}}
               />
               <label
                 className="form-check-label ms-2"

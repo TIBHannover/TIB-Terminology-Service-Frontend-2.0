@@ -46,7 +46,11 @@ const App = () => {
   });
   const [appIsReady, setAppIsReady] = useState(false);
   const [headerIsPainted, setHeaderIsPainted] = useState(false);
-  const [includeImportedTerms, setIncludeImportedTerms] = useState(true);
+  const [includeImportedTerms, setIncludeImportedTerms] = useState(
+    () =>
+      new URLSearchParams(window.location.search).get("includeimported") !==
+      "false",
+  );
   const showLoadingPage = !appIsReady || !headerIsPainted;
   const handleHeaderPaint = useCallback(() => {
     setHeaderIsPainted(true);
