@@ -98,6 +98,7 @@ const SearchResult = () => {
   const collectionsWithOntologiesQuery = useQuery({
     queryKey: ["allCollectionsWithTheirOntologies"],
     queryFn: getCollectionsAndThierOntologies,
+    meta: { persist: true },
   });
 
   if (

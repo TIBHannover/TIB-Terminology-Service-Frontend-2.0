@@ -56,6 +56,7 @@ const Collections = () => {
   const collectionsWithOntologiesQuery = useQuery({
     queryKey: ["allCollectionsWithTheirOntologiesInCollectionPage"],
     queryFn: getCollectionsAndThierOntologies,
+    meta: { persist: true },
   });
 
   let collectionOntologiesData: { [key: string]: JSX.Element[] } = {};

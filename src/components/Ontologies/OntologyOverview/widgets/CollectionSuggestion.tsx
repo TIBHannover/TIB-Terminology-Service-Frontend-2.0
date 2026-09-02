@@ -27,6 +27,7 @@ const CollectionSuggestion = (props) => {
   const collectionWithOntologyListQuery = useQuery({
     queryKey: ["allCollectionsWithTheirOntologies"],
     queryFn: getCollectionsAndThierOntologies,
+    meta: { persist: true },
   });
 
   let collectionIds = [];

@@ -5,11 +5,10 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createInstance } from "@datapunt/matomo-tracker-react";
 import SiteMatomoProvider from "./components/Matomo/SiteMatomoProvider";
-import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { defaultShouldDehydrateQuery } from "@tanstack/react-query";
+import { localStoragePersister, queryClient } from "./Libs/QueryCache";
 
 // Adding Matomo
 const instance = createInstance({
@@ -24,21 +23,6 @@ const instance = createInstance({
   },
 });
 
-const aWeek = 1000 * 60 * 60 * 24 * 7;
-const cacheTime = process.env.REACT_APP_CACHE_ENABLED === "true" ? aWeek : 0;
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      cacheTime: cacheTime,
-      staleTime: cacheTime,
-    },
-  },
-});
-
-const localStoragePersister = createSyncStoragePersister({
-  storage: window.localStorage,
-});
-
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
@@ -49,13 +33,11 @@ root.render(
         client={queryClient}
         persistOptions={{
           persister: localStoragePersister,
+          buster: "2",
           dehydrateOptions: {
             shouldDehydrateQuery: (query) => {
-              if (!query.meta) {
-                return true;
-              }
               return (
-                defaultShouldDehydrateQuery(query) && query.meta.cache !== false
+                defaultShouldDehydrateQuery(query) && query.meta?.persist === true
               );
             },
           },

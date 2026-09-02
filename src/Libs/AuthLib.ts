@@ -1,6 +1,7 @@
 import UserModel from "../components/User/Model/user";
 import { runLogin, isLogin, logout } from "../api/user";
 import { LoginResponse, ApiKey } from "../api/types/userTypes";
+import { clearQueryCache } from "./QueryCache";
 
 class Auth {
   static run(): boolean {
@@ -115,8 +116,9 @@ class Auth {
   }
 
   static runLogout(): void {
-    logout().then(() => {
-      localStorage.removeItem("user");
+    clearQueryCache();
+    localStorage.removeItem("user");
+    logout().finally(() => {
       let redirectUrl = localStorage.getItem("redirectUrl")
         ? localStorage.getItem("redirectUrl")
         : process.env.REACT_APP_PROJECT_SUB_PATH;
