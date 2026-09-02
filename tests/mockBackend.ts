@@ -80,7 +80,7 @@ function sendJson(
     "Access-Control-Allow-Origin": "http://localhost:3000",
     "Access-Control-Allow-Credentials": "true",
     "Access-Control-Allow-Headers":
-      "Content-Type, X-TS-Frontend-Id, X-TS-Frontend-Token, X-TS-Auth-Provider, X-TS-Auth-APP-Code, X-CSRF-Token, X-Auth-Token",
+      "Content-Type, X-TS-Frontend-Id, X-TS-Frontend-Token, X-TS-Auth-Provider, X-TS-Auth-APP-Code, X-TS-OAuth-State, X-CSRF-Token, X-Auth-Token",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Content-Type": "application/json",
   });
@@ -164,6 +164,11 @@ const server = http.createServer(async (req, res) => {
 
   if (req.method === "GET" && url.pathname === "/user/login/") {
     sendJson(res, 200, { _result: mockUser() });
+    return;
+  }
+
+  if (req.method === "GET" && url.pathname === "/user/login/state/") {
+    sendJson(res, 200, { _result: { code_challenge: "mock-challenge" } });
     return;
   }
 

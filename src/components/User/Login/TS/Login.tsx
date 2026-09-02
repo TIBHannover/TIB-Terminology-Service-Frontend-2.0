@@ -1,11 +1,23 @@
 import Modal from "react-bootstrap/Modal";
 import { useState, useEffect } from "react";
+import { createLoginState } from "../../../../api/user";
+
+const loginStateKey = "oauthLoginState:";
+
+function createState(): string {
+  const bytes = new Uint8Array(32);
+  window.crypto.getRandomValues(bytes);
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
 
 const Login = (props) => {
   const [showModal, setShowModal] = useState(false);
 
-  function getAuthenticationCode(e) {
-    let authProvider = e.target.getAttribute("authProvider");
+  async function getAuthenticationCode(e) {
+    let authProvider = e.currentTarget.getAttribute("authProvider");
+    if (!authProvider) {
+      return;
+    }
     let loginUrl = "";
     if (authProvider === "github") {
       loginUrl = process.env.REACT_APP_GITHUB_AUTH_BASE_URL;
@@ -21,10 +33,23 @@ const Login = (props) => {
       loginUrl += "?client_id=" + process.env.REACT_APP_REGAPP_CLIENT_ID;
     }
 
-    loginUrl += "&redirect_uri=" + process.env.REACT_APP_LOGIN_REDIRECT_URL;
-    localStorage.setItem("authProvider", authProvider);
-    localStorage.setItem("redirectUrl", window.location.href);
-    window.location.replace(loginUrl);
+    const state = createState();
+    const loginState = await createLoginState(authProvider, state);
+    if (!loginState) {
+      return;
+    }
+    const url = new URL(loginUrl);
+    url.searchParams.set("redirect_uri", process.env.REACT_APP_LOGIN_REDIRECT_URL ?? "");
+    url.searchParams.set("state", state);
+    if (loginState.code_challenge) {
+      url.searchParams.set("code_challenge", loginState.code_challenge);
+      url.searchParams.set("code_challenge_method", "S256");
+    }
+    sessionStorage.setItem(
+      loginStateKey + state,
+      JSON.stringify({ authProvider, redirectUrl: window.location.href }),
+    );
+    window.location.replace(url.toString());
   }
 
   function buildAuthButtons() {
