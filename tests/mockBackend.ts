@@ -162,7 +162,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  if (req.method === "GET" && url.pathname === "/user/login/") {
+  if (req.method === "POST" && url.pathname === "/user/login/") {
     sendJson(res, 200, { _result: mockUser() });
     return;
   }
@@ -177,7 +177,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  if (req.method === "GET" && url.pathname === "/user/logout/") {
+  if (req.method === "POST" && url.pathname === "/user/logout/") {
     sendJson(res, 200, { _result: true });
     return;
   }

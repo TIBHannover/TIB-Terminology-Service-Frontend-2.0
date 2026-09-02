@@ -26,7 +26,7 @@ export async function runLogin(
     headers["X-TS-OAuth-State"] = state;
     headers["X-TS-Auth-Provider"] = provider;
     let result: any = await fetch(baseUrl + "/user/login/", {
-      method: "GET",
+      method: "POST",
       headers: headers,
       credentials: "include",
     });
@@ -73,7 +73,7 @@ export async function logout(): Promise<boolean> {
       withAccessToken: true,
     });
     let result: any = await fetch(baseUrl + "/user/logout/", {
-      method: "GET",
+      method: "POST",
       headers: headers,
       credentials: "include",
     });
