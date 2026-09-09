@@ -301,7 +301,7 @@ export async function createApiKey(data: {
   name: string;
   description: string;
   title: string;
-  expires_at: string;
+  expires_at: string | null;
 }): Promise<string> {
   type _resp = {
     _result: {

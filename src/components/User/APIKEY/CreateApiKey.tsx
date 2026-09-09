@@ -26,7 +26,7 @@ const CreateApiKey = () => {
       name: name,
       description: description,
       title: title,
-      expires_at: "2022-12-31T23:59:59Z",
+      expires_at: null,
     }).then((result) => {
       if (!result) {
         setLoading(false);
