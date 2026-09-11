@@ -1,16 +1,16 @@
-import { Button, Card, Modal, Spinner } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { Button, Modal, Spinner } from "react-bootstrap";
+import { useContext, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import * as Diff2Html from "diff2html";
 import "diff2html/bundles/css/diff2html.min.css";
 import "../layout/diff2html_table_row_fixed.css";
+import "../layout/ondet.css";
 import OndetApi from "../../api/ondet";
 import {
   DiffAvailability,
   ProcessedDiffTimelineItem,
 } from "../../api/types/ondetTypes";
 import { OntologyPageContext } from "../../context/OntologyPageContext";
-import { useContext } from "react";
 import Toolkit from "../../Libs/Toolkit";
 
 const MAX_INLINE_GIT_DIFF_BYTES = 1000000;
@@ -21,17 +21,111 @@ const ROBOT_DIFF_STATIC_HEADER_REGEX =
 const ondetApi = new (OndetApi as any)({});
 
 const customMarkdownComponents: any = {
+  h1: "h4",
+  h2: "h5",
   h3: "h6",
-  h4: "p",
+  h4: "h6",
+  p(props) {
+    const { node, children, ...rest } = props;
+    return <p className="ondet-markdown-paragraph" {...rest}>{children}</p>;
+  },
   a(props) {
     const { node, children, ...rest } = props;
     return (
-      <a style={{ fontSize: "14px" }} {...rest}>
+      <a className="ondet-markdown-link" target="_blank" rel="noopener noreferrer" {...rest}>
         {children}
       </a>
     );
   },
 };
+
+const formatDateTime = (date?: string) => {
+  if (!date) {
+    return "Unknown date";
+  }
+
+  return new Intl.DateTimeFormat(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(date));
+};
+
+const shortSha = (sha?: string) => sha ? sha.substring(0, 7) : "unknown";
+
+const statusTone = (status?: string) => {
+  switch (status) {
+    case "AVAILABLE":
+      return "success";
+    case "EXTERNAL_URL":
+      return "info";
+    case "NOT_APPLICABLE":
+      return "muted";
+    case "NOT_AVAILABLE":
+      return "warning";
+    default:
+      return "neutral";
+  }
+};
+
+const normalizeStatusLabel = (status?: string) => {
+  if (!status) {
+    return "Unknown";
+  }
+  return status.replace(/_/g, " ").toLowerCase();
+};
+
+const StatusPill = ({ label, availability }: { label: string; availability?: DiffAvailability | null }) => (
+  <span className={`ondet-status-pill ondet-status-${statusTone(availability?.status)}`} title={availability?.message || label}>
+    <span className="ondet-status-dot" />
+    {label}: {normalizeStatusLabel(availability?.status)}
+  </span>
+);
+
+const EmptyState = ({ icon, title, message }: { icon: string; title: string; message: string }) => (
+  <div className="ondet-empty-state">
+    <i className={`bi ${icon}`} aria-hidden="true" />
+    <h5>{title}</h5>
+    <p>{message}</p>
+  </div>
+);
+
+const DiffPanel = ({
+  title,
+  subtitle,
+  icon,
+  availability,
+  markdown,
+}: {
+  title: string;
+  subtitle: string;
+  icon: string;
+  availability?: DiffAvailability | null;
+  markdown: string;
+}) => (
+  <section className="ondet-diff-panel">
+    <header className="ondet-panel-header">
+      <div className="ondet-panel-title-wrap">
+        <span className="ondet-panel-icon"><i className={`bi ${icon}`} aria-hidden="true" /></span>
+        <div>
+          <h5>{title}</h5>
+          <span>{subtitle}</span>
+        </div>
+      </div>
+      <StatusPill label={title} availability={availability} />
+    </header>
+    {availability?.message && availability.status !== "AVAILABLE" && (
+      <div className={`ondet-message ondet-message-${statusTone(availability.status)}`}>
+        {availability.message}
+      </div>
+    )}
+    <div className="ondet-markdown-surface">
+      <ReactMarkdown components={customMarkdownComponents}>{markdown}</ReactMarkdown>
+    </div>
+  </section>
+);
 
 const ChangesTimeline = () => {
   const ontologyPageContext = useContext(OntologyPageContext);
@@ -44,6 +138,8 @@ const ChangesTimeline = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [contoMarkdown, setContoMarkdown] = useState("");
   const [robotMarkdown, setRobotMarkdown] = useState("");
+  const [robotStatus, setRobotStatus] = useState<DiffAvailability | null>(null);
+  const [contoStatus, setContoStatus] = useState<DiffAvailability | null>(null);
   const [gitDiffHtml, setGitDiffHtml] = useState("");
   const [gitDiffUrl, setGitDiffUrl] = useState("");
   const [gitDiffStatus, setGitDiffStatus] = useState<DiffAvailability | null>(null);
@@ -55,6 +151,14 @@ const ChangesTimeline = () => {
   const [timelineError, setTimelineError] = useState("");
   const [detailsError, setDetailsError] = useState("");
   const [open, setOpen] = useState(false);
+
+  const selectedMessage = selectedItem?.message || "Ontology file version";
+  const timelineCountLabel = useMemo(() => {
+    if (ontologyCommits.length === 1) {
+      return "1 comparable version";
+    }
+    return `${ontologyCommits.length} comparable versions`;
+  }, [ontologyCommits.length]);
 
   useEffect(() => {
     async function fetchOntology() {
@@ -86,6 +190,8 @@ const ChangesTimeline = () => {
     setGitDiffHtml("");
     setGitDiffUrl("");
     setGitDiffStatus(null);
+    setRobotStatus(null);
+    setContoStatus(null);
     setGitDiffError("");
     setLoadedGitDiffSha("");
 
@@ -94,6 +200,8 @@ const ChangesTimeline = () => {
 
       setContoMarkdown(getContoDiff(data?.difference));
       setRobotMarkdown(getRobotDiff(data?.markdown, data?.status?.robot));
+      setRobotStatus(data?.status?.robot || null);
+      setContoStatus(data?.status?.conto || null);
       setGitDiffUrl(data?.status?.git?.url || data?.gitDiffUrl || "");
       setGitDiffStatus(data?.status?.git || null);
     } catch (error) {
@@ -226,146 +334,157 @@ const ChangesTimeline = () => {
   };
 
   return (
-    <div className="tree-view-container resizable-container">
-      {commitsFetched && <Spinner animation="border" variant="primary" />}
-      {!commitsFetched && timelineError && (
-        <h5>{timelineError}</h5>
-      )}
-      {!commitsFetched && !timelineError && ontologyCommits.length === 0 && (
-        <>
-          <h5>
-            No comparable ontology versions are available in OnDeT for this
-            ontology.
-            <br />
-            The ontology must be processed before differences can be shown.
-          </h5>
-        </>
-      )}
-      {!commitsFetched && !timelineError && ontologyCommits.length > 0 && (
-        <>
-          <div className="node-table-container">
-            <ul>
-              {ontologyCommits.map((item, index) => {
-                const date = item.date;
-                const message = item.message || "Ontology file version";
-
-                return (
-                  <li key={item.sha || `${item.parentSha}-${index}`}>
-                    <button
-                      onClick={() => handleItemClick(item, index)}
-                      style={{
-                        cursor: "pointer",
-                        border: "none",
-                        background: "transparent",
-                        textAlign: "left",
-                        padding: 0,
-                      }}
-                    >
-                      <span>{date ? new Date(date).toLocaleString() : ""}</span>
-                      <Card
-                        style={{
-                          padding: "20px",
-                          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                          borderRadius: "8px",
-                          backgroundColor:
-                            selectedIndex === index ? "lightblue" : "",
-                        }}
-                      >
-                        <div className="card-body">
-                          <h6 className="commit-message">{message}</h6>
-                        </div>
-                      </Card>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+    <div className="ondet-workspace">
+      <aside className="ondet-sidebar">
+        <div className="ondet-sidebar-header">
+          <div>
+            <span className="ondet-eyebrow">OnDeT history</span>
+            <h4>Ontology changes</h4>
           </div>
-          <div className="col-sm-9">
-            {selectedItem && loading && <div className="isLoading"></div>}
-            {selectedItem && detailsError && !loading && (
-              <h5>{detailsError}</h5>
-            )}
-            {!selectedItem && (
-              <div>
-                <p>
-                  After you choose one of the items from the timeline on the
-                  left
-                  <br />
-                  You will see it's value here.
-                </p>
+          <span className="ondet-count">{timelineCountLabel}</span>
+        </div>
+
+        {commitsFetched && (
+          <div className="ondet-loading-block">
+            <Spinner animation="border" variant="primary" />
+            <span>Loading ontology history</span>
+          </div>
+        )}
+
+        {!commitsFetched && timelineError && (
+          <EmptyState icon="bi-exclamation-triangle" title="History unavailable" message={timelineError} />
+        )}
+
+        {!commitsFetched && !timelineError && ontologyCommits.length === 0 && (
+          <EmptyState
+            icon="bi-clock-history"
+            title="No comparable versions"
+            message="This ontology needs to be processed before adjacent version differences can be shown."
+          />
+        )}
+
+        {!commitsFetched && !timelineError && ontologyCommits.length > 0 && (
+          <ol className="ondet-timeline-list">
+            {ontologyCommits.map((item, index) => {
+              const message = item.message || "Ontology file version";
+              const selected = selectedIndex === index;
+
+              return (
+                <li key={item.sha || `${item.parentSha}-${index}`}>
+                  <button
+                    className={`ondet-timeline-item ${selected ? "is-selected" : ""}`}
+                    onClick={() => handleItemClick(item, index)}
+                    type="button"
+                    title={message}
+                  >
+                    <span className="ondet-timeline-marker" />
+                    <span className="ondet-timeline-date">{formatDateTime(item.date)}</span>
+                    <span className="ondet-timeline-message">{message}</span>
+                    <span className="ondet-timeline-sha">{shortSha(item.parentSha || item.sha)}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+        )}
+      </aside>
+
+      <main className="ondet-detail-pane">
+        {selectedItem && loading && (
+          <div className="ondet-detail-loading">
+            <Spinner animation="border" variant="primary" />
+            <span>Loading diff details</span>
+          </div>
+        )}
+
+        {selectedItem && detailsError && !loading && (
+          <EmptyState icon="bi-exclamation-circle" title="Diff details unavailable" message={detailsError} />
+        )}
+
+        {!selectedItem && !loading && (
+          <EmptyState
+            icon="bi-diagram-3"
+            title="Select a version"
+            message="Choose a commit from the timeline to compare ROBOT, COnto, and syntax diff results."
+          />
+        )}
+
+        {selectedItem && !loading && !detailsError && (
+          <>
+            <section className="ondet-commit-summary">
+              <div className="ondet-summary-main">
+                <span className="ondet-eyebrow">Selected comparison</span>
+                <h4>{selectedMessage}</h4>
+                <div className="ondet-summary-meta">
+                  <span><i className="bi bi-calendar-event" aria-hidden="true" /> {formatDateTime(selectedItem.date)}</span>
+                  <span><i className="bi bi-git" aria-hidden="true" /> {shortSha(selectedItem.parentSha || selectedItem.sha)}</span>
+                </div>
               </div>
-            )}
-            {selectedItem && !loading && !detailsError && (
-              <>
-                <div className="sticky-top text-center">
-                  This view displays available semantic differences calculated
-                  by ROBOT DIFF and COntoDiff.
-                  <br />
-                  {ontologyRawUrl && (
-                    <>
-                      <a
-                        href={ontologyRawUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Versioned URL
-                      </a>
-                      <br />
-                    </>
-                  )}
-                  <Button variant="link" onClick={handleOpen}>
-                    {" "}
-                    Open syntax diff
-                  </Button>
-                </div>
-                <div className="d-flex">
-                  <div className="col-sm-6">
-                    <div className="row sticky-top text-center">
-                      <h3>ROBOT Diff</h3>
-                    </div>
-                    <div className="node-table-container">
-                      <ReactMarkdown components={customMarkdownComponents}>
-                        {robotMarkdown}
-                      </ReactMarkdown>
-                    </div>
-                  </div>
+              <div className="ondet-summary-actions">
+                {ontologyRawUrl && (
+                  <a className="ondet-link-button" href={ontologyRawUrl} target="_blank" rel="noopener noreferrer">
+                    <i className="bi bi-box-arrow-up-right" aria-hidden="true" /> Versioned URL
+                  </a>
+                )}
+                <Button className="ondet-primary-action" onClick={handleOpen}>
+                  <i className="bi bi-code-slash" aria-hidden="true" /> Syntax diff
+                </Button>
+              </div>
+            </section>
 
-                  <div className="col-sm-6">
-                    <div className="row sticky-top text-center">
-                      <h3>COnto Diff</h3>
-                    </div>
-                    <div className="node-table-container">
-                      <ReactMarkdown components={customMarkdownComponents}>
-                        {contoMarkdown}
-                      </ReactMarkdown>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-          <Modal
-            show={open}
-            onHide={handleClose}
-            size="xl"
-            centered
-            scrollable
-            fullscreen
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Git Diff</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {gitDiffLoading && <Spinner animation="border" variant="primary" />}
-              {!gitDiffLoading && gitDiffError && <h5>{gitDiffError}</h5>}
-              {!gitDiffLoading &&
-                !gitDiffError &&
-                Toolkit.renderDangerousHtml(gitDiffHtml)}
-            </Modal.Body>
-          </Modal>
-        </>
-      )}
+            <div className="ondet-status-row">
+              <StatusPill label="ROBOT" availability={robotStatus} />
+              <StatusPill label="COnto" availability={contoStatus} />
+              <StatusPill label="Git" availability={gitDiffStatus} />
+            </div>
+
+            <div className="ondet-diff-grid">
+              <DiffPanel
+                title="ROBOT"
+                subtitle="Axiom-oriented semantic diff"
+                icon="bi-braces"
+                availability={robotStatus}
+                markdown={robotMarkdown}
+              />
+              <DiffPanel
+                title="COnto"
+                subtitle="Change-model semantic diff"
+                icon="bi-diagram-2"
+                availability={contoStatus}
+                markdown={contoMarkdown}
+              />
+            </div>
+          </>
+        )}
+      </main>
+
+      <Modal
+        show={open}
+        onHide={handleClose}
+        size="xl"
+        centered
+        scrollable
+        fullscreen
+        dialogClassName="ondet-git-modal"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <i className="bi bi-code-square" aria-hidden="true" /> Syntax diff
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {gitDiffLoading && (
+            <div className="ondet-detail-loading">
+              <Spinner animation="border" variant="primary" />
+              <span>Loading syntax diff</span>
+            </div>
+          )}
+          {!gitDiffLoading && gitDiffError && (
+            <EmptyState icon="bi-file-earmark-x" title="Syntax diff unavailable" message={gitDiffError} />
+          )}
+          {!gitDiffLoading && !gitDiffError && Toolkit.renderDangerousHtml(gitDiffHtml)}
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
