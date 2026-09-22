@@ -523,14 +523,15 @@ const Tree = (props: TreeProps) => {
               Reset
             </button>
           )}
-          {props.componentIdentity !== "individuals" && (
-            <button
-              className="btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-showobsolete"
-              onClick={showObsoletes}
-            >
-              {!obsoletesShown ? "Show Obsoletes" : "Hide Obsoletes"}
-            </button>
-          )}
+          {props.componentIdentity !== "individuals" &&
+            !props.isIndividual && (
+              <button
+                className="btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-showobsolete"
+                onClick={showObsoletes}
+              >
+                {!obsoletesShown ? "Show Obsoletes" : "Hide Obsoletes"}
+              </button>
+            )}
           {subOrFullTreeBtnShow && !props.isIndividual && (
             <button
               className="btn btn-secondary btn-sm tree-action-btn stour-tree-action-btn-subtree"

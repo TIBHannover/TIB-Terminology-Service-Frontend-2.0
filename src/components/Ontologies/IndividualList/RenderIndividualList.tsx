@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import JumpTo from "../../common/JumpTo/JumpTo";
 import AlertBox from "../../common/Alerts/Alerts";
+import Pagination from "../../common/Pagination/Pagination";
 
 export const RenderIndividualList = (props) => {
   const ontologyPageContext = useContext(OntologyPageContext);
@@ -33,22 +34,30 @@ export const RenderIndividualList = (props) => {
   }
 
   function createActionButtonSection() {
-    return [
-      typeof props.iri !== "undefined" &&
-        props.iri !== " " &&
-        props.individuals.length !== 0 && (
-          <div className="row tree-action-button-holder">
-            <div className="col-sm-12">
+    return (
+      <div className="row tree-action-button-holder">
+        <div className="col-sm-12">
+          {props.targetMode && (
+            <button
+              className="btn btn-secondary btn-sm tree-action-btn me-2"
+              onClick={props.resetList}
+            >
+              Show All Individuals
+            </button>
+          )}
+          {typeof props.iri !== "undefined" &&
+            props.iri !== " " &&
+            props.individuals.length !== 0 && (
               <button
                 className="btn btn-secondary btn-sm tree-action-btn stour-check-in-tree-individual"
                 onClick={props.switchViewFunction}
               >
                 {props.listView ? "Show In Tree" : ""}
               </button>
-            </div>
-          </div>
-        ),
-    ];
+            )}
+        </div>
+      </div>
+    );
   }
 
   function isInViewport(el) {
@@ -103,6 +112,28 @@ export const RenderIndividualList = (props) => {
         {!ontologyPageContext.isSkos && (
           <div className="row tree-action-button-area">
             <div className="col-sm-12">{createActionButtonSection()}</div>
+          </div>
+        )}
+        {!props.targetMode &&
+          props.isLoaded &&
+          props.totalNumberOfIndividuals > 0 && (
+          <div className="row individual-list-pagination">
+            <div className="col-sm-12">
+              {props.pageCount > 1 && (
+                <Pagination
+                  clickHandler={props.handlePagination}
+                  count={props.pageCount}
+                  initialPageNumber={props.pageNumber + 1}
+                />
+              )}
+              <b className="individual-list-count">
+                {props.pageNumber * props.pageSize + 1} - {Math.min(
+                  (props.pageNumber + 1) * props.pageSize,
+                  props.totalNumberOfIndividuals,
+                )}{" "}
+                of {props.totalNumberOfIndividuals} Individuals
+              </b>
+            </div>
           </div>
         )}
         <hr />

@@ -245,6 +245,58 @@
   width: 100px;
 }
 
+.individual-list-pagination {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.individual-list-pagination > .col-sm-12 {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.individual-list-pagination .pagination-holder {
+  flex-shrink: 0;
+  height: 24px;
+  margin: 0;
+  width: fit-content;
+}
+
+.individual-list-pagination .pagination-btn,
+.individual-list-pagination .pagination-btn:hover,
+.individual-list-pagination .pagination-btn:focus,
+.individual-list-pagination .pagination-btn:active {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  height: 24px;
+  justify-content: center;
+  line-height: 1.15;
+  min-width: 0;
+  padding: 1px 4px;
+}
+
+.individual-list-pagination .pagination-link,
+.individual-list-pagination .pagination-link:hover,
+.individual-list-pagination .pagination-link:focus,
+.individual-list-pagination .pagination-link:active {
+  font-size: var(--font-size-xs);
+  line-height: 1.15;
+  text-decoration: none;
+}
+
+.individual-list-pagination .pagination-start,
+.individual-list-pagination .pagination-start:hover,
+.individual-list-pagination .pagination-start:focus,
+.individual-list-pagination .pagination-start:active {
+  margin-left: 0;
+}
+
+.individual-list-count {
+  font-size: var(--font-size-sm);
+}
+
 .node-tag {
   float: left;
   margin-bottom: 10px;
