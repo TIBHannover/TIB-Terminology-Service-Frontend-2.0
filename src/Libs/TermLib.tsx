@@ -418,10 +418,13 @@ function AxiomInfoButton({
         ] as const;
       }),
     ).then((resolvedLinks) => {
-      setLinks((currentLinks) => ({
-        ...currentLinks,
-        ...Object.fromEntries(resolvedLinks),
-      }));
+      setLinks((currentLinks) => {
+        const updatedLinks = { ...currentLinks };
+        resolvedLinks.forEach(([iri, link]) => {
+          updatedLinks[iri] = link;
+        });
+        return updatedLinks;
+      });
     });
   }, [showModal, axioms, ontologyId, ontologyPageContext.ontology.ontologyId]);
 
