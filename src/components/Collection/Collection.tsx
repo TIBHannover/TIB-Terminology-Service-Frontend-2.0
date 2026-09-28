@@ -176,8 +176,12 @@ const Collections = () => {
             <div className="col-sm-12 collection-ontologies-text">
               <b>
                 Ontologies{" "}
-                {!ontologiesAreLoading &&
-                  "(" + (collectionOntologies[collectionId] || []).length + ")"}
+                <span translate="no">
+                  {!ontologiesAreLoading &&
+                    "(" +
+                      (collectionOntologies[collectionId] || []).length +
+                      ")"}
+                </span>
                 :
               </b>
               <span className="collection-ontologies-list">
