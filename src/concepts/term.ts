@@ -315,7 +315,10 @@ export class TsTerm {
           "/individuals?iri=" +
           encodeURIComponent(csLink);
         result.push(
-          `<a href="${individualUrl}" target='_blank'>${this.getLabelForLinkedEntity(csLink)}</a>`,
+          buildHtmlAnchor(
+            individualUrl,
+            this.getLabelForLinkedEntity(csLink),
+          ).outerHTML,
         );
       }
       return result;
@@ -373,7 +376,23 @@ export class TsTerm {
     } else if (typeof value === "object") {
       result.value = value.value;
     }
+    if (["mass", "monoisotopic mass"].includes(label.toLowerCase())) {
+      result.value = TsTerm.addMolarMassUnit(result.value);
+    }
     return result;
+  }
+
+  private static addMolarMassUnit(value: TsAnnotation["value"]) {
+    const addUnit = (item: any) => {
+      if (typeof item === "string") {
+        return item.endsWith(" g/mol") ? item : `${item} g/mol`;
+      }
+      if (typeof item === "object" && typeof item.value === "string") {
+        return { ...item, value: addUnit(item.value) };
+      }
+      return item;
+    };
+    return Array.isArray(value) ? value.map(addUnit) : addUnit(value);
   }
 
   static getAnnotationOriginalIri(annotation: any, fallback: string) {
@@ -416,7 +435,14 @@ export class TsTerm {
 
   getLabelForLinkedEntity(iri: string): string {
     try {
-      return this.term["linkedEntities"]?.[iri]?.["label"]?.[0] ?? "";
+      const label = this.term["linkedEntities"]?.[iri]?.["label"]?.[0];
+      if (typeof label === "string") {
+        return label;
+      }
+      if (label && typeof label === "object") {
+        return label.value ?? "";
+      }
+      return "";
     } catch {
       return "";
     }

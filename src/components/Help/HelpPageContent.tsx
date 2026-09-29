@@ -174,7 +174,7 @@ export function renderHelpPage() {
             <a
               href={"https://www.iso.org/obp/ui#search"}
               target="_blank"
-              rel="nofollow noreferrer"
+              rel="nofollow noopener noreferrer"
             >
               ISO Open Browsing Platform
             </a>
@@ -185,7 +185,7 @@ export function renderHelpPage() {
             <a
               href={"https://www.electropedia.org/"}
               target="_blank"
-              rel="nofollow noreferrer"
+              rel="nofollow noopener noreferrer"
             >
               Electropedia
             </a>
@@ -198,7 +198,7 @@ export function renderHelpPage() {
                 "https://www.din.de/de/service-fuer-anwender/terminologie/din-term"
               }
               target="_blank"
-              rel="nofollow noreferrer"
+              rel="nofollow noopener noreferrer"
             >
               DIN-TERMinologieportal
             </a>
@@ -213,7 +213,7 @@ export function renderHelpPage() {
                 "https://www.din.de/de/service-fuer-anwender/terminologie/din-termonline"
               }
               target="_blank"
-              rel="nofollow noreferrer"
+              rel="nofollow noopener noreferrer"
             >
               DINTerm Online
             </a>
@@ -232,7 +232,7 @@ export function renderHelpPage() {
             <a
               href={"https://bartoc.org/registries"}
               target="_blank"
-              rel="nofollow noreferrer"
+              rel="nofollow noopener noreferrer"
             >
               Bartoc
             </a>
@@ -243,7 +243,7 @@ export function renderHelpPage() {
             <a
               href={"https://lov.linkeddata.es/dataset/lov/"}
               target="_blank"
-              rel="nofollow noreferrer"
+              rel="nofollow noopener noreferrer"
             >
               Linked Open Vocabularies
             </a>
@@ -254,7 +254,7 @@ export function renderHelpPage() {
             <a
               href={"https://www.lod-cloud.net/"}
               target="_blank"
-              rel="nofollow noreferrer"
+              rel="nofollow noopener noreferrer"
             >
               Linked Open Data Cloud
             </a>
@@ -265,7 +265,7 @@ export function renderHelpPage() {
             <a
               href={"https://archivo.dbpedia.org/list"}
               target="_blank"
-              rel="nofollow noreferrer"
+              rel="nofollow noopener noreferrer"
             >
               DBpedia Archivo
             </a>
@@ -276,7 +276,7 @@ export function renderHelpPage() {
             <a
               href={"https://bioregistry.io"}
               target="_blank"
-              rel="nofollow noreferrer"
+              rel="nofollow noopener noreferrer"
             >
               The Bioregistry
             </a>
@@ -288,7 +288,7 @@ export function renderHelpPage() {
         <a
           href={"https://bartoc.org/registries"}
           target="_blank"
-          rel="nofollow noreferrer"
+          rel="nofollow noopener noreferrer"
         >
           Bartoc
         </a>

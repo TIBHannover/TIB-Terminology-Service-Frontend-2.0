@@ -73,7 +73,7 @@ function renderIssueTableRows(issuesList) {
     result.push(
       <tr>
         <td scope="col" className="col-6">
-          <a href={issue["issue_url"]} target="_blank">
+          <a href={issue["issue_url"]} target="_blank" rel="noopener noreferrer">
             {issue["issue_url"]}
           </a>
         </td>
@@ -87,7 +87,7 @@ function renderIssueTableRows(issuesList) {
               "/ontologies/" +
               issue["ontology_id"]
             }
-            target="_blank"
+            target="_blank" rel="noopener noreferrer"
           >
             {issue["ontology_id"]}
           </a>

@@ -1,11 +1,10 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../layout/termset.css";
 import { Link } from "react-router-dom";
 import { DeleteModal } from "../common/DeleteModal/DeleteModal";
 import { getTsPluginHeaders } from "../../api/header";
 import { TsTermset } from "../../concepts";
 import Pagination from "../common/Pagination/Pagination";
-import { AppContext } from "../../context/AppContext";
 import * as SiteUrlParamNames from "../../UrlFactory/UrlParamNames";
 import EditTermset from "./EditTermset";
 
@@ -140,9 +139,7 @@ const TermsetCard = (props: {
   const callHeader = getTsPluginHeaders({ withAccessToken: true });
   let redirectAfterDeleteUrl =
     process.env.REACT_APP_PROJECT_SUB_PATH + redirectAfterDeleteEndpoint;
-  const appContext = useContext(AppContext);
-
-  const canEdit = appContext?.user?.id === termset.creator?.id;
+  const canEdit = termset.can_edit;
   const fromParam = from ? `?${SiteUrlParamNames.From}=${from}` : "";
 
   return (

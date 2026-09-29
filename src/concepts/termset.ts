@@ -64,6 +64,10 @@ export class TsTermset {
     return this._visibility;
   }
 
+  get can_edit(): boolean {
+    return this.termsetData.can_edit ?? false;
+  }
+
   get terms(): TsTerm[] {
     return this._terms;
   }

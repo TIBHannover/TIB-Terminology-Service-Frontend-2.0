@@ -14,6 +14,8 @@ const baseUrl: string | undefined =
 
 export async function runLogin(
   authCode: string,
+  state: string,
+  provider: string,
 ): Promise<LoginResponse | null> {
   try {
     let headers: TsPluginHeader = getTsPluginHeaders({
@@ -21,8 +23,10 @@ export async function runLogin(
       withAccessToken: false,
     });
     headers["X-TS-Auth-APP-Code"] = authCode;
+    headers["X-TS-OAuth-State"] = state;
+    headers["X-TS-Auth-Provider"] = provider;
     let result: any = await fetch(baseUrl + "/user/login/", {
-      method: "GET",
+      method: "POST",
       headers: headers,
       credentials: "include",
     });
@@ -37,6 +41,31 @@ export async function runLogin(
   }
 }
 
+export async function createLoginState(
+  provider: string,
+  state: string,
+): Promise<{ code_challenge?: string } | null> {
+  try {
+    let headers: TsPluginHeader = getTsPluginHeaders({
+      isJson: false,
+      withAccessToken: false,
+    });
+    headers["X-TS-Auth-Provider"] = provider;
+    headers["X-TS-OAuth-State"] = state;
+    let result: any = await fetch(baseUrl + "/user/login/state/", {
+      method: "GET",
+      headers: headers,
+      credentials: "include",
+    });
+    if (!result.ok) {
+      return null;
+    }
+    return (await result.json())["_result"];
+  } catch (e) {
+    return null;
+  }
+}
+
 export async function logout(): Promise<boolean> {
   try {
     let headers: TsPluginHeader = getTsPluginHeaders({
@@ -44,7 +73,7 @@ export async function logout(): Promise<boolean> {
       withAccessToken: true,
     });
     let result: any = await fetch(baseUrl + "/user/logout/", {
-      method: "GET",
+      method: "POST",
       headers: headers,
       credentials: "include",
     });
@@ -272,7 +301,7 @@ export async function createApiKey(data: {
   name: string;
   description: string;
   title: string;
-  expires_at: string;
+  expires_at: string | null;
 }): Promise<string> {
   type _resp = {
     _result: {

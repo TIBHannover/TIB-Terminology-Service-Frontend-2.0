@@ -18,6 +18,7 @@ import { storeUserSettings } from "../../../api/user";
 import SearchLib from "../../../Libs/searchLib";
 import { SuggestAndSelectApiInput } from "../../../api/types/searchApiTypes";
 import { TsOntology } from "../../../concepts";
+import * as SiteUrlParamNames from "../../../UrlFactory/UrlParamNames";
 
 const SearchForm = () => {
   /* 
@@ -58,6 +59,7 @@ const SearchForm = () => {
   const jumptToRef = useRef(null);
   const lastSearchQuery = useRef(searchQuery);
   const exact = searchUrlFactory.exact === "true";
+  const obsoletes = Toolkit.getObsoleteFlagValue();
 
   const searchUnderIris = SearchLib.decodeSearchUnderIrisFromUrl();
   const searchUnderAllIris = SearchLib.decodeSearchUnderAllIrisFromUrl();
@@ -68,6 +70,19 @@ const SearchForm = () => {
     setAutoCompleteResult([]);
     setJumpToResult([]);
     setOntologyJumpToResult([]);
+  }
+
+  function cancelPendingSuggestions() {
+    if (debouncingTimer.current) {
+      clearTimeout(debouncingTimer.current);
+      debouncingTimer.current = null;
+    }
+    lastSearchQuery.current = "";
+  }
+
+  function cancelSuggestions() {
+    cancelPendingSuggestions();
+    closeResultBoxes();
   }
 
   async function runAutoCompleteAndJumpTo(searchQuery: string) {
@@ -158,11 +173,10 @@ const SearchForm = () => {
   }
 
   function setSearchUrl(label: string) {
-    let obsoletesFlag = Toolkit.getObsoleteFlagValue();
     return searchUrlFactory.createSearchUrlForAutoSuggestItem({
       label: label.trim(),
       ontologyId: ontologyId,
-      obsoleteFlag: obsoletesFlag,
+      obsoleteFlag: obsoletes,
       exact: exact,
       fromOntologyPage: !!ontologyId,
     });
@@ -170,11 +184,11 @@ const SearchForm = () => {
 
   function triggerSearch() {
     if (searchQuery.trim().length === 0) {
-      closeResultBoxes();
+      cancelSuggestions();
       return true;
     }
     let searchUrl = setSearchUrl(searchQuery);
-    closeResultBoxes();
+    cancelSuggestions();
     navigator.push(searchUrl);
   }
 
@@ -184,7 +198,7 @@ const SearchForm = () => {
       setSearchQuery(selectedQuery);
       document.getElementById("s-field").value = selectedQuery;
     }
-    closeResultBoxes();
+    cancelSuggestions();
   }
 
   function closeResultBoxWhenClickedOutside(e: MouseEvent) {
@@ -202,21 +216,29 @@ const SearchForm = () => {
     }
   }
 
+  function setSearchCheckboxUrl(name: string, checked: boolean) {
+    const params = new URLSearchParams(location.search);
+    params.set(name, String(checked));
+    navigator.push(location.pathname + "?" + params.toString());
+  }
+
   function handleExactCheckboxClick(e: React.MouseEvent<HTMLInputElement>) {
-    searchUrlFactory.setExact({ exact: e.currentTarget.checked });
+    setSearchCheckboxUrl(SiteUrlParamNames.Exact, e.currentTarget.checked);
   }
 
   function handleIncludeImprtedCheckboxClick(
     e: React.MouseEvent<HTMLInputElement>,
   ) {
-    searchUrlFactory.setIncludeImported({
-      includeImported: e.currentTarget.checked,
-    });
+    setSearchCheckboxUrl(
+      SiteUrlParamNames.IncludeImported,
+      e.currentTarget.checked,
+    );
     appContext.setIncludeImportedTerms(e.currentTarget.checked);
   }
 
   function handleObsoletesCheckboxClick(e: React.MouseEvent<HTMLInputElement>) {
-    Toolkit.setObsoleteInStorageAndUrl(e.currentTarget.checked);
+    localStorage.setItem("obsoletes", String(e.currentTarget.checked));
+    setSearchCheckboxUrl(SiteUrlParamNames.Obsoletes, e.currentTarget.checked);
   }
 
   async function handleAdvancedSearchToggle() {
@@ -238,17 +260,8 @@ const SearchForm = () => {
     );
     document.addEventListener("keydown", keyboardNavigationForJumpto, false);
     document.addEventListener("keydown", closeResultBoxOnEscape, false);
-    if (Toolkit.getObsoleteFlagValue()) {
-      document.getElementById("obsoletes-checkbox").checked = true;
-    }
-    document.getElementById("exact-checkbox").checked = exact;
-    appContext.setIncludeImportedTerms(
-      !(searchUrlFactory.includeImported === "false"),
-    );
-    document.getElementById("include-imported-checkbox").checked = !(
-      searchUrlFactory.includeImported === "false"
-    );
     return () => {
+      cancelPendingSuggestions();
       document.removeEventListener(
         "mousedown",
         closeResultBoxWhenClickedOutside,
@@ -262,6 +275,12 @@ const SearchForm = () => {
       document.removeEventListener("keydown", closeResultBoxOnEscape, false);
     };
   }, []);
+
+  useEffect(() => {
+    appContext.setIncludeImportedTerms(
+      new SearchUrlFactory().includeImported !== "false",
+    );
+  }, [location.search]);
 
   useEffect(() => {
     if (appContext.userSettings.advancedSearchEnabled) {
@@ -286,6 +305,8 @@ const SearchForm = () => {
         jumpToResult={jumpToResult}
         jumptToRef={jumptToRef}
         ontologyJumpToResult={ontologyJumpToResult}
+        exact={exact}
+        obsoletes={obsoletes}
         handleExactCheckboxClick={handleExactCheckboxClick}
         handleObsoletesCheckboxClick={handleObsoletesCheckboxClick}
         handleIncludeImprtedCheckboxClick={handleIncludeImprtedCheckboxClick}

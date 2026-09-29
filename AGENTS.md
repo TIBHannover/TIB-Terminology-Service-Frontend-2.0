@@ -1,6 +1,3 @@
-# Code metadata
-
-
 code structure:
 - The components that holds app logic and rendering are in `src/components`
 - `src/components/common` holds the common components that are used by multiple components.
@@ -12,16 +9,23 @@ code structure:
 - `src/UrlFactory` holds the url factory. A component must insteract with the URL only through these libraries.
 - tests are in `tests/`. All tests goes here.
 
-Stack:
-- React
-- Typescript
-- CSS/Bootstrap 6
+# Instructions
 
+General:
+- always use typescript in creating a new file unless said otherwise
+- use function compponents and not class components. 
+- Check `src/components/common/` for reusable components. 
+- Do not build the project unless asked to do so. Only check typescript errors and warnings.
 
+CSS and styling:
+- Look for css in `src/components/layout` directory.
+- use bootsrap 5 for styling or raw css. do not use anything else.
+- ignore nfdi4ing.css file
+- never define inline styles. 
 
-
-
-
-
-
-
+Test:
+- Never changing the app while writing tests.
+- Do not use anything starts with `stour` as a selector. This is only for the Tour feature. 
+- site uses a tour optins that overlay the pages. This conflicts with the test. Disable the tour feature before running the tests. Do it only for test and not in the application itself. 
+- There is a `tests/libs.ts` file that contains common functions for reuse in the tests. check this for resuseable functions. Also if a new function is reusable, it should be added to this file.
+- never change the .env file for tests.

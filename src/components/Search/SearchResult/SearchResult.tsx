@@ -39,6 +39,7 @@ const SearchResult = () => {
 
   const searchUrlFactory = new SearchUrlFactory();
   const commonUrlFactory = new CommonUrlFactory();
+  const includeImported = searchUrlFactory.includeImported !== "false";
 
   let language =
     commonUrlFactory.getParam({ name: SiteUrlParamNames.Lang }) ||
@@ -98,6 +99,7 @@ const SearchResult = () => {
   const collectionsWithOntologiesQuery = useQuery({
     queryKey: ["allCollectionsWithTheirOntologies"],
     queryFn: getCollectionsAndThierOntologies,
+    meta: { persist: true },
   });
 
   if (
@@ -118,10 +120,6 @@ const SearchResult = () => {
       ontologies = [...appContext.userSettings.activeCollection.ontology_ids];
     }
 
-    searchUrlFactory.setIncludeImported({
-      includeImported: appContext.includeImportedTerms,
-    });
-
     try {
       let searchParams = {
         searchQuery: searchQuery,
@@ -132,7 +130,7 @@ const SearchResult = () => {
         selectedCollections: selectedCollections,
         obsoletes: obsoletes,
         exact: exact,
-        includeImported: appContext.includeImportedTerms,
+        includeImported: includeImported,
         searchInValues: searchUrlFactory.searchIn,
         searchUnderIris: searchUnderIris,
         searchUnderAllIris: searchUnderAllIris,
@@ -519,6 +517,7 @@ const SearchResult = () => {
     searchQuery,
     obsoletes,
     exact,
+    includeImported,
   ]);
 
   useEffect(() => {

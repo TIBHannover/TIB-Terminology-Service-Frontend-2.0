@@ -145,39 +145,24 @@ export class TsClass extends TsTerm {
         if (typeof xref === "string") {
           xref = { value: xref, axioms: [] };
         }
+        let content = document.createElement("span");
         if (!this.term["linkedEntities"][xref.value]) {
-          // the xref value is not part of linked entities --> display as plain string
-          let sources = [];
-          for (let ax of xref.axioms) {
-            sources.push(Object.values(ax)[0]);
-          }
-          sources.length
-            ? dbXrefLinks.push(
-                `${xref.value} <small>(source: ${sources.join(", ")})</small>`,
-              )
-            : dbXrefLinks.push(`${xref.value}`);
+          content.textContent = xref.value;
         } else {
           let anchor = this.term["linkedEntities"][xref.value];
-          let sources = [];
-          for (let ax of xref.axioms) {
-            sources.push(Object.values(ax)[0]);
-          }
           if (anchor.url) {
-            sources.length
-              ? dbXrefLinks.push(
-                  `<a href="${anchor.url}" target="_blank" rel="noopener noreferrer">${xref.value}</a> <small>(source: ${sources})</small>`,
-                )
-              : dbXrefLinks.push(
-                  `<a href="${anchor.url}" target="_blank" rel="noopener noreferrer">${xref.value}</a>`,
-                );
+            content.appendChild(buildHtmlAnchor(anchor.url, xref.value));
           } else {
-            sources.length
-              ? dbXrefLinks.push(
-                  `${xref.value} <small>(source: ${sources.join(", ")})</small>`,
-                )
-              : dbXrefLinks.push(`${xref.value}`);
+            content.textContent = xref.value;
           }
         }
+        let sources = xref.axioms.map((ax) => Object.values(ax)[0]);
+        if (sources.length) {
+          let source = document.createElement("small");
+          source.textContent = ` (source: ${sources.join(", ")})`;
+          content.appendChild(source);
+        }
+        dbXrefLinks.push(content.outerHTML);
       }
 
       return dbXrefLinks;
@@ -256,6 +241,17 @@ export class TsClass extends TsTerm {
       return { type: "expression", left, relation, right };
     }
     if (relationObj instanceof Object) {
+      if (relationObj.type?.includes("reification") && relationObj.value) {
+        let node =
+          typeof relationObj.value === "string"
+            ? this.createTermLinkNode(relationObj.value)
+            : this.recSubClass(relationObj.value, relation);
+        let axioms = this.createAxiomNodes(relationObj);
+        if (node && axioms?.length) {
+          node.axioms = [...(node.axioms ?? []), ...axioms];
+        }
+        return node;
+      }
       let propertyIri = relationObj["http://www.w3.org/2002/07/owl#onProperty"];
       if (!propertyIri) {
         let relKey = Object.keys(relationObj).find(

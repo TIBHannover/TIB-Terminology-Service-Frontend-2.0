@@ -307,7 +307,7 @@ export function githubPanelTourSteps() {
             in case you do not know what is a pull request check
             <a
               href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests"
-              target={"_blank"}
+              target={"_blank"} rel="noopener noreferrer"
               className="ms-1"
             >
               here
@@ -428,7 +428,7 @@ export function notesTourSteps() {
               feature:
               <a
                 href="https://terminology.nfdi4chem.de/ts/ontologies/vibso/notes?page=1&size=10&originalNotes=false&type=all"
-                target={"_blank"}
+                target={"_blank"} rel="noopener noreferrer"
                 className="ms-2"
               >
                 VIBSO Notes

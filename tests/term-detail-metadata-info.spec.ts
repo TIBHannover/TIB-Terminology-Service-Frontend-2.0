@@ -17,6 +17,11 @@ const EQUIVALENT_IRI = "http://example.test/terms/equivalent-term";
 const DISJOINT_IRI = "http://example.test/terms/disjoint-term";
 const AXIOM_PROPERTY_IRI = "http://example.test/properties/isInferred";
 const AXIOM_VALUE_IRI = "http://example.test/terms/reasoner";
+const REIFIED_PROPERTY_IRI = "http://example.test/properties/reified-property";
+const REIFIED_TARGET_IRI = "http://example.test/terms/reified-target";
+const REIFIED_AXIOM_VALUE =
+  "source: https://example.test/references/reified-source";
+const REIFIED_AXIOM_URL = "https://example.test/references/reified-source";
 
 function metadataRow(page: Page, label: string): Locator {
   return page.locator(".node-detail-table-row").filter({
@@ -100,6 +105,29 @@ function termResponse(propertyIri = PROPERTY_IRI) {
   };
 }
 
+function reifiedTermResponse() {
+  return {
+    ...termResponse(),
+    label: ["Reified annotated term"],
+    "http://www.w3.org/2000/01/rdf-schema#subClassOf": {
+      type: ["reification"],
+      value: {
+        "http://www.w3.org/2002/07/owl#onProperty": REIFIED_PROPERTY_IRI,
+        "http://www.w3.org/2002/07/owl#someValuesFrom": REIFIED_TARGET_IRI,
+      },
+      axioms: [{ [AXIOM_PROPERTY_IRI]: REIFIED_AXIOM_VALUE }],
+    },
+    linkedEntities: {
+      ...termResponse().linkedEntities,
+      [REIFIED_PROPERTY_IRI]: { label: ["reified property"] },
+      [REIFIED_TARGET_IRI]: {
+        label: [{ type: ["literal"], value: "Reified target", axioms: [] }],
+      },
+      [AXIOM_PROPERTY_IRI]: { label: ["is inferred"] },
+    },
+  };
+}
+
 function axiomTermResponse() {
   return {
     iri: AXIOM_VALUE_IRI,
@@ -120,7 +148,8 @@ async function mockMetadataTermRoutes(
   page: Page,
   {
     propertyIri = PROPERTY_IRI,
-  }: { propertyIri?: string } = {},
+    response = () => termResponse(propertyIri),
+  }: { propertyIri?: string; response?: () => unknown } = {},
 ) {
   await page.route("https://api.terminology.tib.eu/api/**", async (route) => {
     await json(route, {}, 404);
@@ -151,7 +180,7 @@ async function mockMetadataTermRoutes(
     ) {
       const iri = routeEntityIri(url);
       if (iri === TERM_IRI) {
-        await json(route, termResponse(propertyIri));
+        await json(route, response());
       } else if (iri === AXIOM_VALUE_IRI) {
         await json(route, axiomTermResponse());
       } else {
@@ -296,4 +325,27 @@ test("term detail class structure axiom buttons open modal only for axiom nodes"
   await expect(dialog).toBeVisible();
   await expect(dialog.locator('li span[title="true"]')).toHaveText("true");
   await expect(dialog.getByRole("link", { name: "true" })).toHaveCount(0);
+});
+
+test("renders reified subclass restrictions and links literal axiom URLs", async ({
+  page,
+}) => {
+  await mockMetadataTermRoutes(page, { response: reifiedTermResponse });
+  await gotoMetadataTerm(page);
+
+  const subclassRow = metadataRow(page, "SubClass Of");
+  const subclassValue = subclassRow.locator(".node-metadata-value");
+  await expect(subclassValue).toContainText("reified property");
+  await expect(subclassValue).toContainText("someValuesFrom");
+  await expect(subclassValue).toContainText("Reified target");
+  await expect(subclassValue).not.toHaveText(/\(\s*\)/);
+
+  await subclassRow.getByRole("button", { name: "see axioms" }).click();
+  const dialog = page.locator(".metadata-info-modal .modal-dialog");
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText("source:");
+
+  const urlLink = dialog.getByRole("link", { name: REIFIED_AXIOM_URL });
+  await expect(urlLink).toHaveAttribute("href", REIFIED_AXIOM_URL);
+  await expect(urlLink).toHaveAttribute("rel", "noopener noreferrer");
 });

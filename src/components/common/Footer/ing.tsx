@@ -50,7 +50,7 @@ const Footer = () => (
         <li>
           <small>
             Free SVG Background by{" "}
-            <a target="_blank" href="https://bgjar.com">
+            <a target="_blank" rel="noopener noreferrer" href="https://bgjar.com">
               BGJar
             </a>
           </small>

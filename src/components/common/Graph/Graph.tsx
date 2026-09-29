@@ -124,6 +124,7 @@ const Graph = (props: GraphProps) => {
   function visitNodeInGraph() {
     let termLink = document.createElement("a");
     termLink.target = "_blank";
+    termLink.rel = "noopener noreferrer";
 
     if (selectedNodes.length === 1) {
       termLink.href = `${process.env.REACT_APP_PROJECT_SUB_PATH}/ontologies/${props.ontologyId}/${props.componentIdentity}?iri=${encodeURIComponent(selectedNodes[0])}`;

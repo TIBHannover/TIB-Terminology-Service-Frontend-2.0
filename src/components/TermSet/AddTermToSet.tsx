@@ -316,7 +316,7 @@ export const AddToTermsetModal = (props: AddToTermsetModalComProps) => {
                       tset.id
                     }
                     target={"_blank"}
-                    rel={"noreferrer"}
+                    rel={"noopener noreferrer"}
                   >
                     {tset.name}
                   </a>

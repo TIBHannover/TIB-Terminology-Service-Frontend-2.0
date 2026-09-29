@@ -96,7 +96,7 @@ const OntologyInfoTable = () => {
                   "/ontologies?and=false&sortedBy=title&page=1&size=10&collection=" +
                   col
                 }
-                target="_blank"
+                target="_blank" rel="noopener noreferrer"
               >
                 {col}
               </a>
@@ -287,7 +287,7 @@ const OntologyInfoTable = () => {
                   {/*<a
                     href={"https://service.tib.eu/ts4tib/api/ontologies/" + ontology.ontologyId + "/download"}
                     className='btn btn-secondary btn-dark download-ontology-btn'
-                    target="_blank"
+                    target="_blank" rel="noopener noreferrer"
                   >
                     <i className="fa fa-download"></i>OWL
                   </a>

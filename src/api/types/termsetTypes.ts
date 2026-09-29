@@ -9,6 +9,7 @@ export type TermSet = {
   creator?: ApiKey;
   updated_at?: string;
   visibility: string;
+  can_edit?: boolean;
   terms: TermWrapperInSet[];
 };
 

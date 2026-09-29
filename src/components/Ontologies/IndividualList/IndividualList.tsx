@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import TermApi from "../../../api/term";
 import TermDetail from "../TermDetail/TermDetail";
 import Tree from "../DataTree/Tree";
@@ -8,6 +8,8 @@ import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import PropTypes from "prop-types";
 import { getTourProfile } from "../../../tours/controller";
+
+const PAGE_SIZE = 50;
 
 const IndividualsList = (props) => {
   /* 
@@ -23,6 +25,11 @@ const IndividualsList = (props) => {
     ontologyPageContext.lastVisitedIri[props.componentIdentity];
 
   const [individuals, setIndividuals] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [totalNumberOfIndividuals, setTotalNumberOfIndividuals] = useState(0);
+  const [targetIri, setTargetIri] = useState(
+    lastVisitedIri && lastVisitedIri !== " " ? lastVisitedIri : "",
+  );
   const [isLoaded, setIsLoaded] = useState(false);
   const [showNodeDetailPage, setShowNodeDetailPage] = useState(false);
   const [selectedNodeIri, setSelectedNodeIri] = useState("");
@@ -30,45 +37,103 @@ const IndividualsList = (props) => {
   const [listView, setListView] = useState(!ontologyPageContext.isSkos);
   const [JumpToOnLoad, setJumpToOnload] = useState(false);
   const [paneResizeClass, setPaneResizeClass] = useState(new PaneResize());
+  const requestId = useRef(0);
 
   const urlFactory = new CommonUrlFactory();
 
   async function setComponentData() {
+    const currentRequestId = ++requestId.current;
+    setIsLoaded(false);
+    setIndividuals([]);
     try {
-      let termApi = new TermApi(
+      const termApi = new TermApi(
         ontologyPageContext.ontology.ontologyId,
-        null,
+        targetIri,
         props.componentIdentity,
         ontologyPageContext.ontoLang,
       );
-      let indvList = await termApi.fetchListOfTerms(0, 10000);
-      indvList = indvList["results"];
+      const curieInUrl = urlFactory.getCurie();
+      if (!targetIri && curieInUrl) {
+        const iri = await termApi.getTermIriByCurie(curieInUrl);
+        if (currentRequestId !== requestId.current) {
+          return;
+        }
+        urlFactory.deleteParam({ name: "curie" });
+        if (iri) {
+          setTargetIri(iri);
+          return;
+        }
+      }
+      if (targetIri) {
+        const individual = await termApi.fetchTerm();
+        if (currentRequestId !== requestId.current) {
+          return;
+        }
+        setIndividuals(individual ? [individual] : []);
+        setIsLoaded(true);
+        setSelectedNodeIri(targetIri);
+        setJumpToOnload(true);
+        setJumpToIri(targetIri);
+        if (urlFactory.getIri() !== targetIri) {
+          urlFactory.setIri({ newIri: targetIri });
+        }
+        ontologyPageContext.storeIriForComponent(
+          targetIri,
+          props.componentIdentity,
+        );
+        return;
+      }
+      let indvList = await termApi.fetchListOfIndividuals(pageNumber);
+      if (currentRequestId !== requestId.current) {
+        return;
+      }
+      const totalNumber = Number(indvList["totalTermsCount"] ?? 0);
+      const lastPage = Math.max(Math.ceil(totalNumber / PAGE_SIZE) - 1, 0);
+      setTotalNumberOfIndividuals(totalNumber);
+      if (pageNumber > lastPage) {
+        setPageNumber(lastPage);
+        return;
+      }
+      indvList = indvList["results"] ?? [];
       setIsLoaded(true);
       setIndividuals(sortIndividuals(indvList));
-      let curieInUrl = urlFactory.getCurie();
-      let iri = "";
-      if (curieInUrl) {
-        iri = await termApi.getTermIriByCurie(curieInUrl);
-      } else {
-        iri =
-          lastVisitedIri &&
-          lastVisitedIri !== " " &&
-          typeof lastVisitedIri !== "undefined"
-            ? lastVisitedIri
-            : "";
-      }
-      if (iri) {
-        urlFactory.deleteParam({ name: "curie" });
-        urlFactory.setIri({ newIri: iri });
-        setSelectedNodeIri(iri);
-        setJumpToOnload(true);
-        setJumpToIri(iri);
-        ontologyPageContext.storeIriForComponent(iri, props.componentIdentity);
-      }
     } catch (error) {
+      if (currentRequestId !== requestId.current) {
+        return;
+      }
       setIsLoaded(true);
+      setTotalNumberOfIndividuals(0);
       setIndividuals(sortIndividuals([]));
     }
+  }
+
+  function pageCount() {
+    return Math.ceil(totalNumberOfIndividuals / PAGE_SIZE);
+  }
+
+  function handlePagination(value) {
+    const nextPage = parseInt(value) - 1;
+    if (nextPage === pageNumber) {
+      return;
+    }
+    requestId.current += 1;
+    setIsLoaded(false);
+    setIndividuals([]);
+    setPageNumber(nextPage);
+  }
+
+  function resetList() {
+    requestId.current += 1;
+    setIsLoaded(false);
+    setIndividuals([]);
+    setSelectedNodeIri("");
+    setJumpToIri(null);
+    setShowNodeDetailPage(false);
+    urlFactory.deleteParam({ name: "iri" });
+    urlFactory.deleteParam({ name: "curie" });
+    ontologyPageContext.storeIriForComponent("", props.componentIdentity);
+    setPageNumber(0);
+    setTargetIri("");
   }
 
   function selectNode(target) {
@@ -170,10 +235,14 @@ const IndividualsList = (props) => {
 
   function handleJumtoSelection(selectedTerm) {
     if (selectedTerm) {
+      requestId.current += 1;
+      setIsLoaded(false);
+      setIndividuals([]);
       setSelectedNodeIri(selectedTerm["iri"]);
       setJumpToIri(selectedTerm["iri"]);
       setJumpToOnload(true);
       urlFactory.setIri({ newIri: selectedTerm["iri"] });
+      setTargetIri(selectedTerm["iri"]);
       let selectedElement = document.querySelectorAll(".clicked");
       for (let i = 0; i < selectedElement.length; i++) {
         selectedElement[i].classList.remove("clicked");
@@ -182,7 +251,6 @@ const IndividualsList = (props) => {
   }
 
   useEffect(() => {
-    setComponentData();
     paneResizeClass.setOriginalWidthForLeftPanes();
     document.body.addEventListener("mousedown", paneResizeClass.onMouseDown);
     document.body.addEventListener("mousemove", paneResizeClass.moveToResize);
@@ -219,6 +287,13 @@ const IndividualsList = (props) => {
   }, []);
 
   useEffect(() => {
+    setComponentData();
+    return () => {
+      requestId.current += 1;
+    };
+  }, [pageNumber, targetIri]);
+
+  useEffect(() => {
     if (selectedNodeIri !== "") {
       setShowNodeDetailPage(true);
     }
@@ -243,6 +318,13 @@ const IndividualsList = (props) => {
             switchViewFunction={switchView}
             handleJumtoSelection={handleJumtoSelection}
             componentIdentity={props.componentIdentity}
+            pageCount={pageCount()}
+            pageNumber={pageNumber}
+            pageSize={PAGE_SIZE}
+            totalNumberOfIndividuals={totalNumberOfIndividuals}
+            handlePagination={handlePagination}
+            targetMode={Boolean(targetIri)}
+            resetList={resetList}
           />
         )}
         {!listView &&

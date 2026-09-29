@@ -4,6 +4,7 @@ import {
   ReactNode,
   useEffect,
   useContext,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -131,24 +132,28 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
             className="col-7 col-md-8 node-metadata-value"
             key={metadataLabel + "-value"}
           >
-            {formatText(metadataLabel, metadataValue, isLink)}
-            {copyButtonRequired(metadataLabel, isLink) && (
-              <CopyLinkButton valueToCopy={metadataValue} />
-            )}
-            {metadataLabel === "Label" && (
-              <CopyLinkButtonMarkdownFormat
-                label={
-                  props.node.ontologyId.toUpperCase() + ":" + props.node.label
-                }
-                url={setLabelAsLink()}
-                tooltipText={
-                  "This will copy the label of the term (in markdown format) and add the ontology id as a prefix to be able to link to this term within this terminology service, e.g. " +
-                  props.node.ontologyPreferredPrefix +
-                  ":" +
-                  props.node.label
-                }
-              />
-            )}
+            <CollapsibleMetadataValue
+              key={`${props.node.iri}-${metadataLabel}`}
+            >
+              {formatText(metadataLabel, metadataValue, isLink)}
+              {copyButtonRequired(metadataLabel, isLink) && (
+                <CopyLinkButton valueToCopy={metadataValue} />
+              )}
+              {metadataLabel === "Label" && (
+                <CopyLinkButtonMarkdownFormat
+                  label={
+                    props.node.ontologyId.toUpperCase() + ":" + props.node.label
+                  }
+                  url={setLabelAsLink()}
+                  tooltipText={
+                    "This will copy the label of the term (in markdown format) and add the ontology id as a prefix to be able to link to this term within this terminology service, e.g. " +
+                    props.node.ontologyPreferredPrefix +
+                    ":" +
+                    props.node.label
+                  }
+                />
+              )}
+            </CollapsibleMetadataValue>
           </div>
           <div
             className="col-1 metadata-info-cell"
@@ -185,7 +190,7 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
     }
     if (isLink) {
       return (
-        <a href={metadataValue} target="_blank" rel="noreferrer">
+        <a href={metadataValue} target="_blank" rel="noopener noreferrer">
           {metadataValue}
         </a>
       );
@@ -236,6 +241,73 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
     </div>
   );
 };
+
+function CollapsibleMetadataValue({ children }: { children: ReactNode }) {
+  const valueRef = useRef<HTMLDivElement>(null);
+  const [isExpandable, setIsExpandable] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  function toggleExpanded() {
+    if (!isExpanded) {
+      setIsExpanded(true);
+      return;
+    }
+    setIsExpanded(false);
+    requestAnimationFrame(() => {
+      const value = valueRef.current;
+      const row = value?.closest(".node-detail-table-row");
+      const container = value?.closest(".node-table-container");
+      if (!row || !container) {
+        return;
+      }
+      container.scrollTo({
+        top:
+          container.scrollTop +
+          row.getBoundingClientRect().top -
+          container.getBoundingClientRect().top,
+        behavior: "smooth",
+      });
+    });
+  }
+
+  useLayoutEffect(() => {
+    const value = valueRef.current;
+    if (!value || isExpanded) {
+      return;
+    }
+    const updateExpandability = () => {
+      setIsExpandable(value.scrollHeight > value.clientHeight);
+    };
+    const observer = new ResizeObserver(updateExpandability);
+    observer.observe(value);
+    updateExpandability();
+    return () => observer.disconnect();
+  }, [children, isExpanded]);
+
+  return (
+    <>
+      <div
+        ref={valueRef}
+        className={isExpanded ? "" : "node-metadata-value-collapsed"}
+      >
+        {children}
+      </div>
+      {isExpandable && (
+        <button
+          type="button"
+          className="btn btn-secondary btn-sm node-metadata-toggle"
+          onClick={toggleExpanded}
+        >
+          <i
+            className={`fa fa-angle-double-${isExpanded ? "up" : "down"} fa-borderless`}
+            aria-hidden="true"
+          ></i>{" "}
+          Show {isExpanded ? "less" : "more"}
+        </button>
+      )}
+    </>
+  );
+}
 
 function MetadataInfoButton({
   iri,
@@ -309,7 +381,7 @@ function MetadataInfoButton({
                 className="metadata-info-iri"
                 href={safeIriUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 {iri}
               </a>

@@ -13,6 +13,7 @@ const DEFAULT_PAGE_NUMBER = 1;
 const CLASS_TYPE_ID = "classes";
 const PROPERTY_TYPE_ID = "properties";
 const INDIVIDUAL_TYPE_ID = "individuals";
+const INDIVIDUAL_PAGE_SIZE = 50;
 
 class TermApi {
   ontologyId: string = "";
@@ -94,6 +95,12 @@ class TermApi {
       //throw (e)
       return [];
     }
+  }
+
+  async fetchListOfIndividuals(
+    page: number | string = 0,
+  ): Promise<TermListData | []> {
+    return this.fetchListOfTerms(page, INDIVIDUAL_PAGE_SIZE);
   }
 
   async getIndividualInstancesForClass(): Promise<any> {

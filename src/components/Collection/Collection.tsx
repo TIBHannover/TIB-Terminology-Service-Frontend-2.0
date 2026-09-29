@@ -56,6 +56,7 @@ const Collections = () => {
   const collectionsWithOntologiesQuery = useQuery({
     queryKey: ["allCollectionsWithTheirOntologiesInCollectionPage"],
     queryFn: getCollectionsAndThierOntologies,
+    meta: { persist: true },
   });
 
   let collectionOntologiesData: { [key: string]: JSX.Element[] } = {};
@@ -140,7 +141,7 @@ const Collections = () => {
                 <a
                   href={collectionJson["project_homepage"]}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   {collectionJson["project_homepage"]}
                 </a>
@@ -154,7 +155,7 @@ const Collections = () => {
                 <a
                   href={collectionJson["domain_ts_link"]}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   {collectionJson["domain_ts_link"]}
                 </a>
@@ -175,8 +176,12 @@ const Collections = () => {
             <div className="col-sm-12 collection-ontologies-text">
               <b>
                 Ontologies{" "}
-                {!ontologiesAreLoading &&
-                  "(" + (collectionOntologies[collectionId] || []).length + ")"}
+                <span translate="no">
+                  {!ontologiesAreLoading &&
+                    "(" +
+                      (collectionOntologies[collectionId] || []).length +
+                      ")"}
+                </span>
                 :
               </b>
               <span className="collection-ontologies-list">

@@ -243,7 +243,7 @@ const EditTermset = (props: TermsetEditComProps) => {
   } else if (
     mode === "edit" &&
     data &&
-    !appContext.userTermsets.find((tset) => tset.name === data.name)
+    !data.can_edit
   ) {
     // non owner is not allowed to visit the edit page
     return (

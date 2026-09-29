@@ -75,6 +75,7 @@ const OntologySuggestion = () => {
     queryKey: ["allCollectionsWithTheirOntologies"],
     queryFn: getCollectionsAndThierOntologies,
     enabled: queryEnabled,
+    meta: { persist: true },
   });
 
   let collectionIds: any[] = [];

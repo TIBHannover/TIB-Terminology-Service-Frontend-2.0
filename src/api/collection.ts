@@ -18,9 +18,12 @@ export function getCollectionStatFromOntoList(ontoList: TsOntology[]): {
       }
     }
   }
-  return Object.fromEntries(
-    Object.entries(result).sort(([, v1], [, v2]) => v2 - v1),
-  );
+  return Object.entries(result)
+    .sort(([, v1], [, v2]) => v2 - v1)
+    .reduce<{ [key: string]: number }>((sorted, [key, value]) => {
+      sorted[key] = value;
+      return sorted;
+    }, {});
 }
 
 export function getSubjectStatFromOntoList(ontoList: TsOntology[]): {
@@ -39,9 +42,12 @@ export function getSubjectStatFromOntoList(ontoList: TsOntology[]): {
       }
     }
   }
-  return Object.fromEntries(
-    Object.entries(result).sort(([, v1], [, v2]) => v2 - v1),
-  );
+  return Object.entries(result)
+    .sort(([, v1], [, v2]) => v2 - v1)
+    .reduce<{ [key: string]: number }>((sorted, [key, value]) => {
+      sorted[key] = value;
+      return sorted;
+    }, {});
 }
 
 /* react query key: allCollectionsWithTheirOntologies  */

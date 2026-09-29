@@ -14,7 +14,6 @@ import Toolkit from "../../../Libs/Toolkit";
 import { getTsPluginHeaders } from "../../../api/header";
 import { microBackendUrl } from "../../../api/helper";
 import Dropdown from "react-bootstrap/Dropdown";
-import { AppContext } from "../../../context/AppContext";
 import type {
   Note,
   NoteCardHeaderProps,
@@ -88,8 +87,6 @@ export const NoteCardHeader = (props: NoteCardHeaderProps) => {
   */
 
   const ontologyPageContext = useContext(OntologyPageContext);
-  const appContext = useContext(AppContext);
-
   const noteUrlFactory = new NoteUrlFactory();
 
   const [note, setNote] = useState<Note>(props.note);
@@ -108,7 +105,7 @@ export const NoteCardHeader = (props: NoteCardHeaderProps) => {
   reportFormData["objectId"] = note.id;
   reportFormData["objectType"] = "note";
   reportFormData["ontology"] = ontologyPageContext.ontology.ontologyId;
-  let can_edit = appContext?.user?.id === (note.created_by as any)?.id;
+  const can_edit = note.can_edit ?? false;
 
   let redirectAfterDeleteEndpoint = noteUrlFactory.getNoteListLink({
     page: 1,
