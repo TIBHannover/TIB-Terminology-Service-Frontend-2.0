@@ -1,8 +1,8 @@
-import { OndetData } from "./types/ondetTypes";
+import { OndetData, ProcessedDiffTimelineItem } from "./types/ondetTypes";
 import { getCallSetting } from "./constants";
 
 class OndetApi {
-  async fetchOntologyCommits(rawUrl: string): Promise<Array<Commit>> {
+  async fetchOntologyCommits(rawUrl: string): Promise<Array<ProcessedDiffTimelineItem>> {
     try {
       const versionsURL =
         `${process.env.REACT_APP_DIFF_BACKEND_URL}/api/ondet/sdiffs/commits?uri=` +
@@ -14,9 +14,19 @@ class OndetApi {
     }
   }
 
-  async fetchOntologyVersion(sha: string): Promise<OndetData> {
+  async fetchOntologyVersion(
+    sha: string,
+    includeGitDiff = true,
+    maxGitDiffBytes?: number
+  ): Promise<OndetData> {
     try {
-      const versionsURL = `${process.env.REACT_APP_DIFF_BACKEND_URL}/api/ondet/sdiffs/${encodeURIComponent(sha)}`;
+      const params = new URLSearchParams({
+        includeGitDiff: String(includeGitDiff),
+      });
+      if (maxGitDiffBytes !== undefined) {
+        params.set("maxGitDiffBytes", String(maxGitDiffBytes));
+      }
+      const versionsURL = `${process.env.REACT_APP_DIFF_BACKEND_URL}/api/ondet/sdiffs/${encodeURIComponent(sha)}?${params.toString()}`;
       let resp = await fetch(versionsURL, getCallSetting);
       return await resp.json();
     } catch (e) {
