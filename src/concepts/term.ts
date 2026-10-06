@@ -97,12 +97,18 @@ export class TsTerm {
   }
 
   get definition() {
+    return this.getDefinition();
+  }
+
+  getDefinition(transformLinks = true) {
     try {
       if (this.term.definition) {
         let result = [];
         for (let desc of this.term.definition) {
           if (typeof desc === "object" && desc.value) {
-            let defText = Toolkit.transformLinksInStringToAnchor(desc.value);
+            let defText = transformLinks
+              ? Toolkit.transformLinksInStringToAnchor(desc.value)
+              : desc.value;
             let defArr = [];
             defArr.push(defText);
             for (let ax of desc.axioms ?? []) {

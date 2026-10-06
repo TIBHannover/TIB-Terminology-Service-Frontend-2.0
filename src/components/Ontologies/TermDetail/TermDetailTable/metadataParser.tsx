@@ -36,7 +36,8 @@ function createBaseMetadata(term: TsTerm): TableMetadata {
   let metadata: TableMetadata = {};
   metadata["Label"] = { value: term.label, isLink: false };
   metadata["Description"] = {
-    value: term.definition ?? term?.annotation?.["definition"]?.value,
+    value:
+      term.getDefinition(false) ?? term.annotation?.["definition"]?.value,
     isLink: false,
   };
   if (term.originalOntology !== term.ontologyId) {
@@ -69,17 +70,21 @@ function createBaseMetadata(term: TsTerm): TableMetadata {
 function renderMathRelatedMetadata(
   term: TsTerm,
   metadata: TableMetadata,
-  key: string,
+  annotationKey: string,
+  metadataKey: string,
   iri?: string,
 ) {
-  let annotation = term.annotation[key];
-  metadata[key] = {
+  let annotation = term.annotation[annotationKey];
+  metadata[metadataKey] = {
     value: (
       <QueryClientProvider client={mathWidgetQueryClient}>
         <MathFormulaWidget
           api={mathWidgetApi}
           iri={term.iri}
-          mathProperty={TsTerm.getAnnotationOriginalIri(annotation, key)}
+          mathProperty={TsTerm.getAnnotationOriginalIri(
+            annotation,
+            annotationKey,
+          )}
           ontologyId={term.ontologyId}
         />
       </QueryClientProvider>
@@ -128,7 +133,11 @@ function renderMathRelatedMetadata(
   }
 }
 
-function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
+function renderAnnotation(
+  term: TsTerm,
+  metadata: TableMetadata,
+  renderIaoDefinition = false,
+) {
   // add custom annotation fields. Metadata key can be anything
   for (let key in term.annotation) {
     const annotation = term.annotation[key] as TsAnnotation;
@@ -138,7 +147,8 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
     if (key === "definition" || key === "has_dbxref") {
       continue;
     }
-    let annotKey = key as string;
+    let annotKey =
+      renderIaoDefinition && key === "IAO_0000115" ? "definition" : key;
     if (!annotationKeyMap[annotKey]) {
       annotKey = annotKey.replace(/([a-z])([A-Z])/g, "$1 $2");
       annotKey = annotKey.replaceAll("_", " ");
@@ -146,7 +156,13 @@ function renderAnnotation(term: TsTerm, metadata: TableMetadata) {
       annotKey = annotationKeyMap[key] ?? (key as string);
     }
     if (hasMathMlValue(annotation.value)) {
-      renderMathRelatedMetadata(term, metadata, annotKey, annotation.iri);
+      renderMathRelatedMetadata(
+        term,
+        metadata,
+        key,
+        annotKey,
+        annotation.iri,
+      );
       continue;
     }
 
@@ -213,7 +229,7 @@ export function classMetaData(term: TsClass) {
   metadata["Rules"] = { value: term.rules, isLink: false };
 
   if (term.annotation) {
-    renderAnnotation(term, metadata);
+    renderAnnotation(term, metadata, true);
   }
   const dbXref = term.annotation?.["has_dbxref"]?.value;
   if (dbXref && dbXref.length > 0) {
@@ -237,7 +253,7 @@ export function individualMetadata(term: TsIndividual) {
     metadata["Instance of"] = { value: term.parentClasses, isLink: false };
   }
   if (term.annotation) {
-    renderAnnotation(term, metadata);
+    renderAnnotation(term, metadata, true);
   }
   return metadata;
 }
@@ -266,7 +282,7 @@ export function propertyMetaData(term: TsProperty) {
   };
 
   if (term.annotation) {
-    renderAnnotation(term, metadata);
+    renderAnnotation(term, metadata, true);
   }
   return metadata;
 }

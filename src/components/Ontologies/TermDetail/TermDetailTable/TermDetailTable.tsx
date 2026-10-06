@@ -1,6 +1,9 @@
 import {
+  cloneElement,
   Component,
+  Fragment,
   isValidElement,
+  ReactElement,
   ReactNode,
   useEffect,
   useContext,
@@ -185,6 +188,9 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
     if (!props.node) {
       return;
     }
+    if (metadataLabel === "Description") {
+      return formatDescription(metadataValue);
+    }
     if (isValidElement(metadataValue)) {
       return metadataValue;
     }
@@ -203,7 +209,6 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
         "Instance of",
         "Domain",
         "Range",
-        "Description",
         "in defining formula",
       ].includes(metadataLabel)
     ) {
@@ -217,6 +222,53 @@ const TermDetailTable = (props: TermDetailTableComProp) => {
     }
 
     return Toolkit.renderDangerousHtml(metadataValue, {}, "span");
+  }
+
+  function formatDescription(
+    value: any,
+    separateItems = true,
+  ): ReactNode {
+    if (Array.isArray(value)) {
+      return value.map((item, index) => (
+        <Fragment key={index}>
+          {formatDescription(item, false)}
+          {separateItems && index < value.length - 1 && <br />}
+        </Fragment>
+      ));
+    }
+    if (typeof value === "string") {
+      return Toolkit.renderDangerousHtml(
+        transformDescriptionLinks(value),
+        {},
+        "span",
+      );
+    }
+    if (value && typeof value === "object" && typeof value.value === "string") {
+      return formatDescription(value.value, separateItems);
+    }
+    if (isValidElement(value)) {
+      const element = value as ReactElement<any>;
+      return cloneElement(
+        element,
+        {},
+        formatDescription(element.props.children, false),
+      );
+    }
+    return value;
+  }
+
+  function transformDescriptionLinks(value: string): string {
+    return value
+      .replace(
+        /\[([^\]]+)\]\(([^)]+)\)/g,
+        (_match, label, url) =>
+          `<a href="${url.replaceAll("\\&", "&")}" target="_blank" rel="noopener noreferrer">${label}</a>`,
+      )
+      .split(/(<a(?:\s[^>]*)?>[\s\S]*?<\/a>)/gi)
+      .map((part, index) =>
+        index % 2 ? part : Toolkit.transformLinksInStringToAnchor(part),
+      )
+      .join("");
   }
 
   if (!props.node) {
