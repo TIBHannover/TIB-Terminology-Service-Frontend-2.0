@@ -294,6 +294,10 @@ export class TsTerm {
     return this.term.hasHierarchicalChildren || this.term.hasDirectChildren;
   }
 
+  get numDescendants(): number | undefined {
+    return this.term.numDescendants;
+  }
+
   get shortForm(): string {
     return this.term.shortForm ?? "";
   }

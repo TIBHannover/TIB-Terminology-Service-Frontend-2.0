@@ -100,6 +100,7 @@ export type OntologyTermDataV2 = {
   appearsIn?: string[];
   definedBy?: string[];
   hasHierarchicalChildren?: boolean;
+  numDescendants?: number;
   hasDirectParents?: boolean;
   shortForm?: string;
   isPreferredRoot?: boolean;

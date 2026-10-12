@@ -51,6 +51,7 @@ const Tree = (props: TreeProps) => {
   ] as any;
   const urlFacory = new CommonUrlFactory();
   const treeContainerRef = useRef<HTMLDivElement>(null);
+  const buildRequestId = useRef(0);
 
   const [treeDomContent, setTreeDomContent] = useState<TreeDomContent>("");
   const [childExtractName, setChildExtractName] = useState(
@@ -124,6 +125,7 @@ const Tree = (props: TreeProps) => {
   }
 
   async function buildTheTree() {
+    const requestId = ++buildRequestId.current;
     let target: string | null | undefined = props.selectedNodeIri;
     target = target ? target.trim() : null;
     let siblingsVisible = false;
@@ -239,6 +241,7 @@ const Tree = (props: TreeProps) => {
       }
     }
 
+    if (requestId !== buildRequestId.current) return false;
     setTreeDomContent(treeList);
     setReload(false);
     setSiblingsVisible(siblingsVisible);
@@ -419,15 +422,16 @@ const Tree = (props: TreeProps) => {
     setReload(true);
   }
 
-  function showObsoletes() {
-    Toolkit.setObsoleteInStorageAndUrl(!obsoletesShown);
+  async function showObsoletes() {
+    const show = !obsoletesShown;
+    Toolkit.setObsoleteInStorageAndUrl(show);
     if (!props.isIndividual) {
-      ontologyPageContext.handleObsoleteChange(!obsoletesShown);
+      await ontologyPageContext.handleObsoleteChange(show);
     }
     setReload(true);
     setIsLoading(true);
     setTreeDomContent("");
-    setObsoletesShown(!obsoletesShown);
+    setObsoletesShown(show);
   }
 
   async function handlePreferredRootSwitch(
@@ -447,13 +451,10 @@ const Tree = (props: TreeProps) => {
       target.classList.contains("tree-text-container")
     ) {
       selectNode(target);
-    } else if (
-      target.tagName === "DIV" &&
-      target.classList.contains("li-label-text")
-    ) {
-      selectNode(target.parentNode as HTMLElement | null);
-    } else if (target.tagName === "S") {
-      selectNode(target.parentNode?.parentNode as HTMLElement | null);
+    } else if (target.closest(".li-label-text")) {
+      selectNode(
+        target.closest(".li-label-text")?.parentNode as HTMLElement | null,
+      );
     } else if (target.tagName === "I") {
       expandNodeHandler(target.parentNode as HTMLElement | null);
     }
@@ -471,6 +472,7 @@ const Tree = (props: TreeProps) => {
     let clickedNodeId = "";
     let showNodeDetailPage = false;
     if (targetNodeDiv) {
+      buildRequestId.current++;
       targetNodeDiv.classList.add("clicked");
       clickedNodeIri = treeNode.getClickedNodeIri(target);
       clickedNodeId = treeNode.getClickedNodeId(target);
@@ -585,6 +587,16 @@ const Tree = (props: TreeProps) => {
     keyboardNavigationManager.run(event);
   };
 
+  function shouldBuildForDataUpdate() {
+    return (
+      !treeContainerRef.current?.querySelector("#tree-root-ul") ||
+      !props.selectedNodeIri ||
+      subTreeMode ||
+      resetTreeFlag ||
+      reload
+    );
+  }
+
   useEffect(() => {
     setComponentData();
     buildTheTree();
@@ -604,7 +616,7 @@ const Tree = (props: TreeProps) => {
   }, []);
 
   useEffect(() => {
-    buildTheTree();
+    if (shouldBuildForDataUpdate()) buildTheTree();
     const timeoutId = window.setTimeout(() => {
       saveComponentStateInParent();
     }, 2000);
@@ -631,7 +643,7 @@ const Tree = (props: TreeProps) => {
   }, [obsoletesShown, siblingsVisible, subTreeMode]);
 
   useEffect(() => {
-    buildTheTree();
+    if (shouldBuildForDataUpdate()) buildTheTree();
     const timeoutId = window.setTimeout(() => {
       saveComponentStateInParent();
     }, 2000);

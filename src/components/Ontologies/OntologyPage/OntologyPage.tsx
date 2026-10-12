@@ -269,7 +269,9 @@ const OntologyPage = (props: CmpPropp) => {
   }
 
   useEffect(() => {
-    loadOntologyData();
+    if (ontoLang === UrlFactory.getParam({ name: SiteUrlParamNames.Lang })) {
+      loadOntologyData();
+    }
     setCountOfNotes();
     setTabOnLoad();
   }, []);

@@ -37,9 +37,24 @@ class TreeNodeController {
     isExpanded = false,
     isSkos = false,
   }: BuildNodeArgs) {
-    let numOfdescendant: string | number = nodeObject["numDescendants"] ?? 0;
-    numOfdescendant = numOfdescendant ? `(${numOfdescendant})` : "";
-    let nodeLabel: ReactNode = `${nodeObject.label ?? nodeObject.text ?? ""}${numOfdescendant}`;
+    let nodeLabel: ReactNode = nodeObject.label ?? nodeObject.text ?? "";
+    if (isSkos) {
+      nodeLabel = `${nodeLabel}${
+        nodeObject.numDescendants ? `(${nodeObject.numDescendants})` : ""
+      }`;
+    } else if (nodeObject.hasChildren && nodeObject.numDescendants != null) {
+      nodeLabel = React.createElement(
+        React.Fragment,
+        {},
+        nodeLabel,
+        " ",
+        React.createElement(
+          "span",
+          { className: "text-muted small" },
+          `(${nodeObject.numDescendants})`,
+        ),
+      );
+    }
     let nodeHasChildren = !isSkos
       ? nodeObject.hasChildren
       : nodeObject.hasChildren;
@@ -136,17 +151,28 @@ class TreeNodeController {
     isExpanded = false,
     isSkos = false,
   }: BuildNodeArgs) {
-    let numOfdescendant: string | number = nodeObject["numDescendants"] ?? 0;
-    numOfdescendant = numOfdescendant ? `(${numOfdescendant})` : "";
-    let nodeLabel = `${nodeObject.label ?? nodeObject.text ?? ""}${numOfdescendant}`;
     let nodeHasChildren = !isSkos
       ? nodeObject.hasChildren
       : nodeObject.hasChildren;
     this.textDiv = document.createElement("div");
-    let label = document.createTextNode(nodeLabel);
     (this.textDiv as HTMLElement).classList.add("li-label-text");
     (this.textDiv as HTMLElement).classList.add("stour-tree-node");
-    (this.textDiv as HTMLElement).appendChild(label);
+    if (isSkos) {
+      (this.textDiv as HTMLElement).textContent = `${nodeObject.label ?? nodeObject.text ?? ""}${
+        nodeObject.numDescendants ? `(${nodeObject.numDescendants})` : ""
+      }`;
+    } else {
+      (this.textDiv as HTMLElement).appendChild(
+        document.createTextNode(nodeObject.label ?? nodeObject.text ?? ""),
+      );
+    }
+    if (!isSkos && nodeHasChildren && nodeObject.numDescendants != null) {
+      let count = document.createElement("span");
+      count.classList.add("text-muted", "small");
+      count.textContent = `(${nodeObject.numDescendants})`;
+      (this.textDiv as HTMLElement).appendChild(document.createTextNode(" "));
+      (this.textDiv as HTMLElement).appendChild(count);
+    }
     this.iconInTree = document.createElement("i");
     this.textDivContainer = document.createElement("div");
     (this.textDivContainer as HTMLElement).classList.add("tree-text-container");

@@ -216,7 +216,10 @@ export default class SkosHelper {
       let node = siblingsNodes[i];
       if (node.iri !== targetNodeIri) {
         let treeNode = new TreeNodeController();
-        let listItem = treeNode.buildNodeWithReact({ nodeObject: node });
+        let listItem = treeNode.buildNodeWithReact({
+          nodeObject: node,
+          isSkos: true,
+        });
         nodesToRender.push(listItem);
       }
     }
