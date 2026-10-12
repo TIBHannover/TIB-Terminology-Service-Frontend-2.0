@@ -25,6 +25,7 @@ const NoteList = lazy(() => import("../Note/NoteList"));
 const PublicationsLinks = lazy(
   () => import("../PublicationsLinks/PublicationsLinks"),
 );
+const IriChecker = lazy(() => import("../../IriChecker/IriChecker"));
 
 const OVERVIEW_TAB_ID = 0;
 const TERM_TREE_TAB_ID = 1;
@@ -36,6 +37,7 @@ const GIT_ISSUE_LIST_ID = 6;
 const ONDET_TAB_ID = 7;
 const PUBLICATIONS_LINKS_TAB_ID = 8;
 const LINKED_DATASETS_TAB_ID = 9;
+const IRI_CHECKER_TAB_ID = 10;
 const TAB_LOADER = <div className="isLoading-small"></div>;
 
 const TAB_ID_MAP_TO_TAB_ENDPOINT: Record<string, number> = {
@@ -49,6 +51,7 @@ const TAB_ID_MAP_TO_TAB_ENDPOINT: Record<string, number> = {
   ondet: ONDET_TAB_ID,
   publications: PUBLICATIONS_LINKS_TAB_ID,
   linkedDatasets: LINKED_DATASETS_TAB_ID,
+  iriChecker: IRI_CHECKER_TAB_ID,
 };
 
 type CmpPropp = RouteComponentProps<{ ontologyId: string; tab?: string }>;
@@ -428,6 +431,12 @@ const OntologyPage = (props: CmpPropp) => {
                       process.env.REACT_APP_LINKED_DATASETS === "true" && (
                         <Suspense fallback={TAB_LOADER}>
                           <LinkedDatasets />
+                        </Suspense>
+                      )}
+                    {!waiting &&
+                      activeTab === IRI_CHECKER_TAB_ID && (
+                        <Suspense fallback={TAB_LOADER}>
+                          <IriChecker />
                         </Suspense>
                       )}
                   </div>
