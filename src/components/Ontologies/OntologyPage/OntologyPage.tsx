@@ -434,7 +434,8 @@ const OntologyPage = (props: CmpPropp) => {
                         </Suspense>
                       )}
                     {!waiting &&
-                      activeTab === IRI_CHECKER_TAB_ID && (
+                      activeTab === IRI_CHECKER_TAB_ID &&
+                      process.env.REACT_APP_IRI_CHECKER === "true" && (
                         <Suspense fallback={TAB_LOADER}>
                           <IriChecker />
                         </Suspense>
