@@ -78,5 +78,13 @@
     "tabId": 9,
     "tabTitle": "Linked Datasets",
     "urlEndPoint": "/linkedDatasets"
+  },
+  "IriChecker": {
+    "id": "iriChecker",
+    "keyForRenderAsComponent": "iriCheckerPage",
+    "keyForRenderAsTabItem": "iriCheckerPage-tab",
+    "tabId": 10,
+    "tabTitle": "IRI Checker",
+    "urlEndPoint": "/iriChecker"
   }
 }

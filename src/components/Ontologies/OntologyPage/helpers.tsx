@@ -19,6 +19,8 @@ export const OntologyPageTabs = (props) => {
         return process.env.REACT_APP_PUBLICATION_LINKS !== "true";
       case "LinkedDatasets":
         return process.env.REACT_APP_LINKED_DATASETS !== "true";
+      case "IriChecker":
+        return process.env.REACT_APP_IRI_CHECKER !== "true";
       default:
         return false;
     }
