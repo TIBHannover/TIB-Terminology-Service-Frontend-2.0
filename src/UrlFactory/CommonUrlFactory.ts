@@ -4,6 +4,10 @@ import * as SiteUrlParamNames from "./UrlParamNames";
 type UrlParam = { name: string; value: string; updateUrl?: boolean };
 
 class CommonUrlFactory {
+  static getAdminPanelUrl(): string {
+    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/admin-panel";
+  }
+
   baseUrl: string;
   history: ReturnType<typeof createBrowserHistory>;
 

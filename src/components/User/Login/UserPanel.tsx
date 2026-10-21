@@ -4,6 +4,7 @@ import Auth from "../../../Libs/AuthLib";
 import Login from "./TS/Login";
 import { Link } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 
 const UserPanel = (props) => {
   const appContext = useContext(AppContext);
@@ -68,6 +69,18 @@ const UserPanel = (props) => {
                   Issue Requests
                 </Dropdown.Item>
               )}
+            {appContext.isUserSystemAdmin && (
+              <>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  as={Link}
+                  className="user-panel-item"
+                  to={CommonUrlFactory.getAdminPanelUrl()}
+                >
+                  Admin panel
+                </Dropdown.Item>
+              </>
+            )}
             {appContext.isUserSystemAdmin && (
               <Dropdown.Item
                 as={Link}

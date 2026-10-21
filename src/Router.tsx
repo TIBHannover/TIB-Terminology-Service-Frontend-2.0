@@ -3,6 +3,7 @@ import { Route, Switch } from "./Libs/reactRouterCompat";
 import { lazy, Suspense } from "react";
 import type { ComponentType } from "react";
 import LoadingPage from "./LoadingPage";
+import CommonUrlFactory from "./UrlFactory/CommonUrlFactory";
 
 const lazyAny = (factory: () => Promise<{ default: unknown }>) =>
   lazy(async () => {
@@ -39,6 +40,7 @@ const SubmitedIssueRequests = lazyAny(
     ),
 );
 const UserProfile = lazy(() => import("./components/User/Profile/Profile"));
+const AdminPanel = lazy(() => import("./components/User/Admin/AdminPanel"));
 const UserPanel = lazy(() => import("./components/User/Login/UserPanel"));
 const ReportPanel = lazyAny(
   () => import("./components/User/Admin/ReportPanel"),
@@ -88,6 +90,10 @@ const AppRouter = () => {
         <RequireLoginRoute
           path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}
           component={UserProfile}
+        />
+        <RequireLoginRoute
+          path={CommonUrlFactory.getAdminPanelUrl()}
+          component={AdminPanel}
         />
         <RequireLoginRoute
           path={process.env.REACT_APP_PROJECT_SUB_PATH + "/apikey"}
