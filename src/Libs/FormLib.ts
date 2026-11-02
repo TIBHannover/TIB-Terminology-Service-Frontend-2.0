@@ -48,9 +48,7 @@ class FormLib {
       return false;
     }
     let contentJson = JSON.parse(content);
-    let contentText: string = contentJson?.["blocks"]?.[0]?.["text"];
-
-    if (!contentText || contentText.trim() === "") {
+    if (!contentJson?.blocks?.some((block: { text?: string }) => block.text?.trim())) {
       textEditorTextBox.style.border = "1px solid red";
       return false;
     }

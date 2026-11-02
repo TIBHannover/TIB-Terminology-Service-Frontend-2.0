@@ -8,10 +8,17 @@ import {
   convertFromRaw,
   ContentState,
   RichUtils,
+  Modifier,
 } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import draftToMarkdown from "draftjs-to-markdown";
 import DOMPurify from "dompurify";
+import {
+  createMarkdownPasteContent,
+  hasRichClipboardHtml,
+  markdownTableEntityToHtml,
+  renderMarkdownTableBlock,
+} from "./MarkdownPaste";
 
 type TextEditorProps = {
   editorState: any;
@@ -21,6 +28,7 @@ type TextEditorProps = {
   placeholder?: string;
   wrapperId?: string;
   textSizeOptions: string[];
+  formatMarkdownOnPaste?: boolean;
 };
 
 const FONT_SIZE_OPTIONS = [
@@ -237,12 +245,49 @@ const TextEditor = (props: TextEditorProps) => {
     return ["unordered", "ordered"];
   }
 
+  function handleMarkdownPaste(
+    text: string,
+    html: string,
+    currentEditorState: any,
+    onChange: (state: any) => void,
+  ) {
+    if (hasRichClipboardHtml(html, text)) return false;
+    const markdownContent = createMarkdownPasteContent(text);
+    if (
+      !markdownContent.getBlockMap().some((block) =>
+        block.getType() !== "unstyled" ||
+        block.getCharacterList().some((character) =>
+          character.getStyle().size > 0 || character.getEntity() !== null,
+        ),
+      )
+    ) {
+      return false;
+    }
+
+    const content = Modifier.replaceWithFragment(
+      currentEditorState.getCurrentContent(),
+      currentEditorState.getSelection(),
+      markdownContent.getBlockMap(),
+    );
+    onChange(
+      EditorState.forceSelection(
+        EditorState.push(currentEditorState, content, "insert-fragment"),
+        content.getSelectionAfter(),
+      ),
+    );
+    return true;
+  }
+
   return (
     <div ref={rootRef} onClick={onModalClick}>
       {editorIsReady && (
         <Editor
           editorState={editorState}
           onEditorStateChange={props.textChangeHandlerFunction}
+          customBlockRenderFunc={renderMarkdownTableBlock}
+          handlePastedText={
+            props.formatMarkdownOnPaste ? handleMarkdownPaste : undefined
+          }
           wrapperClassName={props.wrapperClassName}
           editorClassName={props.editorClassName}
           placeholder={props.placeholder}
@@ -311,7 +356,7 @@ export function createHtmlFromEditorJson(jsonInput: string) {
       convertFromRaw(JSON.parse(jsonInput)),
     );
     let noteContent = convertToRaw(editorState.getCurrentContent());
-    noteContent = draftToHtml(noteContent);
+    noteContent = draftToHtml(noteContent, undefined, false, markdownTableEntityToHtml);
     return DOMPurify.sanitize(noteContent, { USE_PROFILES: { html: true } });
   } catch (e) {
     return "";

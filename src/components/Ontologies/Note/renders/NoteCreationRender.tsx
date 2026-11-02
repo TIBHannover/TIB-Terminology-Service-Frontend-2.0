@@ -203,6 +203,7 @@ export const NoteCreationRender = (props: NoteCreationRenderProps) => {
           <div className="row">
             <div className="col-sm-10">
               <TextEditor
+                formatMarkdownOnPaste
                 editorState={props.editorState}
                 textChangeHandlerFunction={props.onTextAreaChange}
                 wrapperClassName="note-creation-text-editor"
