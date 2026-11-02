@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import NotificationEmail from "./NotificationEmail";
 import { AppContext } from "../../../context/AppContext";
 
 const UserProfile = () => {
@@ -53,6 +54,7 @@ const UserProfile = () => {
             ? buildOrcidProfile()
             : buildGitProfile()}
         </table>
+        <NotificationEmail />
       </div>
     </div>
   );

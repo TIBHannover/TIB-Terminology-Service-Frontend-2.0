@@ -59,7 +59,7 @@ export async function getNoteList(
       isJson: true,
       withAccessToken: true,
     });
-    let url = microBackendUrl("/note/list?ontology=" + ontologyId);
+    let url = microBackendUrl("/note/list/?ontology=" + encodeURIComponent(ontologyId));
     url += "&page=" + pageNumber + "&size=" + pageSize;
     if (targetTerm) {
       url += "&artifact_iri=" + encodeURIComponent(targetTerm["iri"]);
@@ -75,6 +75,9 @@ export async function getNoteList(
       headers: headers,
       credentials: "include",
     });
+    if (!result.ok) {
+      return null;
+    }
     result = await result.json();
     let notes: NoteListResponse = result["_result"];
     if (params.withoutLabelFetch) {
@@ -113,7 +116,7 @@ export async function getNoteDetail(
       withAccessToken: true,
     });
     let url = microBackendUrl(
-      "/note/get/" + noteId + "?withComments=True&ontology=" + ontologyId,
+      "/note/get/" + noteId + "/?withComments=True&ontology=" + encodeURIComponent(ontologyId ?? ""),
     );
     let result: any = await fetch(url, {
       headers: headers,

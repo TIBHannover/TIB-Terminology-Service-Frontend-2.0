@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { useContext } from "react";
 import DropDown from "../../common/DropDown/DropDown";
+import OntologyFollowButton from "./OntologyFollowButton";
 
 export const OntologyPageTabs = (props) => {
   /* 
@@ -101,7 +102,8 @@ export const OntologyPageHeadSection = () => {
         <p className="fw-bold">{ontologyPageContext.ontology.title}</p>
       </div>
       <div className="col-sm-4 pb-0">
-        <div className="d-flex flex-row gap-4 justify-content-end">
+        <div className="d-flex flex-wrap gap-2 justify-content-end">
+          <OntologyFollowButton key={ontologyPageContext.ontology.ontologyId} ontologyId={ontologyPageContext.ontology.ontologyId} />
           <div>
             <form className="mt-auto bottom-0">
               <DropDown

@@ -36,6 +36,13 @@ const UserPanel = (props) => {
             <Dropdown.Item
               as={Link}
               className="user-panel-item"
+              to={CommonUrlFactory.getFollowedOntologiesUrl()}
+            >
+              Followed ontologies
+            </Dropdown.Item>
+            <Dropdown.Item
+              as={Link}
+              className="user-panel-item"
               to={process.env.REACT_APP_PROJECT_SUB_PATH + "/apikey"}
             >
               API Key

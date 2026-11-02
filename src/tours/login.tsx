@@ -9,7 +9,8 @@ export function loginInHeaderTourSteps(isUserLogin) {
           return (
             <>
               <span>Your user panel. You can check:</span>
-              <li>Profile info</li>
+              <li>Profile info and notification email</li>
+              <li>Followed ontologies and email update subscriptions</li>
               <li>Define and check your custom ontology collections</li>
               <li>Your submited issue requests for ontologies.</li>
             </>

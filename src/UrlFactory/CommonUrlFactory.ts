@@ -4,6 +4,18 @@ import * as SiteUrlParamNames from "./UrlParamNames";
 type UrlParam = { name: string; value: string; updateUrl?: boolean };
 
 class CommonUrlFactory {
+  static getProfileUrl(): string {
+    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/myprofile";
+  }
+
+  static getFollowedOntologiesUrl(): string {
+    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/followed-ontologies";
+  }
+
+  static getOntologyUrl(ontologyId: string): string {
+    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/ontologies/" + encodeURIComponent(ontologyId);
+  }
+
   static getAdminPanelUrl(): string {
     return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/admin-panel";
   }

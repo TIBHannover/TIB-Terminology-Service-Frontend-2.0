@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { NoteListRender } from "./renders/NoteListRender";
 import { getNoteList } from "../../../api/note";
+import AlertBox from "../../common/Alerts/Alerts";
 import { OntologyPageContext } from "../../../context/OntologyPageContext";
 import { NoteContext } from "../../../context/NoteContext";
 import NoteUrlFactory from "../../../UrlFactory/NoteUrlFactory";
@@ -61,6 +62,7 @@ const NoteList = (props: NoteListProps) => {
     Note | Record<string, never>
   >({});
   const [componentIsLoading, setComponentIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
   const [noteExist, setNoteExist] = useState(true);
   const [selectedArtifactType, setSelectedArtifactType] = useState<
     number | string
@@ -83,6 +85,8 @@ const NoteList = (props: NoteListProps) => {
   }
 
   function loadNoteList() {
+    setLoadError("");
+    setComponentIsLoading(true);
     let ontologyId = ontologyPageContext.ontology.ontologyId;
     let type: string | null = TYPES_VALUES[Number(selectedArtifactType)];
 
@@ -105,8 +109,13 @@ const NoteList = (props: NoteListProps) => {
         setShowNoteDetailPage(false);
         setNoteTotalPageCount(Number(noteStats.totalPageCount ?? 0));
         setNumberOfPinned(Number(noteStats.number_of_pinned ?? 0));
-        setComponentIsLoading(false);
+      } else {
+        setLoadError("Could not load notes. Please try again.");
       }
+    }).catch(() => {
+      setLoadError("Could not load notes. Please try again.");
+    }).finally(() => {
+      setComponentIsLoading(false);
     });
   }
 
@@ -209,6 +218,17 @@ const NoteList = (props: NoteListProps) => {
 
   if (process.env.REACT_APP_NOTE_FEATURE !== "true") {
     return null;
+  }
+
+  if (loadError && !showNoteDetailPage) {
+    return (
+      <>
+        <AlertBox type="danger" message={loadError} />
+        <button type="button" className="btn btn-secondary" onClick={loadNoteList}>
+          Retry loading notes
+        </button>
+      </>
+    );
   }
 
   const noteContextData = {

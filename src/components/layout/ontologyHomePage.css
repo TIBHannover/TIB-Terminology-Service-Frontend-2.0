@@ -104,6 +104,24 @@ body .ontology-page-headbar {
   top: -5px;
 }
 
+.ontology-follow-control {
+  position: relative;
+}
+
+.ontology-follow-control > button {
+  min-width: 6rem;
+}
+
+.ontology-follow-feedback {
+  position: absolute;
+  right: calc(100% + 0.5rem);
+  top: 50%;
+  transform: translateY(-50%);
+  width: max-content;
+  max-width: min(18rem, 40vw);
+  z-index: 1;
+}
+
 .ontology-overview-table-id-column {
   width: 180px;
   max-width: 180px;

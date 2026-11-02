@@ -5,12 +5,38 @@ import {
   ContactFormData,
   ApiKey,
 } from "./types/userTypes";
+import { microBackendUrl } from "./helper";
 import { TsPluginHeader } from "./types/headerTypes";
 import { getTsPluginHeaders } from "./header";
 import { LoginResponse } from "./types/userTypes";
 
 const baseUrl: string | undefined =
   process.env.REACT_APP_MICRO_BACKEND_ENDPOINT;
+
+async function requestUserEmail(method: string, email?: string): Promise<string> {
+  const response = await fetch(microBackendUrl("/user/email/"), {
+    method,
+    headers: getTsPluginHeaders({ isJson: true, withAccessToken: true }),
+    credentials: "include",
+    ...(email !== undefined ? { body: JSON.stringify({ email }) } : {}),
+  });
+  if (!response.ok) {
+    throw new Error("Could not access notification email settings.");
+  }
+  return (await response.json())._result.email;
+}
+
+export function fetchUserEmail(): Promise<string> {
+  return requestUserEmail("GET");
+}
+
+export function saveUserEmail(email: string): Promise<string> {
+  return requestUserEmail("PUT", email);
+}
+
+export function deleteUserEmail(): Promise<string> {
+  return requestUserEmail("DELETE");
+}
 
 export async function runLogin(
   authCode: string,

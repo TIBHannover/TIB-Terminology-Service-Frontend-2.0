@@ -37,6 +37,13 @@ export function ontologyPageTabTourSteps() {
     },
   ];
 
+  if (process.env.REACT_APP_AUTH_FEATURE === "true") {
+    steps.push({
+      selector: tourSelectorPrefix + "ontology-follow",
+      content:
+        "Follow this ontology to receive email about new non-private notes, issues or term requests, and publications on this terminology service. Add an email in My Profile. Private notes never trigger emails. Manage your follows from Followed ontologies in your profile menu, or click Unfollow to stop updates.",
+    });
+  }
   return steps;
 }
 

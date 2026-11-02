@@ -40,6 +40,9 @@ const SubmitedIssueRequests = lazyAny(
     ),
 );
 const UserProfile = lazy(() => import("./components/User/Profile/Profile"));
+const FollowedOntologies = lazy(
+  () => import("./components/User/FollowedOntologies/FollowedOntologies"),
+);
 const AdminPanel = lazy(() => import("./components/User/Admin/AdminPanel"));
 const UserPanel = lazy(() => import("./components/User/Login/UserPanel"));
 const ReportPanel = lazyAny(
@@ -90,6 +93,10 @@ const AppRouter = () => {
         <RequireLoginRoute
           path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}
           component={UserProfile}
+        />
+        <RequireLoginRoute
+          path={CommonUrlFactory.getFollowedOntologiesUrl()}
+          component={FollowedOntologies}
         />
         <RequireLoginRoute
           path={CommonUrlFactory.getAdminPanelUrl()}
