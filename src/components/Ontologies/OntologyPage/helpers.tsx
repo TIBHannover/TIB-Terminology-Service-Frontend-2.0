@@ -103,7 +103,7 @@ export const OntologyPageHeadSection = () => {
       </div>
       <div className="col-sm-4 pb-0">
         <div className="d-flex flex-wrap gap-2 justify-content-end">
-          <OntologyFollowButton key={ontologyPageContext.ontology.ontologyId} ontologyId={ontologyPageContext.ontology.ontologyId} />
+          <OntologyFollowButton key={ontologyPageContext.ontology.ontologyId} ontology={ontologyPageContext.ontology} />
           <div>
             <form className="mt-auto bottom-0">
               <DropDown

@@ -4,6 +4,8 @@ import { fetchFollowedOntologies, setOntologyFollow, updateOntologyFollow } from
 import { OntologyFollow, OntologyFollowPreferences, followPreferenceOptions } from "../../../concepts/ontologyFollow";
 import { AppContext } from "../../../context/AppContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import { useQuery } from "@tanstack/react-query";
+import OntologyApi from "../../../api/ontology";
 import AlertBox from "../../common/Alerts/Alerts";
 
 const FollowedOntologies = () => {
@@ -15,6 +17,13 @@ const FollowedOntologies = () => {
   const [loaded, setLoaded] = useState(false);
   const [reload, setReload] = useState(0);
   const [message, setMessage] = useState("");
+
+  const ontologyListQuery = useQuery(["ontologyList"], async () => {
+    const result = await new OntologyApi({}).fetchOntologyListResult();
+    if (result.failed) throw new Error("Could not load ontology metadata.");
+    return result.ontologies;
+  });
+  const repositories = Object.fromEntries((ontologyListQuery.data ?? []).map((ontology) => [ontology.ontologyId, ontology.githubRepository]));
 
   useEffect(() => {
     let active = true;
@@ -36,7 +45,7 @@ const FollowedOntologies = () => {
       .finally(() => {
         if (active) setLoading(false);
       });
-      return () => { active = false; };
+    return () => { active = false; };
   }, [user, reload]);
 
   async function unfollow(ontologyId: string) {
@@ -74,9 +83,13 @@ const FollowedOntologies = () => {
       <div className="col-12">
         <h1 className="h4">Followed ontologies</h1>
         <p>
-          Choose which emails you receive for each ontology. Changes are saved automatically. Private notes never trigger emails.{" "}
+          Choose which emails you receive for each ontology. Changes are saved automatically. GitHub activity summarizes new issues and main/master commits daily at 7 am Europe/Berlin, for ontologies hosted on GitHub. Private notes never trigger emails.{" "}
           <Link to={CommonUrlFactory.getProfileUrl()}>Manage your notification email in My Profile</Link>.
         </p>
+        {ontologyListQuery.isError && <div role="alert">
+          Could not load ontology metadata. Existing GitHub subscriptions can still be disabled.
+          <button type="button" className="btn btn-link btn-sm" onClick={() => ontologyListQuery.refetch()}>Retry metadata</button>
+        </div>}
         {error && <AlertBox type="danger" message={error} />}
         <div role="status" aria-live="polite">{message}</div>
         {loading && <p role="status">Loading followed ontologies…</p>}
@@ -92,21 +105,27 @@ const FollowedOntologies = () => {
               {followPreferenceOptions.map(({ key, label }) => <th scope="col" key={key}>{label}</th>)}
               <th scope="col">Actions</th>
             </tr></thead>
-            <tbody>{follows.map((follow) => (
+            <tbody>{follows.map((follow) => {
+              const repository = repositories[follow.ontologyId] ?? (ontologyListQuery.isLoading ? undefined : ontologyListQuery.isError ? null : "");
+              return (
               <tr key={follow.ontologyId}>
                 <th scope="row"><Link className="text-break" to={CommonUrlFactory.getOntologyUrl(follow.ontologyId)}>{follow.ontologyId}</Link></th>
                 {followPreferenceOptions.map(({ key, label }) => (
                   <td key={key}>
-                    <input type="checkbox" className="form-check-input" checked={follow[key]} disabled={!!pending}
+                    <input type="checkbox" className="form-check-input" checked={follow[key]} disabled={!!pending || (key === "notifyGithub" && !follow.notifyGithub && !repository)}
                       aria-label={`${label} for ${follow.ontologyId}`}
                       onChange={(event) => updatePreference(follow.ontologyId, key, event.target.checked)} />
+                    {key === "notifyGithub" && !repository && (
+                      <span className="small ms-2">{repository === undefined ? "Checking…" : repository === null ? "Check failed" : "Unavailable"}</span>
+                    )}
                   </td>
                 ))}
                 <td><button type="button" className="btn btn-secondary btn-sm" disabled={!!pending}
                   aria-label={"Unfollow " + follow.ontologyId} title="Stop receiving email updates for this ontology."
                   onClick={() => unfollow(follow.ontologyId)}>Unfollow</button></td>
               </tr>
-            ))}</tbody>
+              );
+            })}</tbody>
           </table>
         </div>}
       </div>

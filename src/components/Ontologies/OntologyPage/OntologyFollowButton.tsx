@@ -3,9 +3,12 @@ import { defaultFollowPreferences, followPreferenceOptions } from "../../../conc
 import { useContext, useEffect, useState } from "react";
 import { fetchFollowedOntologies, setOntologyFollow } from "../../../api/ontologyFollow";
 import { AppContext } from "../../../context/AppContext";
+import { TsOntology } from "../../../concepts/ontology";
 import Login from "../../User/Login/TS/Login";
 
-const OntologyFollowButton = ({ ontologyId }: { ontologyId: string }) => {
+const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
+  const ontologyId = ontology.ontologyId;
+  const repository = ontology.githubRepository;
   const { user } = useContext(AppContext);
   const [following, setFollowing] = useState<boolean | null>(null);
   const [busy, setBusy] = useState(false);
@@ -51,7 +54,7 @@ const OntologyFollowButton = ({ ontologyId }: { ontologyId: string }) => {
     setBusy(true);
     setError("");
     try {
-      const result = await setOntologyFollow(ontologyId, !following, preferences);
+      const result = await setOntologyFollow(ontologyId, !following, { ...preferences, notifyGithub: !!repository && preferences.notifyGithub });
       setFollowing(result);
       setShowPreferences(false);
     } catch {
@@ -93,11 +96,13 @@ const OntologyFollowButton = ({ ontologyId }: { ontologyId: string }) => {
           <p>Add your notification email in My Profile to receive updates. Private notes never trigger emails.</p>
           {followPreferenceOptions.map(({ key, label }) => (
             <div className="form-check" key={key}>
-              <input className="form-check-input" type="checkbox" id={`follow-${key}`} checked={preferences[key]} disabled={busy}
+              <input className="form-check-input" type="checkbox" id={`follow-${key}`} checked={key === "notifyGithub" ? !!repository && preferences[key] : preferences[key]} disabled={busy || (key === "notifyGithub" && !repository)}
                 onChange={(event) => setPreferences({ ...preferences, [key]: event.target.checked })} />
               <label className="form-check-label" htmlFor={`follow-${key}`}>{label}</label>
             </div>
           ))}
+          <p className="small mt-3">GitHub activity includes new issues and commits on the main/master branch, summarized daily at 7 am Europe/Berlin.</p>
+          {repository === "" && <p className="small">GitHub updates are unavailable because this ontology is not hosted on GitHub.</p>}
           {error && <div role="alert" className="text-danger mt-3">{error}</div>}
         </Modal.Body>
         <Modal.Footer>

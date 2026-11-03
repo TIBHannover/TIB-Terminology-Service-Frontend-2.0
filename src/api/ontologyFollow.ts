@@ -7,6 +7,7 @@ type FollowData = {
   notify_note: boolean;
   notify_issue: boolean;
   notify_publication: boolean;
+  notify_github: boolean;
 };
 
 export async function fetchFollowedOntologies(): Promise<OntologyFollow[]> {
@@ -23,6 +24,7 @@ export async function fetchFollowedOntologies(): Promise<OntologyFollow[]> {
     notifyNote: follow.notify_note,
     notifyIssue: follow.notify_issue,
     notifyPublication: follow.notify_publication,
+    notifyGithub: follow.notify_github,
   }));
 }
 
@@ -40,6 +42,7 @@ async function saveFollow(
       notify_note: preferences?.notifyNote,
       notify_issue: preferences?.notifyIssue,
       notify_publication: preferences?.notifyPublication,
+      notify_github: preferences?.notifyGithub,
     }),
   });
   if (!response.ok) {
