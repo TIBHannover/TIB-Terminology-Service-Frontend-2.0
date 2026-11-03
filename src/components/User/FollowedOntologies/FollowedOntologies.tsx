@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchFollowedOntologies, setOntologyFollow } from "../../../api/ontologyFollow";
+import { fetchFollowedOntologies, setOntologyFollow, updateOntologyFollow } from "../../../api/ontologyFollow";
+import { OntologyFollow, OntologyFollowPreferences, followPreferenceOptions } from "../../../concepts/ontologyFollow";
 import { AppContext } from "../../../context/AppContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import AlertBox from "../../common/Alerts/Alerts";
 
 const FollowedOntologies = () => {
   const { user } = useContext(AppContext);
-  const [ontologyIds, setOntologyIds] = useState<string[]>([]);
+  const [follows, setFollows] = useState<OntologyFollow[]>([]);
   const [loading, setLoading] = useState(true);
   const [pending, setPending] = useState("");
   const [error, setError] = useState("");
@@ -19,13 +20,13 @@ const FollowedOntologies = () => {
     let active = true;
     setLoading(true);
     setLoaded(false);
-    setOntologyIds([]);
+    setFollows([]);
     setError("");
     setMessage("");
     fetchFollowedOntologies()
-      .then((ids) => {
+      .then((items) => {
         if (active) {
-          setOntologyIds(ids);
+          setFollows(items);
           setLoaded(true);
         }
       })
@@ -35,7 +36,7 @@ const FollowedOntologies = () => {
       .finally(() => {
         if (active) setLoading(false);
       });
-    return () => { active = false; };
+      return () => { active = false; };
   }, [user, reload]);
 
   async function unfollow(ontologyId: string) {
@@ -44,10 +45,25 @@ const FollowedOntologies = () => {
     setMessage("");
     try {
       await setOntologyFollow(ontologyId, false);
-      setOntologyIds((ids) => ids.filter((id) => id !== ontologyId));
+      setFollows((items) => items.filter((follow) => follow.ontologyId !== ontologyId));
       setMessage("Ontology unfollowed.");
     } catch {
       setError("Could not unfollow this ontology. Please try again.");
+    } finally {
+      setPending("");
+    }
+  }
+
+  async function updatePreference(ontologyId: string, key: keyof OntologyFollowPreferences, checked: boolean) {
+    setPending(ontologyId);
+    setError("");
+    setMessage("");
+    try {
+      await updateOntologyFollow(ontologyId, { [key]: checked });
+      setFollows((items) => items.map((follow) => follow.ontologyId === ontologyId ? { ...follow, [key]: checked } : follow));
+      setMessage("Notification preferences saved.");
+    } catch {
+      setError("Could not save notification preferences. Please try again.");
     } finally {
       setPending("");
     }
@@ -58,8 +74,7 @@ const FollowedOntologies = () => {
       <div className="col-12">
         <h1 className="h4">Followed ontologies</h1>
         <p>
-          Get email about new non-private notes, issues or term requests, and publications
-          for these ontologies. Private notes never trigger emails.{" "}
+          Choose which emails you receive for each ontology. Changes are saved automatically. Private notes never trigger emails.{" "}
           <Link to={CommonUrlFactory.getProfileUrl()}>Manage your notification email in My Profile</Link>.
         </p>
         {error && <AlertBox type="danger" message={error} />}
@@ -68,24 +83,32 @@ const FollowedOntologies = () => {
         {!loading && !loaded && (
           <button type="button" className="btn btn-secondary" onClick={() => setReload(reload + 1)}>Retry</button>
         )}
-        {!loading && loaded && ontologyIds.length === 0 && <p>You are not following any ontologies yet.</p>}
-        <ul className="list-group">
-          {ontologyIds.map((id) => (
-            <li key={id} className="list-group-item d-flex flex-wrap align-items-center justify-content-between gap-2">
-              <Link className="text-break" to={CommonUrlFactory.getOntologyUrl(id)}>{id}</Link>
-              <button
-                type="button"
-                className="btn btn-secondary btn-sm"
-                disabled={!!pending}
-                aria-label={"Unfollow " + id}
-                title="Stop receiving email updates for this ontology."
-                onClick={() => unfollow(id)}
-              >
-                {pending === id ? "Unfollowing…" : "Unfollow"}
-              </button>
-            </li>
-          ))}
-        </ul>
+        {!loading && loaded && follows.length === 0 && <p>You are not following any ontologies yet.</p>}
+        {follows.length > 0 && <div className="table-responsive">
+          <table className="table align-middle">
+            <caption className="visually-hidden">Notification preferences for followed ontologies</caption>
+            <thead><tr>
+              <th scope="col">Ontology</th>
+              {followPreferenceOptions.map(({ key, label }) => <th scope="col" key={key}>{label}</th>)}
+              <th scope="col">Actions</th>
+            </tr></thead>
+            <tbody>{follows.map((follow) => (
+              <tr key={follow.ontologyId}>
+                <th scope="row"><Link className="text-break" to={CommonUrlFactory.getOntologyUrl(follow.ontologyId)}>{follow.ontologyId}</Link></th>
+                {followPreferenceOptions.map(({ key, label }) => (
+                  <td key={key}>
+                    <input type="checkbox" className="form-check-input" checked={follow[key]} disabled={!!pending}
+                      aria-label={`${label} for ${follow.ontologyId}`}
+                      onChange={(event) => updatePreference(follow.ontologyId, key, event.target.checked)} />
+                  </td>
+                ))}
+                <td><button type="button" className="btn btn-secondary btn-sm" disabled={!!pending}
+                  aria-label={"Unfollow " + follow.ontologyId} title="Stop receiving email updates for this ontology."
+                  onClick={() => unfollow(follow.ontologyId)}>Unfollow</button></td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>}
       </div>
     </div>
   );
