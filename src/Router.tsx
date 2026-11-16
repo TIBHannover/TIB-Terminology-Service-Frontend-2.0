@@ -94,10 +94,12 @@ const AppRouter = () => {
           path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}
           component={UserProfile}
         />
-        <RequireLoginRoute
-          path={CommonUrlFactory.getFollowedOntologiesUrl()}
-          component={FollowedOntologies}
-        />
+        {process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true" && (
+          <RequireLoginRoute
+            path={CommonUrlFactory.getFollowedOntologiesUrl()}
+            component={FollowedOntologies}
+          />
+        )}
         <RequireLoginRoute
           path={CommonUrlFactory.getAdminPanelUrl()}
           component={AdminPanel}

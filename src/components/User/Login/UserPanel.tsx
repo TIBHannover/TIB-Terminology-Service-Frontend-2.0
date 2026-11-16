@@ -33,13 +33,15 @@ const UserPanel = (props) => {
             >
               My Profile
             </Dropdown.Item>
-            <Dropdown.Item
-              as={Link}
-              className="user-panel-item"
-              to={CommonUrlFactory.getFollowedOntologiesUrl()}
-            >
-              Followed ontologies
-            </Dropdown.Item>
+            {process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true" && (
+              <Dropdown.Item
+                as={Link}
+                className="user-panel-item"
+                to={CommonUrlFactory.getFollowedOntologiesUrl()}
+              >
+                Followed ontologies
+              </Dropdown.Item>
+            )}
             <Dropdown.Item
               as={Link}
               className="user-panel-item"

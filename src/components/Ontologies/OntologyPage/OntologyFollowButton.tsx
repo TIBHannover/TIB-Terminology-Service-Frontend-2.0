@@ -23,7 +23,8 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
     let active = true;
     setFollowing(null);
     setError("");
-    if (user && process.env.REACT_APP_AUTH_FEATURE === "true") {
+    if (user && process.env.REACT_APP_AUTH_FEATURE === "true" &&
+      process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true") {
       fetchFollowedOntologies()
         .then((follows) => {
           if (active) setFollowing(follows.some((follow) => follow.ontologyId === ontologyId.trim().toLowerCase()));
@@ -64,7 +65,8 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
     }
   }
 
-  if (process.env.REACT_APP_AUTH_FEATURE !== "true") return null;
+  if (process.env.REACT_APP_AUTH_FEATURE !== "true" ||
+    process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE !== "true") return null;
 
   return (
     <div className="stour-ontology-follow ontology-follow-control align-self-center">

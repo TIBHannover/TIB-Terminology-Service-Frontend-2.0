@@ -37,7 +37,8 @@ export function ontologyPageTabTourSteps() {
     },
   ];
 
-  if (process.env.REACT_APP_AUTH_FEATURE === "true") {
+  if (process.env.REACT_APP_AUTH_FEATURE === "true" &&
+    process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true") {
     steps.push({
       selector: tourSelectorPrefix + "ontology-follow",
       content:

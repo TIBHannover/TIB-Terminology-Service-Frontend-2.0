@@ -9,8 +9,10 @@ export function loginInHeaderTourSteps(isUserLogin) {
           return (
             <>
               <span>Your user panel. You can check:</span>
-              <li>Profile info and notification email</li>
-              <li>Followed ontologies and email update subscriptions</li>
+              <li>Profile info{process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true" && " and notification email"}</li>
+              {process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true" && (
+                <li>Followed ontologies and email update subscriptions</li>
+              )}
               <li>Define and check your custom ontology collections</li>
               <li>Your submited issue requests for ontologies.</li>
             </>

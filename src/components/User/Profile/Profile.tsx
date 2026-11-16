@@ -54,7 +54,9 @@ const UserProfile = () => {
             ? buildOrcidProfile()
             : buildGitProfile()}
         </table>
-        <NotificationEmail />
+        {process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true" && (
+          <NotificationEmail />
+        )}
       </div>
     </div>
   );
