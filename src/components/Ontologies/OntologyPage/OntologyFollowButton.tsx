@@ -2,6 +2,7 @@ import Modal from "react-bootstrap/Modal";
 import { defaultFollowPreferences, followPreferenceOptions } from "../../../concepts/ontologyFollow";
 import { useContext, useEffect, useState } from "react";
 import { fetchFollowedOntologies, setOntologyFollow } from "../../../api/ontologyFollow";
+import { fetchUserEmail, saveUserEmail } from "../../../api/user";
 import { AppContext } from "../../../context/AppContext";
 import { TsOntology } from "../../../concepts/ontology";
 import Login from "../../User/Login/TS/Login";
@@ -18,6 +19,8 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
 
   const [showPreferences, setShowPreferences] = useState(false);
   const [preferences, setPreferences] = useState(defaultFollowPreferences);
+  const [needsEmail, setNeedsEmail] = useState(false);
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -36,7 +39,7 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
     return () => { active = false; };
   }, [user, ontologyId, reload]);
 
-  function toggleFollow() {
+  async function toggleFollow() {
     if (!user) {
       setShowLogin(true);
       setTimeout(() => setShowLogin(false), 1000);
@@ -45,7 +48,17 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
     if (!following) {
       setPreferences(defaultFollowPreferences);
       setError("");
-      setShowPreferences(true);
+      setBusy(true);
+      try {
+        const address = await fetchUserEmail();
+        setNeedsEmail(!address?.trim());
+        setEmail("");
+        setShowPreferences(true);
+      } catch {
+        setError("Could not load your notification email. Please try again.");
+      } finally {
+        setBusy(false);
+      }
       return;
     }
     saveFollow();
@@ -55,6 +68,18 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
     setBusy(true);
     setError("");
     try {
+      if (!following && needsEmail) {
+        if (!email.trim()) {
+          setError("Enter an email address to follow this ontology.");
+          return;
+        }
+        const address = await saveUserEmail(email.trim());
+        if (!address?.trim()) {
+          setError("Could not save your notification email. Please try again.");
+          return;
+        }
+        setNeedsEmail(false);
+      }
       const result = await setOntologyFollow(ontologyId, !following, { ...preferences, notifyGithub: !!repository && preferences.notifyGithub });
       setFollowing(result);
       setShowPreferences(false);
@@ -77,7 +102,7 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
         disabled={busy || (!!user && following === null)}
         title={following
           ? "Unfollow to stop receiving email updates for this ontology."
-          : "Follow to receive email about new non-private notes, issues or term requests, and publications. Add your email in My Profile. Private notes never trigger emails."}
+          : "Follow to receive email about new non-private notes, issues or term requests, and publications. A notification email is required. Private notes never trigger emails."}
         onClick={toggleFollow}
       >
         {busy ? "Saving…" : user && following === null && !error ? "Loading…" : following ? "Unfollow" : "Follow"}
@@ -90,12 +115,20 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
         </div>
       )}
       <Modal show={showPreferences} onHide={() => !busy && setShowPreferences(false)} aria-labelledby="follow-modal-title">
+        <form onSubmit={(event) => { event.preventDefault(); saveFollow(); }}>
         <Modal.Header closeButton={!busy}>
           <Modal.Title id="follow-modal-title">Follow {ontologyId}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>Follow this ontology to receive email when new content is added. Choose which updates you want below. You can change these choices in Followed ontologies.</p>
-          <p>Add your notification email in My Profile to receive updates. Private notes never trigger emails.</p>
+          <p>A notification email is required to follow an ontology. You can later add, change, or remove this email in My Profile. Private notes never trigger emails.</p>
+          {needsEmail && (
+            <div className="mb-3">
+              <label className="form-label" htmlFor="follow-notification-email">Email address</label>
+              <input id="follow-notification-email" className="form-control" type="email" autoComplete="email" maxLength={254} required
+                value={email} disabled={busy} onChange={(event) => setEmail(event.target.value)} />
+            </div>
+          )}
           {followPreferenceOptions.map(({ key, label }) => (
             <div className="form-check" key={key}>
               <input className="form-check-input" type="checkbox" id={`follow-${key}`} checked={key === "notifyGithub" ? !!repository && preferences[key] : preferences[key]} disabled={busy || (key === "notifyGithub" && !repository)}
@@ -109,8 +142,9 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
         </Modal.Body>
         <Modal.Footer>
           <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => setShowPreferences(false)}>Cancel</button>
-          <button type="button" className="btn btn-primary" disabled={busy} onClick={saveFollow}>{busy ? "Saving…" : "Confirm follow"}</button>
+          <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? "Saving…" : "Confirm follow"}</button>
         </Modal.Footer>
+        </form>
       </Modal>
       <Login isModal={true} showModal={showLogin} withoutButton={true} />
     </div>
