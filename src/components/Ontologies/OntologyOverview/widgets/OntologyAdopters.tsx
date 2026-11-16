@@ -1,5 +1,6 @@
 import { useContext, useMemo } from "react";
 import Modal from "react-bootstrap/Modal";
+import Toolkit from "../../../../Libs/Toolkit";
 import { OntologyPageContext } from "../../../../context/OntologyPageContext";
 
 const LinkOrText = ({ href, children }) =>
@@ -168,7 +169,11 @@ export default function OntologyAdopters({ showModal, setShowModal }) {
               )}
 
               {u.usedBy?.usageReportMetadata?.source && (
-                <Row label="Source">{u.usedBy.usageReportMetadata.source}</Row>
+                <Row label="Source">
+                  {Toolkit.isStringArray(u.usedBy.usageReportMetadata.source)
+                    ? u.usedBy.usageReportMetadata.source.join(", ")
+                    : u.usedBy.usageReportMetadata.source}
+                </Row>
               )}
 
               {u.usedBy?.usageReportMetadata?.created && (

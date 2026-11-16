@@ -203,6 +203,10 @@ class Toolkit {
     return false;
   }
 
+  static isStringArray(input: unknown): input is string[] {
+    return Array.isArray(input) && input.every((item) => typeof item === "string");
+  }
+
   static selectSiteNavbarOption(navbarText: string) {
     let currentSelected = document.getElementsByClassName("nav-clicked");
     if (currentSelected.length > 0) {
