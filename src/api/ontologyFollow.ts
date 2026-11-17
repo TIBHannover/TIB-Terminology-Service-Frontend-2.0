@@ -65,3 +65,21 @@ export function updateOntologyFollow(
 ): Promise<boolean> {
   return saveFollow(ontologyId, "PATCH", preferences);
 }
+
+export async function unfollowOntologyFromEmail(token: string): Promise<string> {
+  const response = await fetch(microBackendUrl("/ontology_follow/unfollow/"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "omit",
+    body: JSON.stringify({ token }),
+  });
+  if (response.status === 410) {
+    throw new Error("This unfollow link is no longer valid. Use a recent email or manage your followed ontologies.");
+  }
+  if (!response.ok) {
+    throw new Error(response.status === 400
+      ? "This unfollow link is invalid. Use the link in your ontology update email."
+      : "Could not unfollow this ontology. Please try again.");
+  }
+  return (await response.json())._result.ontology_id;
+}

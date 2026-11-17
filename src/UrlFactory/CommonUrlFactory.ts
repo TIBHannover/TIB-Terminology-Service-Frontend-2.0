@@ -4,6 +4,27 @@ import * as SiteUrlParamNames from "./UrlParamNames";
 type UrlParam = { name: string; value: string; updateUrl?: boolean };
 
 class CommonUrlFactory {
+  private static ontologyUnfollowData = { token: "", ontologyId: "" };
+
+  static getOntologyUnfollowUrl(): string {
+    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/ontology/unfollow";
+  }
+
+  static getOntologyUnfollowData(): { token: string; ontologyId: string } {
+    const url = new URL(window.location.href);
+    if (url.pathname.replace(/\/$/, "") !== this.getOntologyUnfollowUrl()) return { token: "", ontologyId: "" };
+    if (url.searchParams.has("token")) {
+      this.ontologyUnfollowData = {
+        token: url.searchParams.get("token") || "",
+        ontologyId: url.searchParams.get("ontology") || "",
+      };
+      url.searchParams.delete("token");
+      url.searchParams.delete("ontology");
+      window.history.replaceState(window.history.state, "", url);
+    }
+    return this.ontologyUnfollowData;
+  }
+
   private static emailActivationToken = "";
   static getEmailActivationUrl(): string {
     return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/email/activate";

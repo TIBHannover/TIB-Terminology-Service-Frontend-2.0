@@ -12,6 +12,7 @@ import { defaultShouldDehydrateQuery } from "@tanstack/react-query";
 import { localStoragePersister, queryClient } from "./Libs/QueryCache";
 
 CommonUrlFactory.getEmailActivationToken();
+CommonUrlFactory.getOntologyUnfollowData();
 
 // Adding Matomo
 const instance = createInstance({

@@ -21,6 +21,7 @@ import "./components/layout/common.css";
 import "./components/layout/mediaQueries.css";
 import "./components/layout/custom.css";
 
+const OntologyUnfollow = lazy(() => import("./components/User/OntologyUnfollow/OntologyUnfollow"));
 const EmailActivation = lazy(() => import("./components/User/EmailActivation/EmailActivation"));
 const Footer = lazy(() => import("./components/common/Footer/Footer"));
 const Header = lazy(() => import("./components/common/Header/Header"));
@@ -134,6 +135,9 @@ const App = () => {
       <LoginLoadingAnimation />
       <BrowserRouter>
         <Switch>
+          <Route exact path={CommonUrlFactory.getOntologyUnfollowUrl()}>
+            <Suspense fallback={<LoadingPage />}><OntologyUnfollow /></Suspense>
+          </Route>
           <Route exact path={CommonUrlFactory.getEmailActivationUrl()}>
             <Suspense fallback={<LoadingPage />}><EmailActivation /></Suspense>
           </Route>
