@@ -131,19 +131,14 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
           )}
         </div>
       )}
-      <Modal show={showPreferences} onHide={() => !busy && setShowPreferences(false)} aria-labelledby="follow-modal-title">
+      <Modal className="ontology-follow-modal" show={showPreferences} onHide={() => !busy && setShowPreferences(false)} aria-labelledby="follow-modal-title">
         <form onSubmit={(event) => { event.preventDefault(); saveFollow(); }}>
         <Modal.Header closeButton={!busy}>
           <Modal.Title id="follow-modal-title">Follow {ontologyId}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>Follow this ontology to receive email when new content is added. Choose which updates you want below. You can change these choices in Followed ontologies.</p>
-          <p>A notification email is required to follow an ontology. You can later add, change, or remove this email in My Profile. Private notes never trigger emails.</p>
-          {needsEmail ? (
-            <div className="alert alert-warning">Add an email below, then confirm it using the activation link sent to your inbox to receive notifications.</div>
-          ) : !emailVerified && (
-            <div className="alert alert-warning">Confirm your email to receive notifications. You can request a new activation link in My Profile.</div>
-          )}
+          <div className="alert alert-warning">A confirmed email is required to receive notifications. Confirm it using the activation link sent to your inbox. You can later add, change, or remove this email in My Profile. Private notes never trigger emails.</div>
           {needsEmail && (
             <div className="mb-3">
               <label className="form-label" htmlFor="follow-notification-email">Email address</label>
@@ -162,9 +157,9 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
           {repository === "" && <p className="small">GitHub updates are unavailable because this ontology is not hosted on GitHub.</p>}
           {error && <div role="alert" className="text-danger mt-3">{error}</div>}
         </Modal.Body>
-        <Modal.Footer>
-          <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => setShowPreferences(false)}>Cancel</button>
-          <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? "Saving…" : "Confirm follow"}</button>
+        <Modal.Footer className="justify-content-between">
+          <button type="button" className="btn btn-secondary follow-cancel-button" disabled={busy} onClick={() => setShowPreferences(false)}>Cancel</button>
+          <button type="submit" className="btn btn-secondary" disabled={busy}>{busy ? "Saving…" : "Confirm follow"}</button>
         </Modal.Footer>
         </form>
       </Modal>

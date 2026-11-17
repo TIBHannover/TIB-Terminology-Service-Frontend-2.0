@@ -336,3 +336,27 @@ body .ontology-page-headbar {
   margin-top: -40px;
   padding: 0;
 }
+
+.ontology-follow-modal .btn-close,
+.ontology-follow-modal .btn-close:hover,
+.ontology-follow-modal .btn-close:focus,
+.ontology-follow-modal .btn-close:active {
+  box-sizing: content-box;
+  width: 1em;
+  height: 1em;
+  padding: 0.5rem;
+  margin: -0.5rem -0.5rem -0.5rem auto;
+  font-size: var(--font-size-base);
+  background-color: transparent;
+  border: 0;
+  transform: none;
+}
+
+.ontology-follow-modal .follow-cancel-button,
+.ontology-follow-modal .follow-cancel-button:hover,
+.ontology-follow-modal .follow-cancel-button:focus,
+.ontology-follow-modal .follow-cancel-button:active {
+  background-color: var(--bs-gray-200);
+  border-color: var(--bs-gray-400);
+  color: var(--bs-gray-900);
+}

@@ -41,7 +41,7 @@ const EmailActivation = () => {
           ) : token ? (
             <>
               <p>Activate your email address to receive ontology notifications. You will not receive notifications until you confirm your email.</p>
-              <button type="button" className="btn btn-primary align-self-start" disabled={busy} onClick={activate}>
+              <button type="button" className="btn btn-secondary align-self-start fs-6" disabled={busy} onClick={activate}>
                 {busy ? "Activating…" : "Activate email"}
               </button>
             </>
@@ -49,7 +49,7 @@ const EmailActivation = () => {
             <div role="alert" className="alert alert-warning">The activation link is missing. Save your email in My Profile to request a new link.</div>
           )}
           {error && <div role="alert" className="alert alert-danger mt-3">{error}</div>}
-          <Link className="mt-3" to={CommonUrlFactory.getProfileUrl()}>Go to My Profile</Link>
+          <Link className="mt-3 fs-6" to={CommonUrlFactory.getProfileUrl()}>Go to My Profile</Link>
         </div>
       </main>
       <Footer />
