@@ -14,12 +14,14 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
   const [following, setFollowing] = useState<boolean | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [reload, setReload] = useState(0);
   const [showLogin, setShowLogin] = useState(false);
 
   const [showPreferences, setShowPreferences] = useState(false);
   const [preferences, setPreferences] = useState(defaultFollowPreferences);
   const [needsEmail, setNeedsEmail] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
   const [email, setEmail] = useState("");
 
   useEffect(() => {
@@ -45,13 +47,15 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
       setTimeout(() => setShowLogin(false), 1000);
       return;
     }
+    setMessage("");
     if (!following) {
       setPreferences(defaultFollowPreferences);
       setError("");
       setBusy(true);
       try {
-        const address = await fetchUserEmail();
-        setNeedsEmail(!address?.trim());
+        const result = await fetchUserEmail();
+        setNeedsEmail(!result.email.trim());
+        setEmailVerified(result.emailVerified);
         setEmail("");
         setShowPreferences(true);
       } catch {
@@ -73,15 +77,19 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
           setError("Enter an email address to follow this ontology.");
           return;
         }
-        const address = await saveUserEmail(email.trim());
-        if (!address?.trim()) {
+        const result = await saveUserEmail(email.trim());
+        if (!result.email.trim()) {
           setError("Could not save your notification email. Please try again.");
           return;
         }
         setNeedsEmail(false);
+        setEmailVerified(result.emailVerified);
       }
       const result = await setOntologyFollow(ontologyId, !following, { ...preferences, notifyGithub: !!repository && preferences.notifyGithub });
       setFollowing(result);
+      if (result && (needsEmail || !emailVerified)) {
+        setMessage("You are following this ontology. Check your inbox and activate your email. You will not receive any ontology notifications until you confirm it.");
+      }
       setShowPreferences(false);
     } catch {
       setError("Could not update follow status. Please try again.");
@@ -107,6 +115,9 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
       >
         {busy ? "Saving…" : user && following === null && !error ? "Loading…" : following ? "Unfollow" : "Follow"}
       </button>
+      {message && !showPreferences && (
+        <div role="status" className="ontology-follow-feedback small alert alert-warning shadow-sm">{message}</div>
+      )}
       {error && !showPreferences && (
         <div role="alert" className="ontology-follow-feedback small bg-white border rounded p-2 shadow-sm">
           {error} {following === null && (
@@ -122,6 +133,9 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
         <Modal.Body>
           <p>Follow this ontology to receive email when new content is added. Choose which updates you want below. You can change these choices in Followed ontologies.</p>
           <p>A notification email is required to follow an ontology. You can later add, change, or remove this email in My Profile. Private notes never trigger emails.</p>
+          {(needsEmail || !emailVerified) && (
+            <div className="alert alert-warning">You must confirm your email using the activation link sent to your inbox. Until then, you will not receive any ontology notifications. You can request a new link by saving your email again in My Profile.</div>
+          )}
           {needsEmail && (
             <div className="mb-3">
               <label className="form-label" htmlFor="follow-notification-email">Email address</label>

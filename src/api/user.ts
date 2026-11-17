@@ -10,10 +10,12 @@ import { TsPluginHeader } from "./types/headerTypes";
 import { getTsPluginHeaders } from "./header";
 import { LoginResponse } from "./types/userTypes";
 
+import { UserEmail } from "../concepts/userEmail";
+
 const baseUrl: string | undefined =
   process.env.REACT_APP_MICRO_BACKEND_ENDPOINT;
 
-async function requestUserEmail(method: string, email?: string): Promise<string> {
+async function requestUserEmail(method: string, email?: string): Promise<UserEmail> {
   const response = await fetch(microBackendUrl("/user/email/"), {
     method,
     headers: getTsPluginHeaders({ isJson: true, withAccessToken: true }),
@@ -23,19 +25,34 @@ async function requestUserEmail(method: string, email?: string): Promise<string>
   if (!response.ok) {
     throw new Error("Could not access notification email settings.");
   }
-  return (await response.json())._result.email;
+  const result = (await response.json())._result;
+  return { email: result.email, emailVerified: result.email_verified === true };
 }
 
-export function fetchUserEmail(): Promise<string> {
+export function fetchUserEmail(): Promise<UserEmail> {
   return requestUserEmail("GET");
 }
 
-export function saveUserEmail(email: string): Promise<string> {
+export function saveUserEmail(email: string): Promise<UserEmail> {
   return requestUserEmail("PUT", email);
 }
 
-export function deleteUserEmail(): Promise<string> {
+export function deleteUserEmail(): Promise<UserEmail> {
   return requestUserEmail("DELETE");
+}
+
+export async function activateUserEmail(token: string): Promise<void> {
+  const response = await fetch(microBackendUrl("/user/email/activate/"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "omit",
+    body: JSON.stringify({ token }),
+  });
+  if (!response.ok) {
+    throw new Error(response.status === 400
+      ? "This activation link is invalid, expired, or already used. Save your email in My Profile to request a new link."
+      : "Could not activate your email. Please try again.");
+  }
 }
 
 export async function runLogin(

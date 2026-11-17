@@ -3,7 +3,7 @@ import SearchForm from "../../Search/SearchForm/SearchForm";
 import UserPanel from "../../User/Login/UserPanel";
 import { Link } from "react-router-dom";
 
-function Header() {
+function Header({ minimal = false }: { minimal?: boolean }) {
   return (
     <>
       <div className="row header-wrapper header-collapseable-section">
@@ -12,6 +12,7 @@ function Header() {
             <div className="col-7 col-md-3 site-header-logo-col">
               <SiteLogo />
             </div>
+            {!minimal && <>
             <div className="col-2 col-md-6 site-header-nav-col">
               <div className="row">
                 <div className="col-sm-12">
@@ -22,8 +23,9 @@ function Header() {
             <div className="col-3 col-md-3 text-center site-header-user-col">
               <UserPanel isModal={true}></UserPanel>
             </div>
+            </>}
           </div>
-          <SearchForm />
+          {!minimal && <SearchForm />}
         </div>
       </div>
     </>

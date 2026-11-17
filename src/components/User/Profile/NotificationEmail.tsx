@@ -7,6 +7,7 @@ const NotificationEmail = () => {
   const { user } = useContext(AppContext);
   const [email, setEmail] = useState("");
   const [savedEmail, setSavedEmail] = useState<string | null>(null);
+  const [emailVerified, setEmailVerified] = useState(false);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -17,14 +18,16 @@ const NotificationEmail = () => {
     let active = true;
     setLoading(true);
     setSavedEmail(null);
+    setEmailVerified(false);
     setEmail("");
     setError("");
     setMessage("");
     fetchUserEmail()
-      .then((address) => {
+      .then((result) => {
         if (active) {
-          setEmail(address);
-          setSavedEmail(address);
+          setEmail(result.email);
+          setSavedEmail(result.email);
+          setEmailVerified(result.emailVerified);
         }
       })
       .catch(() => {
@@ -42,10 +45,13 @@ const NotificationEmail = () => {
     setError("");
     setMessage("");
     try {
-      const address = event ? await saveUserEmail(email.trim()) : await deleteUserEmail();
-      setEmail(address);
-      setSavedEmail(address);
-      setMessage(event ? "Notification email saved." : "Notification email removed.");
+      const result = event ? await saveUserEmail(email.trim()) : await deleteUserEmail();
+      setEmail(result.email);
+      setSavedEmail(result.email);
+      setEmailVerified(result.emailVerified);
+      setMessage(event
+        ? result.emailVerified ? "Notification email saved." : "Confirmation email sent. Check your inbox and activate your email. You will not receive any ontology notifications until you confirm it."
+        : "Notification email removed.");
     } catch {
       setError("Could not update your email. Please try again.");
     } finally {
@@ -55,10 +61,17 @@ const NotificationEmail = () => {
 
   return (
     <section aria-labelledby="notification-email-heading" className="mt-4">
+      {savedEmail && !emailVerified && (
+        <div role="alert" className="alert alert-warning">
+          Your email address is not confirmed. Check your inbox and activate your email before you can receive any ontology notifications. Save your email again to request a new activation link.
+        </div>
+      )}
       <h2 id="notification-email-heading" className="h5">Notification email</h2>
       <p>
         Receive email when an ontology you follow gets a new non-private note,
         issue or term request, or publication. Private notes never trigger emails.
+        You must confirm a new email address using the activation link sent to your inbox.
+        Until then, you will not receive any ontology notifications.
         Removing your email stops emails and keeps your follows.
       </p>
       {error && <AlertBox type="danger" message={error} />}

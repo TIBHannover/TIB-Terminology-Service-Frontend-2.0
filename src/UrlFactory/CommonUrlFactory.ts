@@ -4,6 +4,22 @@ import * as SiteUrlParamNames from "./UrlParamNames";
 type UrlParam = { name: string; value: string; updateUrl?: boolean };
 
 class CommonUrlFactory {
+  private static emailActivationToken = "";
+  static getEmailActivationUrl(): string {
+    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/email/activate";
+  }
+
+  static getEmailActivationToken(): string {
+    const url = new URL(window.location.href);
+    if (url.pathname.replace(/\/$/, "") !== this.getEmailActivationUrl()) return "";
+    if (url.searchParams.has("token")) {
+      this.emailActivationToken = url.searchParams.get("token") || "";
+      url.searchParams.delete("token");
+      window.history.replaceState(window.history.state, "", url);
+    }
+    return this.emailActivationToken;
+  }
+
   static getProfileUrl(): string {
     return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/myprofile";
   }

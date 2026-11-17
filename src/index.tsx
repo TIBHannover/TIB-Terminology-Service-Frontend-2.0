@@ -2,6 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import CommonUrlFactory from "./UrlFactory/CommonUrlFactory";
 import reportWebVitals from "./reportWebVitals";
 import { createInstance } from "@datapunt/matomo-tracker-react";
 import SiteMatomoProvider from "./components/Matomo/SiteMatomoProvider";
@@ -9,6 +10,8 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { defaultShouldDehydrateQuery } from "@tanstack/react-query";
 import { localStoragePersister, queryClient } from "./Libs/QueryCache";
+
+CommonUrlFactory.getEmailActivationToken();
 
 // Adding Matomo
 const instance = createInstance({
