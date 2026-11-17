@@ -50,7 +50,7 @@ const OntologyUnfollow = () => {
             <div role="alert" className="alert alert-warning">The unfollow link is missing. Use the link in your ontology update email.</div>
           )}
           {error && <div role="alert" className="alert alert-danger mt-3">{error}</div>}
-          <Link className="mt-3 fs-6" to={CommonUrlFactory.getFollowedOntologiesUrl()}>Go to followed ontologies</Link>
+          <Link className="mt-3 fs-6" to={CommonUrlFactory.getFollowedOntologiesUrl()}>Go to My Profile notifications</Link>
         </div>
       </main>
       <Footer />

@@ -106,9 +106,9 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
     <div className="stour-ontology-follow ontology-follow-control align-self-center d-inline-flex align-items-center gap-2">
       {user && following && !showPreferences && (needsEmail || !emailVerified) && (
         <span role="status" className="alert alert-warning small text-nowrap mb-0 px-2 py-1"
-          title={needsEmail ? "Add an email in My Profile to receive ontology notifications." : "Confirm your email to receive ontology notifications."}>
+          title={needsEmail ? "Add an email under Notifications in My Profile to receive ontology notifications." : "Confirm your email to receive ontology notifications."}>
           {needsEmail ? (
-            <Link to={CommonUrlFactory.getProfileUrl()} className="alert-link text-decoration-underline">Add email to receive notifications</Link>
+            <Link to={CommonUrlFactory.getProfileUrl("notifications")} className="alert-link text-decoration-underline">Add email to receive notifications</Link>
           ) : "Confirm email to receive notifications"}
         </span>
       )}
@@ -137,8 +137,8 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
           <Modal.Title id="follow-modal-title">Follow {ontologyId}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Follow this ontology to receive email when new content is added. Choose which updates you want below. You can change these choices in Followed ontologies.</p>
-          <div className="alert alert-warning">A confirmed email is required to receive notifications. Confirm it using the activation link sent to your inbox. You can later add, change, or remove this email in My Profile. Private notes never trigger emails.</div>
+          <p>Follow this ontology to receive email when new content is added. Choose which updates you want below. You can change these choices under Notifications in My Profile.</p>
+          <div className="alert alert-warning">A confirmed email is required to receive notifications. Confirm it using the activation link sent to your inbox. You can later add, change, or remove this email under Notifications in My Profile. Private notes never trigger emails.</div>
           {needsEmail && (
             <div className="mb-3">
               <label className="form-label" htmlFor="follow-notification-email">Email address</label>

@@ -42,7 +42,7 @@ export function ontologyPageTabTourSteps() {
     steps.push({
       selector: tourSelectorPrefix + "ontology-follow",
       content:
-        "Follow this ontology to receive email about new non-private notes, issues or term requests, and publications on this terminology service. Add an email in My Profile. Private notes never trigger emails. Manage your follows from Followed ontologies in your profile menu, or click Unfollow to stop updates.",
+        "Follow this ontology to receive email about new non-private notes, issues or term requests, and publications on this terminology service. Add an email under Notifications in My Profile. Private notes never trigger emails. Manage your follows under Notifications in My Profile, or click Unfollow to stop updates.",
     });
   }
   return steps;

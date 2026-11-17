@@ -41,12 +41,16 @@ class CommonUrlFactory {
     return this.emailActivationToken;
   }
 
-  static getProfileUrl(): string {
-    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/myprofile";
+  static getProfileUrl(section?: "info" | "notifications" | "apikey"): string {
+    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/myprofile" + (section ? "/" + section : "");
+  }
+
+  static getSwaggerUrl(): string {
+    return "https://service.tib.eu/ts-plugin/swagger/";
   }
 
   static getFollowedOntologiesUrl(): string {
-    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/followed-ontologies";
+    return this.getProfileUrl("notifications");
   }
 
   static getOntologyUrl(ontologyId: string): string {

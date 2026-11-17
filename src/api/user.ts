@@ -50,7 +50,7 @@ export async function activateUserEmail(token: string): Promise<void> {
   });
   if (!response.ok) {
     throw new Error(response.status === 400
-      ? "This activation link is invalid, expired, or already used. Save your email in My Profile to request a new link."
+      ? "This activation link is invalid, expired, or already used. Save your email under Notifications in My Profile to request a new link."
       : "Could not activate your email. Please try again.");
   }
 }

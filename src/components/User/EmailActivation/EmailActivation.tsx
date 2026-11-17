@@ -46,10 +46,10 @@ const EmailActivation = () => {
               </button>
             </>
           ) : (
-            <div role="alert" className="alert alert-warning">The activation link is missing. Save your email in My Profile to request a new link.</div>
+            <div role="alert" className="alert alert-warning">The activation link is missing. Save your email under Notifications in My Profile to request a new link.</div>
           )}
           {error && <div role="alert" className="alert alert-danger mt-3">{error}</div>}
-          <Link className="mt-3 fs-6" to={CommonUrlFactory.getProfileUrl()}>Go to My Profile</Link>
+          <Link className="mt-3 fs-6" to={CommonUrlFactory.getProfileUrl("notifications")}>Go to My Profile notifications</Link>
         </div>
       </main>
       <Footer />

@@ -29,25 +29,9 @@ const UserPanel = (props) => {
             <Dropdown.Item
               as={Link}
               className="user-panel-item"
-              to={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}
+              to={CommonUrlFactory.getProfileUrl()}
             >
               My Profile
-            </Dropdown.Item>
-            {process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true" && (
-              <Dropdown.Item
-                as={Link}
-                className="user-panel-item"
-                to={CommonUrlFactory.getFollowedOntologiesUrl()}
-              >
-                Followed ontologies
-              </Dropdown.Item>
-            )}
-            <Dropdown.Item
-              as={Link}
-              className="user-panel-item"
-              to={process.env.REACT_APP_PROJECT_SUB_PATH + "/apikey"}
-            >
-              API Key
             </Dropdown.Item>
             <Dropdown.Item
               as={Link}

@@ -3,6 +3,10 @@
   padding: 20px;
 }
 
+.notification-preferences-table {
+  min-width: 700px;
+}
+
 body .user-panel-item {
   text-decoration: none;
   color: black;

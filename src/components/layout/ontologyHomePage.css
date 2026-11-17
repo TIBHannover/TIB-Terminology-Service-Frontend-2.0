@@ -189,19 +189,19 @@ body .ontology-page-headbar {
   color: #0e6668;
 }
 
-.ontology-page-container .ontology-detail-nav-item.nav-item-active,
-.ontology-page-container .ontology-detail-nav-item.nav-item-active:hover {
+:is(.ontology-page-container, .user-profile-container) .ontology-detail-nav-item.nav-item-active,
+:is(.ontology-page-container, .user-profile-container) .ontology-detail-nav-item.nav-item-active:hover {
   background-color: #0e6668;
 }
 
-.ontology-page-container .ontology-detail-nav-item.nav-item-active > .nav-link,
-.ontology-page-container
+:is(.ontology-page-container, .user-profile-container) .ontology-detail-nav-item.nav-item-active > .nav-link,
+:is(.ontology-page-container, .user-profile-container)
   .ontology-detail-nav-item.nav-item-active
   > .nav-link:hover,
-.ontology-page-container
+:is(.ontology-page-container, .user-profile-container)
   .ontology-detail-nav-item.nav-item-active
   > .nav-link:focus,
-.ontology-page-container
+:is(.ontology-page-container, .user-profile-container)
   .ontology-detail-nav-item.nav-item-active
   > .nav-link:active {
   color: white;

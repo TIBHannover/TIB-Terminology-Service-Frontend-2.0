@@ -66,7 +66,7 @@ const NotificationEmail = () => {
           Your email address is not confirmed. Check your inbox and activate your email before you can receive any ontology notifications. Save your email again to request a new activation link.
         </div>
       )}
-      <h2 id="notification-email-heading" className="h5">Notification email</h2>
+      <h2 id="notification-email-heading" className="h5">Email</h2>
       <p>
         Receive email when an ontology you follow gets a new non-private note,
         issue or term request, or publication. Private notes never trigger emails.

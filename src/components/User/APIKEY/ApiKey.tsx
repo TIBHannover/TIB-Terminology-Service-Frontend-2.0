@@ -2,25 +2,27 @@ import { useState, useEffect } from "react";
 import { fetchUserApiKeys, deleteApiKey } from "../../../api/user";
 import { ApiKey } from "../../../api/types/userTypes";
 import CreateApiKey from "./CreateApiKey";
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 
 const UserApiKey = () => {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showCreateApiKey, setShowCreateApiKey] = useState(false);
   const [deleted, setDeleted] = useState(false);
-
-  useEffect(() => {
-    fetchUserApiKeys().then((res) => {
-      setApiKeys(res);
-    });
-  }, []);
 
   useEffect(() => {
     if (showCreateApiKey) {
       return;
     }
+    let active = true;
+    setLoading(true);
     fetchUserApiKeys().then((res) => {
-      setApiKeys(res);
+      if (active) {
+        setApiKeys(res);
+        setLoading(false);
+      }
     });
+    return () => { active = false; };
   }, [showCreateApiKey, deleted]);
 
   function deleteKey(e: React.MouseEvent<HTMLElement>) {
@@ -41,29 +43,41 @@ const UserApiKey = () => {
   return (
     <div className="row user-info-panel">
       <div className="col-sm-12">
+        <p>
+          The TS Plugin API lets you access Terminology Service features such as notes, ontology collections, and termsets from your own scripts or applications.
+          {" "}Use an API key to authenticate your requests. Explore the available endpoints and try them in the <a href={CommonUrlFactory.getSwaggerUrl()} target="_blank" rel="noopener noreferrer">Swagger API documentation</a>.
+        </p>
         {showCreateApiKey && (
           <>
             <button
               className="btn btn-secondary mb-2"
-              onClick={() => setShowCreateApiKey(false)}
+              onClick={() => { setLoading(true); setShowCreateApiKey(false); }}
             >
               Back to list
             </button>
             <CreateApiKey />
           </>
         )}
-        {!showCreateApiKey && (
+        {!showCreateApiKey && loading && <p role="status">Loading API keys…</p>}
+        {!showCreateApiKey && !loading && (
           <>
-            <button
-              className="btn btn-secondary mb-2"
+            {apiKeys.length === 0 ? (
+              <div role="alert" className="alert alert-info d-flex flex-wrap align-items-center gap-2">
+                <span>You have no API keys yet. Create a new key to access the API.</span>
+                <button type="button" className="btn btn-secondary btn-sm" onClick={() => setShowCreateApiKey(true)}>
+                  Create new API key
+                </button>
+              </div>
+            ) : <button
+              className="btn btn-secondary btn-sm mb-2"
               onClick={() => setShowCreateApiKey(true)}
             >
               Create new API key
-            </button>
-            <h5>
+            </button>}
+            {apiKeys.length > 0 && <h5>
               <b>Here you can see your API keys.</b>
-            </h5>
-            <table className="table table-striped">
+            </h5>}
+            {apiKeys.length > 0 && <table className="table table-striped">
               <tbody>
                 <tr>
                   <th scope="col" className="col-1"></th>
@@ -101,7 +115,7 @@ const UserApiKey = () => {
                   );
                 })}
               </tbody>
-            </table>
+            </table>}
           </>
         )}
       </div>

@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchFollowedOntologies, setOntologyFollow, updateOntologyFollow } from "../../../api/ontologyFollow";
-import { fetchUserEmail } from "../../../api/user";
 import { OntologyFollow, OntologyFollowPreferences, followPreferenceOptions } from "../../../concepts/ontologyFollow";
 import { AppContext } from "../../../context/AppContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
@@ -19,13 +18,11 @@ const FollowedOntologies = () => {
   const [reload, setReload] = useState(0);
   const [message, setMessage] = useState("");
 
-  const emailQuery = useQuery({
-    queryKey: ["notificationEmail", user?.id],
-    queryFn: fetchUserEmail,
-    enabled: !!user,
-    staleTime: 0,
-    cacheTime: 0,
-  });
+  useEffect(() => {
+    if (!message) return;
+    const timeout = window.setTimeout(() => setMessage(""), 5000);
+    return () => window.clearTimeout(timeout);
+  }, [message]);
 
   const ontologyListQuery = useQuery(["ontologyList"], async () => {
     const result = await new OntologyApi({}).fetchOntologyListResult();
@@ -87,44 +84,67 @@ const FollowedOntologies = () => {
     }
   }
 
+  function preferenceTargets(key: keyof OntologyFollowPreferences, checked: boolean) {
+    return follows.filter((follow) => follow[key] !== checked && (!checked || key !== "notifyGithub" || repositories[follow.ontologyId]));
+  }
+
+  async function updateColumn(key: keyof OntologyFollowPreferences, checked: boolean) {
+    setPending("all");
+    setError("");
+    setMessage("");
+    const results = await Promise.allSettled(preferenceTargets(key, checked).map(async (follow) => {
+      await updateOntologyFollow(follow.ontologyId, { [key]: checked });
+      setFollows((items) => items.map((item) => item.ontologyId === follow.ontologyId ? { ...item, [key]: checked } : item));
+    }));
+    const failed = results.filter((result) => result.status === "rejected").length;
+    if (failed) {
+      setError(`Could not save notification preferences for ${failed} ontologies. Please try again.`);
+    } else {
+      setMessage("Notification preferences saved.");
+    }
+    setPending("");
+  }
+
   return (
-    <div className="row user-info-panel">
+    <div className="row">
       <div className="col-12">
-        {emailQuery.data && (!emailQuery.data.email.trim() || !emailQuery.data.emailVerified) && (
-          <div role="alert" className="alert alert-warning">
-            {!emailQuery.data.email.trim() ? (
-              <Link to={CommonUrlFactory.getProfileUrl()} className="alert-link text-decoration-underline">Add email to receive notifications</Link>
-            ) : "Confirm email to receive notifications"}
-          </div>
-        )}
-        {emailQuery.isError && (
-          <div role="alert" className="alert alert-danger">
-            Could not load your notification email.
-            <button type="button" className="btn btn-link btn-sm" onClick={() => emailQuery.refetch()}>Retry email status</button>
-          </div>
-        )}
-        <h1 className="h4">Followed ontologies</h1>
+        <h2 className="h5">Ontologies</h2>
         <p>
-          Choose which emails you receive for each ontology. Changes are saved automatically. GitHub activity summarizes new issues and main/master commits daily at 7 am Europe/Berlin, for ontologies hosted on GitHub. Private notes never trigger emails.{" "}
-          <Link to={CommonUrlFactory.getProfileUrl()}>Manage your notification email in My Profile</Link>.
+          Choose which emails you receive for each ontology.
         </p>
         {ontologyListQuery.isError && <div role="alert">
           Could not load ontology metadata. Existing GitHub subscriptions can still be disabled.
           <button type="button" className="btn btn-link btn-sm" onClick={() => ontologyListQuery.refetch()}>Retry metadata</button>
         </div>}
         {error && <AlertBox type="danger" message={error} />}
-        <div role="status" aria-live="polite">{message}</div>
+        <div role="status" aria-live="polite">
+          {message && <AlertBox type="success" message={message} />}
+        </div>
         {loading && <p role="status">Loading followed ontologies…</p>}
         {!loading && !loaded && (
           <button type="button" className="btn btn-secondary" onClick={() => setReload(reload + 1)}>Retry</button>
         )}
         {!loading && loaded && follows.length === 0 && <p>You are not following any ontologies yet.</p>}
         {follows.length > 0 && <div className="table-responsive">
-          <table className="table align-middle">
+          <table className="table align-middle notification-preferences-table">
             <caption className="visually-hidden">Notification preferences for followed ontologies</caption>
             <thead><tr>
               <th scope="col">Ontology</th>
-              {followPreferenceOptions.map(({ key, label }) => <th scope="col" key={key}>{label}</th>)}
+              {followPreferenceOptions.map(({ key, label }) => {
+                const enabledCount = preferenceTargets(key, false).length;
+                const remainingCount = preferenceTargets(key, true).length;
+                return <th scope="col" key={key}>
+                  {label}
+                  <div className="mt-2">
+                    <input type="checkbox" className="form-check-input" aria-label={`Toggle all ${label}`}
+                      title={`Select to enable ${label} notifications for all eligible ontologies. Clear to disable them all. A dash means only some are enabled.`}
+                      checked={enabledCount > 0 && remainingCount === 0}
+                      ref={(input) => { if (input) input.indeterminate = enabledCount > 0 && remainingCount > 0; }}
+                      disabled={!!pending || enabledCount + remainingCount === 0}
+                      onChange={(event) => updateColumn(key, event.target.checked)} />
+                  </div>
+                </th>;
+              })}
               <th scope="col">Actions</th>
             </tr></thead>
             <tbody>{follows.map((follow) => {

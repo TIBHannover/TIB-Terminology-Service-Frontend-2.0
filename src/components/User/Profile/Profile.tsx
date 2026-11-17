@@ -1,9 +1,18 @@
-import { useContext } from "react";
+import { lazy, Suspense, useContext } from "react";
+import { Link, useParams } from "react-router-dom";
 import NotificationEmail from "./NotificationEmail";
 import { AppContext } from "../../../context/AppContext";
+import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import "../../layout/ontologyHomePage.css";
+
+const FollowedOntologies = lazy(() => import("../FollowedOntologies/FollowedOntologies"));
+const UserApiKey = lazy(() => import("../APIKEY/ApiKey"));
 
 const UserProfile = () => {
   const appContext = useContext(AppContext);
+  const { section = "info" } = useParams<{ section?: string }>();
+  const notificationsEnabled = process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true";
+  const activeSection = section === "apikey" || (section === "notifications" && notificationsEnabled) ? section : "info";
 
   function buildGitProfile() {
     return [
@@ -47,16 +56,44 @@ const UserProfile = () => {
     return null;
   }
   return (
-    <div className="row">
-      <div className="col-sm-6 user-info-panel user-profile-container">
-        <table className="table table-striped">
-          {localStorage.getItem("authProvider") === "orcid"
-            ? buildOrcidProfile()
-            : buildGitProfile()}
-        </table>
-        {process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true" && (
-          <NotificationEmail />
-        )}
+    <div className="user-profile-container">
+      <h1 className="h4 mb-4">My Profile</h1>
+      <div className="row">
+        <nav className="col-md-3 col-lg-2" aria-label="Profile">
+          {(["info", "notifications", "apikey"] as const).filter((tab) => tab !== "notifications" || notificationsEnabled).map((tab) => (
+            <div key={tab} className={"ontology-detail-nav-item" + (activeSection === tab ? " nav-item-active" : "")}>
+              <Link className="nav-link" to={CommonUrlFactory.getProfileUrl(tab)} aria-current={activeSection === tab ? "page" : undefined}>
+                {tab === "info" ? "Info" : tab === "notifications" ? "Notifications" : "API key"}
+              </Link>
+            </div>
+          ))}
+        </nav>
+        <div className="col-md-9 col-lg-10">
+          <div className="rounded-2 bg-white p-4">
+            {activeSection === "info" && <>
+              <h2 className="h5">Info</h2>
+              <div className="table-responsive">
+                <table className="table table-striped">
+                  {localStorage.getItem("authProvider") === "orcid"
+                    ? buildOrcidProfile()
+                    : buildGitProfile()}
+                </table>
+              </div>
+            </>}
+            <Suspense fallback={<p role="status">Loading profile section…</p>}>
+              {activeSection === "notifications" && <>
+                <h2 className="h5">Notifications</h2>
+                <NotificationEmail />
+                <hr className="my-4" />
+                <FollowedOntologies />
+              </>}
+              {activeSection === "apikey" && <>
+                <h2 className="h5">API key</h2>
+                <UserApiKey />
+              </>}
+            </Suspense>
+          </div>
+        </div>
       </div>
     </div>
   );
