@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchFollowedOntologies, setOntologyFollow, updateOntologyFollow } from "../../../api/ontologyFollow";
+import { fetchUserEmail } from "../../../api/user";
 import { OntologyFollow, OntologyFollowPreferences, followPreferenceOptions } from "../../../concepts/ontologyFollow";
 import { AppContext } from "../../../context/AppContext";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
@@ -17,6 +18,14 @@ const FollowedOntologies = () => {
   const [loaded, setLoaded] = useState(false);
   const [reload, setReload] = useState(0);
   const [message, setMessage] = useState("");
+
+  const emailQuery = useQuery({
+    queryKey: ["notificationEmail", user?.id],
+    queryFn: fetchUserEmail,
+    enabled: !!user,
+    staleTime: 0,
+    cacheTime: 0,
+  });
 
   const ontologyListQuery = useQuery(["ontologyList"], async () => {
     const result = await new OntologyApi({}).fetchOntologyListResult();
@@ -81,6 +90,19 @@ const FollowedOntologies = () => {
   return (
     <div className="row user-info-panel">
       <div className="col-12">
+        {emailQuery.data && (!emailQuery.data.email.trim() || !emailQuery.data.emailVerified) && (
+          <div role="alert" className="alert alert-warning">
+            {!emailQuery.data.email.trim() ? (
+              <Link to={CommonUrlFactory.getProfileUrl()} className="alert-link text-decoration-underline">Add email to receive notifications</Link>
+            ) : "Confirm email to receive notifications"}
+          </div>
+        )}
+        {emailQuery.isError && (
+          <div role="alert" className="alert alert-danger">
+            Could not load your notification email.
+            <button type="button" className="btn btn-link btn-sm" onClick={() => emailQuery.refetch()}>Retry email status</button>
+          </div>
+        )}
         <h1 className="h4">Followed ontologies</h1>
         <p>
           Choose which emails you receive for each ontology. Changes are saved automatically. GitHub activity summarizes new issues and main/master commits daily at 7 am Europe/Berlin, for ontologies hosted on GitHub. Private notes never trigger emails.{" "}

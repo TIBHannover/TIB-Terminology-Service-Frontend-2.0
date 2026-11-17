@@ -98,10 +98,10 @@ export const OntologyPageHeadSection = () => {
 
   return (
     <div className="row ontology-page-headbar">
-      <div className="col-sm-8 pb-0">
+      <div className="col-sm pb-0">
         <p className="fw-bold">{ontologyPageContext.ontology.title}</p>
       </div>
-      <div className="col-sm-4 pb-0">
+      <div className="col-sm-auto pb-0">
         <div className="d-flex flex-wrap gap-2 justify-content-end">
           <OntologyFollowButton key={ontologyPageContext.ontology.ontologyId} ontology={ontologyPageContext.ontology} />
           <div>
