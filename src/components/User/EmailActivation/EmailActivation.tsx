@@ -5,6 +5,7 @@ import { activateUserEmail } from "../../../api/user";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import Header from "../../common/Header/Header";
 import Footer from "../../common/Footer/Footer";
+import AlertBox from "../../common/Alerts/Alerts";
 
 const EmailActivation = () => {
   const [token] = useState(() => CommonUrlFactory.getEmailActivationToken());
@@ -37,7 +38,7 @@ const EmailActivation = () => {
         <div className="card p-4 mx-auto my-4 col-12 col-md-8 col-lg-6">
           <h1 id="email-activation-heading" className="h3">{activated ? "Email activated" : "Confirm your email address"}</h1>
           {activated ? (
-            <p role="status">Your email address is confirmed. You can now receive ontology notifications according to your preferences.</p>
+            <AlertBox type="success" withoutWrapper role="status" message="Your email address is confirmed. You can now receive ontology notifications according to your preferences." />
           ) : token ? (
             <>
               <p>Activate your email address to receive ontology notifications. You will not receive notifications until you confirm your email.</p>
@@ -46,9 +47,9 @@ const EmailActivation = () => {
               </button>
             </>
           ) : (
-            <div role="alert" className="alert alert-warning">The activation link is missing. Save your email under Notifications in My Profile to request a new link.</div>
+            <AlertBox type="warning" withoutWrapper role="alert" message="The activation link is missing. Save your email under Notifications in My Profile to request a new link." />
           )}
-          {error && <div role="alert" className="alert alert-danger mt-3">{error}</div>}
+          {error && <AlertBox type="danger" withoutWrapper role="alert" className="mt-3" message={error} />}
           <Link className="mt-3 fs-6" to={CommonUrlFactory.getProfileUrl("notifications")}>Go to My Profile notifications</Link>
         </div>
       </main>

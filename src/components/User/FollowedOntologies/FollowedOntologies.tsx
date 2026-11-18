@@ -24,11 +24,11 @@ const FollowedOntologies = () => {
     return () => window.clearTimeout(timeout);
   }, [message]);
 
-  const ontologyListQuery = useQuery(["ontologyList"], async () => {
+  const ontologyListQuery = useQuery(["followedOntologyMetadata"], async () => {
     const result = await new OntologyApi({}).fetchOntologyListResult();
     if (result.failed) throw new Error("Could not load ontology metadata.");
     return result.ontologies;
-  });
+  }, { staleTime: 0 });
   const repositories = Object.fromEntries((ontologyListQuery.data ?? []).map((ontology) => [ontology.ontologyId, ontology.githubRepository]));
 
   useEffect(() => {
@@ -112,10 +112,10 @@ const FollowedOntologies = () => {
         <p>
           Choose which emails you receive for each ontology.
         </p>
-        {ontologyListQuery.isError && <div role="alert">
+        {ontologyListQuery.isError && <AlertBox type="danger" withoutWrapper role="alert" message={<>
           Could not load ontology metadata. Existing GitHub subscriptions can still be disabled.
           <button type="button" className="btn btn-link btn-sm" onClick={() => ontologyListQuery.refetch()}>Retry metadata</button>
-        </div>}
+        </>} />}
         {error && <AlertBox type="danger" message={error} />}
         <div role="status" aria-live="polite">
           {message && <AlertBox type="success" message={message} />}

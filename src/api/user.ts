@@ -319,25 +319,19 @@ export async function fetchUserApiKeys(): Promise<ApiKey[]> {
       api_keys: ApiKey[];
     };
   };
-  try {
-    let headers: TsPluginHeader = getTsPluginHeaders({
-      isJson: true,
-      withAccessToken: true,
-    });
-    let result: any = await fetch(baseUrl + "/user/apikey/get/", {
-      method: "GET",
-      headers: headers,
-      credentials: "include",
-    });
-    result = (await result.json()) as _resp;
-    result = result["_result"]["api_keys"];
-    if (result) {
-      return result;
-    }
-    return [];
-  } catch (e) {
-    return [];
+  const response = await fetch(baseUrl + "/user/apikey/get/", {
+    method: "GET",
+    headers: getTsPluginHeaders({ isJson: true, withAccessToken: true }),
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Could not load API keys.");
   }
+  const result: _resp = await response.json();
+  if (!Array.isArray(result?._result?.api_keys)) {
+    throw new Error("Could not load API keys.");
+  }
+  return result._result.api_keys;
 }
 
 export async function createApiKey(data: {

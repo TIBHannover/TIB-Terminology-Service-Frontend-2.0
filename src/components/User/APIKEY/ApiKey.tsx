@@ -3,10 +3,13 @@ import { fetchUserApiKeys, deleteApiKey } from "../../../api/user";
 import { ApiKey } from "../../../api/types/userTypes";
 import CreateApiKey from "./CreateApiKey";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
+import AlertBox from "../../common/Alerts/Alerts";
 
 const UserApiKey = () => {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [reload, setReload] = useState(0);
   const [showCreateApiKey, setShowCreateApiKey] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
@@ -16,14 +19,18 @@ const UserApiKey = () => {
     }
     let active = true;
     setLoading(true);
+    setError("");
     fetchUserApiKeys().then((res) => {
       if (active) {
         setApiKeys(res);
-        setLoading(false);
       }
+    }).catch(() => {
+      if (active) setError("Could not load API keys. Please try again.");
+    }).finally(() => {
+      if (active) setLoading(false);
     });
     return () => { active = false; };
-  }, [showCreateApiKey, deleted]);
+  }, [showCreateApiKey, deleted, reload]);
 
   function deleteKey(e: React.MouseEvent<HTMLElement>) {
     let id = e.currentTarget.dataset.id;
@@ -59,15 +66,18 @@ const UserApiKey = () => {
           </>
         )}
         {!showCreateApiKey && loading && <p role="status">Loading API keys…</p>}
-        {!showCreateApiKey && !loading && (
+        {!showCreateApiKey && error && <AlertBox type="danger" withoutWrapper role="alert" message={<>
+          {error} <button type="button" className="btn btn-link btn-sm" onClick={() => setReload(reload + 1)}>Retry loading API keys</button>
+        </>} />}
+        {!showCreateApiKey && !loading && !error && (
           <>
             {apiKeys.length === 0 ? (
-              <div role="alert" className="alert alert-info d-flex flex-wrap align-items-center gap-2">
+              <AlertBox type="info" withoutWrapper role="alert" className="d-flex flex-wrap align-items-center gap-2" message={<>
                 <span>You have no API keys yet. Create a new key to access the API.</span>
                 <button type="button" className="btn btn-secondary btn-sm" onClick={() => setShowCreateApiKey(true)}>
                   Create new API key
                 </button>
-              </div>
+              </>} />
             ) : <button
               className="btn btn-secondary btn-sm mb-2"
               onClick={() => setShowCreateApiKey(true)}

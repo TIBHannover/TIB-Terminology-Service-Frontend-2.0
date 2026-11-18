@@ -2,12 +2,13 @@ import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import { defaultFollowPreferences, followPreferenceOptions } from "../../../concepts/ontologyFollow";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { fetchFollowedOntologies, setOntologyFollow } from "../../../api/ontologyFollow";
 import { fetchUserEmail, saveUserEmail } from "../../../api/user";
 import { AppContext } from "../../../context/AppContext";
 import { TsOntology } from "../../../concepts/ontology";
 import Login from "../../User/Login/TS/Login";
+import AlertBox from "../../common/Alerts/Alerts";
 
 const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
   const ontologyId = ontology.ontologyId;
@@ -23,24 +24,35 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
   const [preferences, setPreferences] = useState(defaultFollowPreferences);
   const [needsEmail, setNeedsEmail] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
+  const [emailLoaded, setEmailLoaded] = useState(false);
   const [email, setEmail] = useState("");
+  const emailRequest = useRef(0);
 
   useEffect(() => {
     let active = true;
+    const emailRequestId = ++emailRequest.current;
     setFollowing(null);
+    setEmailLoaded(false);
     setError("");
     if (user && process.env.REACT_APP_AUTH_FEATURE === "true" &&
       process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true") {
-      Promise.all([fetchFollowedOntologies(), fetchUserEmail()])
-        .then(([follows, result]) => {
-          if (active) {
+      fetchFollowedOntologies()
+        .then((follows) => {
+          if (active) setFollowing(follows.some((follow) => follow.ontologyId === ontologyId.trim().toLowerCase()));
+        })
+        .catch(() => {
+          if (active) setError("Could not load follow status.");
+        });
+      fetchUserEmail()
+        .then((result) => {
+          if (active && emailRequestId === emailRequest.current) {
             setNeedsEmail(!result.email.trim());
             setEmailVerified(result.emailVerified);
-            setFollowing(follows.some((follow) => follow.ontologyId === ontologyId.trim().toLowerCase()));
+            setEmailLoaded(true);
           }
         })
         .catch(() => {
-          if (active) setError("Could not load follow or email status.");
+          if (active && emailRequestId === emailRequest.current) setError("Could not load your notification email.");
         });
     }
     return () => { active = false; };
@@ -53,6 +65,7 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
       return;
     }
     if (!following) {
+      ++emailRequest.current;
       setPreferences(defaultFollowPreferences);
       setError("");
       setBusy(true);
@@ -60,6 +73,7 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
         const result = await fetchUserEmail();
         setNeedsEmail(!result.email.trim());
         setEmailVerified(result.emailVerified);
+        setEmailLoaded(true);
         setEmail("");
         setShowPreferences(true);
       } catch {
@@ -104,13 +118,13 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
 
   return (
     <div className="stour-ontology-follow ontology-follow-control align-self-center d-inline-flex align-items-center gap-2">
-      {user && following && !showPreferences && (needsEmail || !emailVerified) && (
-        <span role="status" className="alert alert-warning small text-nowrap mb-0 px-2 py-1"
-          title={needsEmail ? "Add an email under Notifications in My Profile to receive ontology notifications." : "Confirm your email to receive ontology notifications."}>
-          {needsEmail ? (
+      {user && following && emailLoaded && !showPreferences && (needsEmail || !emailVerified) && (
+        <AlertBox type="warning" withoutWrapper role="status" className="small text-nowrap mb-0 px-2 py-1"
+          title={needsEmail ? "Add an email under Notifications in My Profile to receive ontology notifications." : "Confirm your email to receive ontology notifications."}
+          message={needsEmail ? (
             <Link to={CommonUrlFactory.getProfileUrl("notifications")} className="alert-link text-decoration-underline">Add email to receive notifications</Link>
           ) : "Confirm email to receive notifications"}
-        </span>
+        />
       )}
       <button
         type="button"
@@ -125,11 +139,9 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
         {busy ? "Saving…" : user && following === null && !error ? "Loading…" : following ? "Unfollow" : "Follow"}
       </button>
       {error && !showPreferences && (
-        <div role="alert" className="ontology-follow-feedback small bg-white border rounded p-2 shadow-sm">
-          {error} {following === null && (
-            <button type="button" className="btn btn-link btn-sm" onClick={() => setReload(reload + 1)}>Retry</button>
-          )}
-        </div>
+        <AlertBox type="danger" withoutWrapper role="alert" className="ontology-follow-feedback small bg-white border rounded p-2 shadow-sm mb-0" message={<>
+          {error} <button type="button" className="btn btn-link btn-sm" disabled={busy} onClick={() => setReload(reload + 1)}>Retry</button>
+        </>} />
       )}
       <Modal className="ontology-follow-modal" show={showPreferences} onHide={() => !busy && setShowPreferences(false)} aria-labelledby="follow-modal-title">
         <form onSubmit={(event) => { event.preventDefault(); saveFollow(); }}>
@@ -138,7 +150,7 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
         </Modal.Header>
         <Modal.Body>
           <p>Follow this ontology to receive email when new content is added. Choose which updates you want below. You can change these choices under Notifications in My Profile.</p>
-          <div className="alert alert-warning">A confirmed email is required to receive notifications. Confirm it using the activation link sent to your inbox. You can later add, change, or remove this email under Notifications in My Profile. Private notes never trigger emails.</div>
+          <AlertBox type="warning" withoutWrapper message="A confirmed email is required to receive notifications. Confirm it using the activation link sent to your inbox. You can later add, change, or remove this email under Notifications in My Profile. Private notes never trigger emails." />
           {needsEmail && (
             <div className="mb-3">
               <label className="form-label" htmlFor="follow-notification-email">Email address</label>
@@ -155,7 +167,7 @@ const OntologyFollowButton = ({ ontology }: { ontology: TsOntology }) => {
           ))}
           <p className="small mt-3">GitHub activity includes new issues and commits on the main/master branch, summarized daily at 7 am Europe/Berlin.</p>
           {repository === "" && <p className="small">GitHub updates are unavailable because this ontology is not hosted on GitHub.</p>}
-          {error && <div role="alert" className="text-danger mt-3">{error}</div>}
+          {error && <AlertBox type="danger" withoutWrapper role="alert" className="mt-3" message={error} />}
         </Modal.Body>
         <Modal.Footer className="justify-content-between">
           <button type="button" className="btn btn-secondary follow-cancel-button" disabled={busy} onClick={() => setShowPreferences(false)}>Cancel</button>

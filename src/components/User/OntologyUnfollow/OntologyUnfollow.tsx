@@ -5,6 +5,7 @@ import { unfollowOntologyFromEmail } from "../../../api/ontologyFollow";
 import CommonUrlFactory from "../../../UrlFactory/CommonUrlFactory";
 import Header from "../../common/Header/Header";
 import Footer from "../../common/Footer/Footer";
+import AlertBox from "../../common/Alerts/Alerts";
 
 const OntologyUnfollow = () => {
   const [link] = useState(() => CommonUrlFactory.getOntologyUnfollowData());
@@ -38,7 +39,7 @@ const OntologyUnfollow = () => {
         <div className="card p-4 mx-auto my-4 col-12 col-md-8 col-lg-6">
           <h1 id="ontology-unfollow-heading" className="h3">{unfollowed ? `Unfollowed ${ontologyId}` : `Unfollow ${ontologyId || "ontology"}?`}</h1>
           {unfollowed ? (
-            <p role="status">You will no longer receive updates for this ontology. You can follow it again on the Terminology Service.</p>
+            <AlertBox type="success" withoutWrapper role="status" message="You will no longer receive updates for this ontology. You can follow it again on the Terminology Service." />
           ) : link.token ? (
             <>
               <p>This will stop all email updates for this ontology.</p>
@@ -47,9 +48,9 @@ const OntologyUnfollow = () => {
               </button>
             </>
           ) : (
-            <div role="alert" className="alert alert-warning">The unfollow link is missing. Use the link in your ontology update email.</div>
+            <AlertBox type="warning" withoutWrapper role="alert" message="The unfollow link is missing. Use the link in your ontology update email." />
           )}
-          {error && <div role="alert" className="alert alert-danger mt-3">{error}</div>}
+          {error && <AlertBox type="danger" withoutWrapper role="alert" className="mt-3" message={error} />}
           <Link className="mt-3 fs-6" to={CommonUrlFactory.getFollowedOntologiesUrl()}>Go to My Profile notifications</Link>
         </div>
       </main>

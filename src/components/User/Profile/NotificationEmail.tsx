@@ -62,9 +62,7 @@ const NotificationEmail = () => {
   return (
     <section aria-labelledby="notification-email-heading" className="mt-4">
       {savedEmail && !emailVerified && (
-        <div role="alert" className="alert alert-warning">
-          Your email address is not confirmed. Check your inbox and activate your email before you can receive any ontology notifications. Save your email again to request a new activation link.
-        </div>
+        <AlertBox type="warning" withoutWrapper role="alert" message="Your email address is not confirmed. Check your inbox and activate your email before you can receive any ontology notifications. Save your email again to request a new activation link." />
       )}
       <h2 id="notification-email-heading" className="h5">Email</h2>
       <p>
@@ -75,7 +73,9 @@ const NotificationEmail = () => {
         Removing your email stops emails and keeps your follows.
       </p>
       {error && <AlertBox type="danger" message={error} />}
-      <div role="status" aria-live="polite">{message}</div>
+      <div role="status" aria-live="polite">
+        {message && <AlertBox type="success" withoutWrapper message={message} />}
+      </div>
       {loading && <p role="status">Loading email…</p>}
       {!loading && savedEmail === null && (
         <button type="button" className="btn btn-secondary" onClick={() => setReload(reload + 1)}>
