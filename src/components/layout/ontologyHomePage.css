@@ -104,6 +104,24 @@ body .ontology-page-headbar {
   top: -5px;
 }
 
+.ontology-follow-control {
+  position: relative;
+}
+
+.ontology-follow-control > button {
+  min-width: 6rem;
+}
+
+.ontology-follow-feedback {
+  position: absolute;
+  right: calc(100% + 0.5rem);
+  top: 50%;
+  transform: translateY(-50%);
+  width: max-content;
+  max-width: min(18rem, 40vw);
+  z-index: 1;
+}
+
 .ontology-overview-table-id-column {
   width: 180px;
   max-width: 180px;
@@ -171,19 +189,19 @@ body .ontology-page-headbar {
   color: #0e6668;
 }
 
-.ontology-page-container .ontology-detail-nav-item.nav-item-active,
-.ontology-page-container .ontology-detail-nav-item.nav-item-active:hover {
+:is(.ontology-page-container, .user-profile-container) .ontology-detail-nav-item.nav-item-active,
+:is(.ontology-page-container, .user-profile-container) .ontology-detail-nav-item.nav-item-active:hover {
   background-color: #0e6668;
 }
 
-.ontology-page-container .ontology-detail-nav-item.nav-item-active > .nav-link,
-.ontology-page-container
+:is(.ontology-page-container, .user-profile-container) .ontology-detail-nav-item.nav-item-active > .nav-link,
+:is(.ontology-page-container, .user-profile-container)
   .ontology-detail-nav-item.nav-item-active
   > .nav-link:hover,
-.ontology-page-container
+:is(.ontology-page-container, .user-profile-container)
   .ontology-detail-nav-item.nav-item-active
   > .nav-link:focus,
-.ontology-page-container
+:is(.ontology-page-container, .user-profile-container)
   .ontology-detail-nav-item.nav-item-active
   > .nav-link:active {
   color: white;
@@ -317,4 +335,28 @@ body .ontology-page-headbar {
   margin-bottom: 0;
   margin-top: -40px;
   padding: 0;
+}
+
+.ontology-follow-modal .btn-close,
+.ontology-follow-modal .btn-close:hover,
+.ontology-follow-modal .btn-close:focus,
+.ontology-follow-modal .btn-close:active {
+  box-sizing: content-box;
+  width: 1em;
+  height: 1em;
+  padding: 0.5rem;
+  margin: -0.5rem -0.5rem -0.5rem auto;
+  font-size: var(--font-size-base);
+  background-color: transparent;
+  border: 0;
+  transform: none;
+}
+
+.ontology-follow-modal .follow-cancel-button,
+.ontology-follow-modal .follow-cancel-button:hover,
+.ontology-follow-modal .follow-cancel-button:focus,
+.ontology-follow-modal .follow-cancel-button:active {
+  background-color: var(--bs-gray-200);
+  border-color: var(--bs-gray-400);
+  color: var(--bs-gray-900);
 }

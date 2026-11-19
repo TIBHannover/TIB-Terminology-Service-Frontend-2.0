@@ -9,7 +9,10 @@ export function loginInHeaderTourSteps(isUserLogin) {
           return (
             <>
               <span>Your user panel. You can check:</span>
-              <li>Profile info</li>
+              <li>My Profile: info and API keys</li>
+              {process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true" && (
+                <li>My Profile → Notifications: notification email and followed ontology subscriptions</li>
+              )}
               <li>Define and check your custom ontology collections</li>
               <li>Your submited issue requests for ontologies.</li>
             </>

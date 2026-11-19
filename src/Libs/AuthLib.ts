@@ -1,5 +1,6 @@
 import UserModel from "../components/User/Model/user";
 import { runLogin, isLogin, logout } from "../api/user";
+import { isSystemAdmin } from "../api/admin";
 import { LoginResponse, ApiKey } from "../api/types/userTypes";
 import { clearQueryCache } from "./QueryCache";
 
@@ -142,6 +143,8 @@ class Auth {
     if (user && user?.csrf) {
       let validation = await isLogin();
       if (validation) {
+        user.systemAdmin = await isSystemAdmin();
+        localStorage.setItem("user", JSON.stringify(user));
         return user;
       }
     }

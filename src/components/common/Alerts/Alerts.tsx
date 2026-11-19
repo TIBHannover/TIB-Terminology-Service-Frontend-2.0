@@ -1,8 +1,9 @@
-import { ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 
-type AlertBoxProps = {
+type AlertBoxProps = Pick<HTMLAttributes<HTMLDivElement>, "className" | "role" | "title"> & {
   message: ReactNode;
   alertColumnClass?: string;
+  withoutWrapper?: boolean;
   type: "danger" | "success" | "warning" | "info";
 };
 
@@ -11,10 +12,17 @@ type CopiedSuccessAlertProps = {
 };
 
 export const AlertBox = (props: AlertBoxProps) => {
+  const alert = (
+    <div role={props.role} title={props.title} className={"alert alert-" + props.type + (props.className ? " " + props.className : "")}>
+      {props.message}
+    </div>
+  );
+  if (props.withoutWrapper) return alert;
+
   return (
     <div className="row text-center">
       <div className={props.alertColumnClass}>
-        <div className={"alert alert-" + props.type}>{props.message}</div>
+        {alert}
       </div>
     </div>
   );

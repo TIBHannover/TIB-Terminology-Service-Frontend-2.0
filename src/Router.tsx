@@ -3,6 +3,8 @@ import { Route, Switch } from "./Libs/reactRouterCompat";
 import { lazy, Suspense } from "react";
 import type { ComponentType } from "react";
 import LoadingPage from "./LoadingPage";
+import CommonUrlFactory from "./UrlFactory/CommonUrlFactory";
+import { Redirect } from "react-router-dom";
 
 const lazyAny = (factory: () => Promise<{ default: unknown }>) =>
   lazy(async () => {
@@ -39,6 +41,7 @@ const SubmitedIssueRequests = lazyAny(
     ),
 );
 const UserProfile = lazy(() => import("./components/User/Profile/Profile"));
+const AdminPanel = lazy(() => import("./components/User/Admin/AdminPanel"));
 const UserPanel = lazy(() => import("./components/User/Login/UserPanel"));
 const ReportPanel = lazyAny(
   () => import("./components/User/Admin/ReportPanel"),
@@ -64,7 +67,6 @@ const NotFoundPage = lazy(() => import("./errors/notFound"));
 const BrowseTermSetList = lazyAny(
   () => import("./components/TermSet/browseTermsetList"),
 );
-const UserApiKey = lazy(() => import("./components/User/APIKEY/ApiKey"));
 const CollectionPage = lazy(
   () => import("./components/Collection/CollectionPage"),
 );
@@ -86,13 +88,21 @@ const AppRouter = () => {
           component={UserPanel}
         />
         <RequireLoginRoute
-          path={process.env.REACT_APP_PROJECT_SUB_PATH + "/myprofile"}
+          path={CommonUrlFactory.getProfileUrl() + "/:section?"}
           component={UserProfile}
         />
+        {process.env.REACT_APP_ONTOLOGY_FOLLOW_FEATURE === "true" && (
+          <Route path={(process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/followed-ontologies"}>
+            <Redirect to={CommonUrlFactory.getFollowedOntologiesUrl()} />
+          </Route>
+        )}
         <RequireLoginRoute
-          path={process.env.REACT_APP_PROJECT_SUB_PATH + "/apikey"}
-          component={UserApiKey}
+          path={CommonUrlFactory.getAdminPanelUrl()}
+          component={AdminPanel}
         />
+        <Route path={(process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/apikey"}>
+          <Redirect to={CommonUrlFactory.getProfileUrl("apikey")} />
+        </Route>
         <RequireLoginRoute
           path={
             process.env.REACT_APP_PROJECT_SUB_PATH + "/submitedIssueRequests"

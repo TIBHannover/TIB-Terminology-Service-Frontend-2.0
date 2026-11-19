@@ -196,6 +196,20 @@ export class TsOntology {
     return this._language;
   }
 
+  get githubRepository(): string {
+    try {
+      const url = new URL((this.repo_url || this.tracker).trim());
+      const [owner, repository] = url.pathname.replace(/^\/+|\/+$/g, "").split("/");
+      const repo = repository?.replace(/\.git$/, "");
+      if (url.protocol !== "https:" || url.host !== "github.com" || url.username || url.password
+        || !owner || !repo || [".", ".."].includes(owner) || [".", ".."].includes(repo)
+        || !/^[A-Za-z0-9_.-]+$/.test(owner) || !/^[A-Za-z0-9_.-]+$/.test(repo)) return "";
+      return `${owner}/${repo}`;
+    } catch {
+      return "";
+    }
+  }
+
   get tracker(): string {
     return this._tracker;
   }

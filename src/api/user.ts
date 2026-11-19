@@ -5,12 +5,55 @@ import {
   ContactFormData,
   ApiKey,
 } from "./types/userTypes";
+import { microBackendUrl } from "./helper";
 import { TsPluginHeader } from "./types/headerTypes";
 import { getTsPluginHeaders } from "./header";
 import { LoginResponse } from "./types/userTypes";
 
+import { UserEmail } from "../concepts/userEmail";
+
 const baseUrl: string | undefined =
   process.env.REACT_APP_MICRO_BACKEND_ENDPOINT;
+
+async function requestUserEmail(method: string, email?: string): Promise<UserEmail> {
+  const response = await fetch(microBackendUrl("/user/email/"), {
+    method,
+    headers: getTsPluginHeaders({ isJson: true, withAccessToken: true }),
+    credentials: "include",
+    ...(email !== undefined ? { body: JSON.stringify({ email }) } : {}),
+  });
+  if (!response.ok) {
+    throw new Error("Could not access notification email settings.");
+  }
+  const result = (await response.json())._result;
+  return { email: result.email, emailVerified: result.email_verified === true };
+}
+
+export function fetchUserEmail(): Promise<UserEmail> {
+  return requestUserEmail("GET");
+}
+
+export function saveUserEmail(email: string): Promise<UserEmail> {
+  return requestUserEmail("PUT", email);
+}
+
+export function deleteUserEmail(): Promise<UserEmail> {
+  return requestUserEmail("DELETE");
+}
+
+export async function activateUserEmail(token: string): Promise<void> {
+  const response = await fetch(microBackendUrl("/user/email/activate/"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "omit",
+    body: JSON.stringify({ token }),
+  });
+  if (!response.ok) {
+    throw new Error(response.status === 400
+      ? "This activation link is invalid, expired, or already used. Save your email under Notifications in My Profile to request a new link."
+      : "Could not activate your email. Please try again.");
+  }
+}
 
 export async function runLogin(
   authCode: string,
@@ -276,25 +319,19 @@ export async function fetchUserApiKeys(): Promise<ApiKey[]> {
       api_keys: ApiKey[];
     };
   };
-  try {
-    let headers: TsPluginHeader = getTsPluginHeaders({
-      isJson: true,
-      withAccessToken: true,
-    });
-    let result: any = await fetch(baseUrl + "/user/apikey/get/", {
-      method: "GET",
-      headers: headers,
-      credentials: "include",
-    });
-    result = (await result.json()) as _resp;
-    result = result["_result"]["api_keys"];
-    if (result) {
-      return result;
-    }
-    return [];
-  } catch (e) {
-    return [];
+  const response = await fetch(baseUrl + "/user/apikey/get/", {
+    method: "GET",
+    headers: getTsPluginHeaders({ isJson: true, withAccessToken: true }),
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Could not load API keys.");
   }
+  const result: _resp = await response.json();
+  if (!Array.isArray(result?._result?.api_keys)) {
+    throw new Error("Could not load API keys.");
+  }
+  return result._result.api_keys;
 }
 
 export async function createApiKey(data: {

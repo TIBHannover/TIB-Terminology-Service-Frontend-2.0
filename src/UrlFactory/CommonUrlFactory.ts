@@ -4,6 +4,63 @@ import * as SiteUrlParamNames from "./UrlParamNames";
 type UrlParam = { name: string; value: string; updateUrl?: boolean };
 
 class CommonUrlFactory {
+  private static ontologyUnfollowData = { token: "", ontologyId: "" };
+
+  static getOntologyUnfollowUrl(): string {
+    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/ontology/unfollow";
+  }
+
+  static getOntologyUnfollowData(): { token: string; ontologyId: string } {
+    const url = new URL(window.location.href);
+    if (url.pathname.replace(/\/$/, "") !== this.getOntologyUnfollowUrl()) return { token: "", ontologyId: "" };
+    if (url.searchParams.has("token")) {
+      this.ontologyUnfollowData = {
+        token: url.searchParams.get("token") || "",
+        ontologyId: url.searchParams.get("ontology") || "",
+      };
+      url.searchParams.delete("token");
+      url.searchParams.delete("ontology");
+      window.history.replaceState(window.history.state, "", url);
+    }
+    return this.ontologyUnfollowData;
+  }
+
+  private static emailActivationToken = "";
+  static getEmailActivationUrl(): string {
+    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/email/activate";
+  }
+
+  static getEmailActivationToken(): string {
+    const url = new URL(window.location.href);
+    if (url.pathname.replace(/\/$/, "") !== this.getEmailActivationUrl()) return "";
+    if (url.searchParams.has("token")) {
+      this.emailActivationToken = url.searchParams.get("token") || "";
+      url.searchParams.delete("token");
+      window.history.replaceState(window.history.state, "", url);
+    }
+    return this.emailActivationToken;
+  }
+
+  static getProfileUrl(section?: "info" | "notifications" | "apikey"): string {
+    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/myprofile" + (section ? "/" + section : "");
+  }
+
+  static getSwaggerUrl(): string {
+    return "https://service.tib.eu/ts-plugin/swagger/";
+  }
+
+  static getFollowedOntologiesUrl(): string {
+    return this.getProfileUrl("notifications");
+  }
+
+  static getOntologyUrl(ontologyId: string): string {
+    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/ontologies/" + encodeURIComponent(ontologyId);
+  }
+
+  static getAdminPanelUrl(): string {
+    return (process.env.REACT_APP_PROJECT_SUB_PATH || "") + "/admin-panel";
+  }
+
   baseUrl: string;
   history: ReturnType<typeof createBrowserHistory>;
 

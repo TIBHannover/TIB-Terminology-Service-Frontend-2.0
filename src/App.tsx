@@ -1,5 +1,6 @@
 import { lazy, Suspense, useCallback, useState, useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import CommonUrlFactory from "./UrlFactory/CommonUrlFactory";
 import { MatomoWrapper } from "./components/Matomo/MatomoWrapper";
 import {
   BackendIsDownMessage,
@@ -20,6 +21,8 @@ import "./components/layout/common.css";
 import "./components/layout/mediaQueries.css";
 import "./components/layout/custom.css";
 
+const OntologyUnfollow = lazy(() => import("./components/User/OntologyUnfollow/OntologyUnfollow"));
+const EmailActivation = lazy(() => import("./components/User/EmailActivation/EmailActivation"));
 const Footer = lazy(() => import("./components/common/Footer/Footer"));
 const Header = lazy(() => import("./components/common/Header/Header"));
 const CookieBanner = lazy(
@@ -131,6 +134,14 @@ const App = () => {
     <div className="App">
       <LoginLoadingAnimation />
       <BrowserRouter>
+        <Switch>
+          <Route exact path={CommonUrlFactory.getOntologyUnfollowUrl()}>
+            <Suspense fallback={<LoadingPage />}><OntologyUnfollow /></Suspense>
+          </Route>
+          <Route exact path={CommonUrlFactory.getEmailActivationUrl()}>
+            <Suspense fallback={<LoadingPage />}><EmailActivation /></Suspense>
+          </Route>
+          <Route>
         <MatomoWrapper>
           <div className="container-fluid">
             <div className="row">
@@ -178,6 +189,8 @@ const App = () => {
             </div>
           </div>
         </MatomoWrapper>
+          </Route>
+        </Switch>
       </BrowserRouter>
     </div>
   );
