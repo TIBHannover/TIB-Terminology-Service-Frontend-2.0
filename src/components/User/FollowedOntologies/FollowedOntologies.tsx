@@ -150,22 +150,22 @@ const FollowedOntologies = () => {
             <tbody>{follows.map((follow) => {
               const repository = repositories[follow.ontologyId] ?? (ontologyListQuery.isLoading ? undefined : ontologyListQuery.isError ? null : "");
               return (
-              <tr key={follow.ontologyId}>
-                <th scope="row"><Link className="text-break" to={CommonUrlFactory.getOntologyUrl(follow.ontologyId)}>{follow.ontologyId}</Link></th>
-                {followPreferenceOptions.map(({ key, label }) => (
-                  <td key={key}>
-                    <input type="checkbox" className="form-check-input" checked={follow[key]} disabled={!!pending || (key === "notifyGithub" && !follow.notifyGithub && !repository)}
-                      aria-label={`${label} for ${follow.ontologyId}`}
-                      onChange={(event) => updatePreference(follow.ontologyId, key, event.target.checked)} />
-                    {key === "notifyGithub" && !repository && (
-                      <span className="small ms-2">{repository === undefined ? "Checking…" : repository === null ? "Check failed" : "Unavailable"}</span>
-                    )}
-                  </td>
-                ))}
-                <td><button type="button" className="btn btn-secondary btn-sm" disabled={!!pending}
-                  aria-label={"Unfollow " + follow.ontologyId} title="Stop receiving email updates for this ontology."
-                  onClick={() => unfollow(follow.ontologyId)}>Unfollow</button></td>
-              </tr>
+                <tr key={follow.ontologyId}>
+                  <th scope="row"><Link className="text-break" to={CommonUrlFactory.getOntologyUrl(follow.ontologyId)}>{follow.ontologyId}</Link></th>
+                  {followPreferenceOptions.map(({ key, label }) => (
+                    <td key={key}>
+                      <input type="checkbox" className="form-check-input" checked={follow[key]} disabled={!!pending || (key === "notifyGithub" && !follow.notifyGithub && !repository)}
+                        aria-label={`${label} for ${follow.ontologyId}`}
+                        onChange={(event) => updatePreference(follow.ontologyId, key, event.target.checked)} />
+                      {key === "notifyGithub" && !repository && (
+                        <span className="small ms-2">{repository === undefined ? "Checking…" : repository === null ? "Check failed" : "Unavailable"}</span>
+                      )}
+                    </td>
+                  ))}
+                  <td><button type="button" className="btn btn-secondary btn-sm" disabled={!!pending}
+                    aria-label={"Unfollow " + follow.ontologyId} title="Stop receiving email updates for this ontology."
+                    onClick={() => unfollow(follow.ontologyId)}>Unfollow</button></td>
+                </tr>
               );
             })}</tbody>
           </table>
