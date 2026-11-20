@@ -80,7 +80,7 @@ export function renderDocumentation() {
       </p>
       <br />
       <h3>
-        Rest Interface for MOD (Metadata for Ontology Description and
+        REST Interface for MOD (Metadata for Ontology Description and
         Publication Ontology)
       </h3>
       <p>
