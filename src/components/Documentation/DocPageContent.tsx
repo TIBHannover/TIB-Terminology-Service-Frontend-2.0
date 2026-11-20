@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import CommonUrlFactory from "../../UrlFactory/CommonUrlFactory";
 
 export function renderDocumentation() {
   let content = [
@@ -137,6 +138,29 @@ export function renderDocumentation() {
             https://fair-impact.github.io/MOD/index-en.html
           </a>
         </b>
+      </p>
+      <br />
+      <h3>REST Interface for TS Plugin</h3>
+      <p>
+        The TS Plugin extends the TIB Terminology Service with an API for
+        authentication and user-specific features, including notes on semantic
+        artifacts, term sets, custom collections, and ontology suggestions. It
+        also supports term requests and issue reports, enabling users to
+        contribute feedback and organize terminology resources for their
+        research workflows. These features can be accessed programmatically to
+        integrate them into other applications and services. Detailed guidance
+        on the available endpoints, authentication requirements, and
+        request/response structures is provided in the accompanying{" "}
+        <b>
+          <a
+            href={CommonUrlFactory.getSwaggerUrl()}
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+          >
+            Swagger Documentation
+          </a>
+        </b>
+        .
       </p>
       <h3>Report an Issue</h3>
       <p>
